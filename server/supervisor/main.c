@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <signal.h>
 
 #include "../include/common/util.h"
 
@@ -65,7 +66,7 @@ int main(void)
         fflush(log_activity);
 
         _exit(1);
-    }
+    }   
 
     waitpid(orchestrator_process, NULL, 0);
 
