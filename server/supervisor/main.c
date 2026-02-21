@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <string.h>
 #include <signal.h>
+#include <sys/poll.h>
 
 #include "../include/common/util.h"
 
@@ -68,6 +69,48 @@ int main(void)
         _exit(1);
     }   
 
+    char *userInput = NULL;
+    size_t cap = 0;
+
+    struct pollfd pfd = {.fd = STDIN_FILENO, .events = POLLIN};
+    
+    for(;;)
+    {   
+        int rc = poll(&pfd, 1, 2000);
+
+        if(rc == 0)
+        {
+            // Timeout 
+            // Something TODO here periodically 
+
+            continue;
+        }
+        if(rc < 0)
+        {
+            perror("poll");
+            kill(orchestrator_process, SIGUSR1);
+            break; 
+        }
+
+        // stdin is ready, now I can read input 
+        ssize_t n = getline(&userInput, &cap, stdin);
+        if(n == -1)
+        {
+            perror("getline");
+            kill(orchestrator_process, SIGUSR1);
+            break;
+        }
+        
+        printf("U: %s", userInput);
+
+        if(strncmp(userInput, "exit", 4) == 0)
+        {
+            kill(orchestrator_process, SIGUSR1);
+            break;
+        }
+    }
+
+    free(userInput);
     waitpid(orchestrator_process, NULL, 0);
 
     return 0;
