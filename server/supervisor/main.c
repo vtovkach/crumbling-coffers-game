@@ -41,21 +41,30 @@ int main(void)
     // Check if fork failed 
     if(orchestrator_process < 0)
     {
-        char time[TIME_BUFFER_SIZE];
-        getTime(time, TIME_BUFFER_SIZE);
-        fprintf(stderr, "%s 'redirect_stderr' failed: %s\n", time, strerror(errno));
+        perror("fork");
         return -1;
     }
     
     // Here goes the child process 
     if(orchestrator_process == 0)
     {
-        // Spawn orchestrator 
-        // TODO 
+        // Make argument list to orchestrator process
+        // Will additional necessary arguments later  
+        char *argv[] = {ORCHESTRATOR_PROCESS, NULL};
 
-        // execve(...)
+        // Execute process 
+        execv(ORCHESTRATOR_PROCESS, argv);
 
-        _exit(0);
+        // Runs only if execv fails 
+        perror("execv");
+
+        // Report error in a log file 
+        char time[TIME_BUFFER_SIZE];
+        getTime(time, TIME_BUFFER_SIZE);
+        fprintf(log_activity, "%s: execv error: %s\n", time, strerror(errno));
+        fflush(log_activity);
+
+        _exit(1);
     }
 
     waitpid(orchestrator_process, NULL, 0);
