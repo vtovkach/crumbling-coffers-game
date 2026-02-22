@@ -10,7 +10,7 @@
 #include <errno.h>
 #include <stdlib.h>
 
-#define LOG_FILE "../log/orchestrator"
+#define LOG_FILE "log/orchestrator"
 
 struct Client
 {
