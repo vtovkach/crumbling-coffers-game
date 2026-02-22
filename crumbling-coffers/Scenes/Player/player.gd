@@ -29,7 +29,7 @@ func _physics_process(delta: float) -> void:
 func move(direction: float, delta: float) -> void:
 	if direction:
 		if (velocity.x > 0 and direction < 0) or (velocity.x < 0 and direction > 0):
-			brake(delta)
+			brake(direction, delta)
 		else:
 			velocity.x = move_toward(velocity.x, direction * MAX_RUNSPEED, accel * delta)
 	else:
@@ -37,8 +37,8 @@ func move(direction: float, delta: float) -> void:
 	
 # When acceleration direction is against current velocity
 # May prefer a state to handle this, especially if custom animation
-func brake(delta: float) -> void:
-	velocity.x = move_toward(velocity.x, 0, braking_decel * delta)
+func brake(direction:float, delta: float) -> void:
+	velocity.x = move_toward(velocity.x, direction * MAX_RUNSPEED, braking_decel * delta)
 	
 		
 # Push this character in a direction, may exceed their max runspeed (but not their max speed)
