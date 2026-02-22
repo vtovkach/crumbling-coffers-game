@@ -8,8 +8,9 @@ extends CharacterBody2D
 const MAX_SPEED = 1000.0
 const MAX_RUNSPEED = 300.0
 
-const decel = 500;
-const accel = 1000;
+const decel = 500
+const accel = 1000
+const braking_decel = 2000
 
 func _physics_process(delta: float) -> void:
 
@@ -27,10 +28,18 @@ func _physics_process(delta: float) -> void:
 # (0, 1]:	To right.
 func move(direction: float, delta: float) -> void:
 	if direction:
-		velocity.x = move_toward(velocity.x, direction * MAX_RUNSPEED, accel * delta)
+		if (velocity.x > 0 and direction < 0) or (velocity.x < 0 and direction > 0):
+			brake(delta)
+		else:
+			velocity.x = move_toward(velocity.x, direction * MAX_RUNSPEED, accel * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0, decel * delta)
-		
+	
+# When acceleration direction is against current velocity
+# May prefer a state to handle this, especially if custom animation
+func brake(delta: float) -> void:
+	move_toward(velocity.x, 0, braking_decel * delta)
+	
 		
 # Push this character in a direction, may exceed their max runspeed (but not their max speed)
 # Adds to initial velocity
