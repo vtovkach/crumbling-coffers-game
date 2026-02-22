@@ -28,13 +28,33 @@ void set_terminate(int sig)
     terminate = 1;
 }
 
-int main(void)
+int main(int argc, char *argv[])
 {
+    if(argc != 2)
+    {
+        printf("orchestrator: incorrect argument list.\n");
+        return 1;
+    }
+    
+    // Obtain parent pid 
+    pid_t p_pid = (pid_t)atoi(argv[1]);
+
     // Connect the signal to a handler routine to allow supervisor process gracefully terminate the orchestrator process 
     if(signal(SIGUSR1, set_terminate) == SIG_ERR)
     {
-        perror("signal");
+        perror("signal (orchestrator)");
+        kill(p_pid, SIGUSR2);
         return 1;
+    }
+
+    // Open log file for orchestrator process 
+    FILE *log_file = fopen(LOG_FILE, "a");
+    if(!log_file)
+    {
+        // Critical Error
+        perror("fopen (orchestrator)"); 
+        kill(p_pid, SIGUSR2);
+        return 1; 
     }
 
     for(;;)
