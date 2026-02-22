@@ -53,7 +53,7 @@ int main(void)
 
     // Get parent pid which will be passed to orchestrator  
     pid_t p_pid = getpid(); 
-    
+
     // Create Orchestrator Process and save child pid 
     pid_t c_pid = fork(); 
     
@@ -108,8 +108,8 @@ int main(void)
         }
         if(rc < 0)
         {
-            perror("poll");
-            kill(orchestrator_process, SIGUSR1);
+            perror("poll (supervisor)");
+            kill(c_pid, SIGUSR1);
             break; 
         }
 
@@ -117,22 +117,22 @@ int main(void)
         ssize_t n = getline(&userInput, &cap, stdin);
         if(n == -1)
         {
-            perror("getline");
-            kill(orchestrator_process, SIGUSR1);
+            perror("getline (supervisor)");
+            kill(c_pid, SIGUSR1);
             break;
         }
-        
+
         printf("U: %s", userInput);
 
         if(strncmp(userInput, "exit", 4) == 0)
         {
-            kill(orchestrator_process, SIGUSR1);
+            kill(c_pid, SIGUSR1);
             break;
         }
     }
 
     free(userInput);
-    waitpid(orchestrator_process, NULL, 0);
+    waitpid(c_pid, NULL, 0);
 
     return 0;
 }
