@@ -14,7 +14,7 @@ const accel = 20;
 func _physics_process(delta: float) -> void:
 
 	# Update velocity
-	move(direction)
+#	move(direction)		Direction given by player input
 		
 	# Update position
 	move_and_slide()
