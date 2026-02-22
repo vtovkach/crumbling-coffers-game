@@ -12,14 +12,27 @@ extends CharacterBody2D
 @export var decel: float = 500.0
 @export var braking_decel: float = 2000.0
 
+@export var jump_velocity: float = 500.	# Jump() function flips the direction; positive jump -> up 
+
 func _physics_process(delta: float) -> void:
 
-	# Update velocity
+	# Update up/down velocity
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+	
+#	if (jumping):
+#		jump()
+	
+	# Update left/right velocity
 #	move(direction)		Direction given by player input
 		
 	# Update position
 	move_and_slide()
 
+func jump() -> void:
+	if is_on_floor():
+		velocity.y = -jump_velocity
+		
 
 # Update velocity according to direction of movement
 # direction: a float in [-1, 1]
@@ -34,8 +47,6 @@ func move(direction: float, delta: float) -> void:
 			velocity.x = move_toward(velocity.x, direction * max_runspeed, accel * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0, decel * delta)
-	
-	
 	
 # When acceleration direction is against current velocity
 # May prefer a state to handle this, especially if custom animation

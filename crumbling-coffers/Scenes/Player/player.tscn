@@ -7,9 +7,6 @@ size = Vector2(100, 100)
 
 [node name="Player" type="CharacterBody2D" unique_id=719838145]
 script = ExtResource("1_uvnfx")
-accel = 1000
-decel = 500
-braking_decel = 2000
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=978850304]
 shape = SubResource("RectangleShape2D_uvnfx")
