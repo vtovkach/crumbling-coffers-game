@@ -19,6 +19,8 @@
 #define SERVER_TCP_PORT "10000"
 #define MAX_TCP_QUEUE   128
 
+#define MAX_EPOLL_EVENTS 512
+
 struct Client
 {
     int fd;
@@ -101,7 +103,25 @@ int main(int argc, char *argv[])
     int fl = fcntl(listen_fd, F_GETFL, 0);
     if(fl < 0 || fcntl(listen_fd, F_SETFL, fl | O_NONBLOCK))
         goto error; 
-    
+
+    // Set up epoll to monitor and react to events
+
+    int epoll_fd;
+
+    // Event Queue will contain epoll_events that have certain actions on them  
+    struct epoll_event eventQueue[MAX_EPOLL_EVENTS];
+
+    epoll_fd = epoll_create1(0);
+    if(epoll_fd < 0)
+        goto error;
+
+    // Create event_epoll instance for a listening socket 
+    struct epoll_event ev;
+    ev.events = EPOLLIN;
+    ev.data.fd = listen_fd;
+
+    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &ev);
+
     for(;;)
     {
         // Check if parent wants to terminate the process 
