@@ -70,6 +70,10 @@ int main(int argc, char *argv[])
         if(terminate)
         {
             // Later gracefully terminate this process 
+
+            close(listen_fd);
+            freeaddrinfo(listen_ai);
+
             break;
         }
 
