@@ -25,7 +25,8 @@ func _physics_process(delta: float) -> void:
 #		jump()
 	
 	# Update left/right velocity
-#	move(direction)		Direction given by player input
+	var direction = Input.get_axis("left", "right")
+	move(direction, delta)
 		
 	# Update position
 	move_and_slide()
