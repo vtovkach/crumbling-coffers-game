@@ -81,6 +81,11 @@ int main(int argc, char *argv[])
         return 1; 
     }
 
+    struct HashTable *active_clients = ht_create(sizeof(int), 1, sizeof(struct Client), 1, hash, 512); 
+    if(!active_clients)
+        goto error;
+
+
     // Establish and bind listening socket to designated PORT 
     
     int listen_fd; 
