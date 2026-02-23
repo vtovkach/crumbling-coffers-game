@@ -139,11 +139,57 @@ int main(int argc, char *argv[])
         int events_ready = epoll_wait(epoll_fd, eventQueue, MAX_EPOLL_EVENTS, 2000);
 
         if(events_ready < 0)
-            perror("error happened with epoll_wait");
+            perror("epoll wait error");
 
         if(events_ready > 0)
+        {
             printf("We got some events!");
 
+            for(int i = 0; i < events_ready; i++)
+            {
+
+                // Check each epoll_event 
+                // TODO 
+
+                struct epoll_event cur_event = eventQueue[i];
+
+                if(cur_event.data.fd & listen_fd)
+                {
+
+                    // Accept new connection 
+                    // TODO
+
+                }
+
+                if(cur_event.events & EPOLLIN)
+                {
+                    // Read received data 
+                    // TODO 
+                }
+
+                if(cur_event.events & EPOLLOUT)
+                {
+                    // Socket is writable 
+                    // TODO 
+                }
+                
+                if(cur_event.events & EPOLLERR)
+                {
+                    // TODO
+                }
+
+                if(cur_event.events & EPOLLHUP)
+                {
+                    // TODO 
+                }
+
+                if(cur_event.events & EPOLLRDHUP)
+                {
+                    // TODO
+                }
+
+            }
+        }
     }
 
     return 0;
