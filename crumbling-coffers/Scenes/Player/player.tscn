@@ -90,8 +90,9 @@ animations = [{
 "speed": 10.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_uvnfx"]
-size = Vector2(100, 100)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h8ma5"]
+radius = 44.0
+height = 250.0
 
 [node name="Player" type="CharacterBody2D" unique_id=719838145]
 script = ExtResource("1_uvnfx")
@@ -102,4 +103,5 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=978850304]
-shape = SubResource("RectangleShape2D_uvnfx")
+position = Vector2(0, 20)
+shape = SubResource("CapsuleShape2D_h8ma5")
