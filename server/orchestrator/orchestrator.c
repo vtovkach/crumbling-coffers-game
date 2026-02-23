@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
         goto error; 
 
     int opt = 1; 
+    // Tell kernel to make the port immediately reusable after listening socket is closed 
     if(setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
         goto error; 
 
