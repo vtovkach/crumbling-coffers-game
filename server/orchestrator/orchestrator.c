@@ -77,4 +77,10 @@ int main(int argc, char *argv[])
     }
 
     return 0;
+
+error:
+    perror("socket/bind/listen/fcntl failed (orchestrator)");
+    kill(p_pid, SIGUSR2);
+    freeaddrinfo(listen_ai);
+    return 1;
 }
