@@ -135,13 +135,21 @@ int main(int argc, char *argv[])
             break;
         }
 
+        int events_ready = epoll_wait(epoll_fd, eventQueue, MAX_EPOLL_EVENTS, 2000);
+
+        if(events_ready < 0)
+            perror("error happened with epoll_wait");
+
+        if(events_ready > 0)
+            printf("We got some events!");
+
         sleep(2);
     }
 
     return 0;
 
 error:
-    perror("socket/bind/listen/fcntl failed (orchestrator)");
+    perror("socket/bind/listen/fcntl/epoll_create failed (orchestrator)");
     kill(p_pid, SIGUSR2);
     freeaddrinfo(listen_ai);
     return 1;
