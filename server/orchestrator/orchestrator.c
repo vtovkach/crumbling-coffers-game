@@ -16,12 +16,25 @@
 #include <netinet/tcp.h>
 #include <fcntl.h>
 
+#include "../include/common/hashmap.h"
+#include "../include/common/util.h"
+
 #define LOG_FILE "log/orchestrator"
 
 #define SERVER_TCP_PORT "10000"
 #define MAX_TCP_QUEUE   128
 
 #define MAX_EPOLL_EVENTS 512
+
+// FUNCTION PROTOTYPES 
+int acceptConnections(FILE *const log_file, const int listen_fd, const int epoll_fd, struct HashTable *const active_clients);
+
+
+unsigned int hash(const void *, unsigned int)
+{
+    // TODO 
+    return 0;
+}
 
 struct Client
 {
