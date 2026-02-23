@@ -129,9 +129,10 @@ int main(int argc, char *argv[])
         {
             // Later gracefully terminate this process 
 
+            close(epoll_fd);
             close(listen_fd);
             freeaddrinfo(listen_ai);
-
+            
             break;
         }
 
@@ -143,7 +144,6 @@ int main(int argc, char *argv[])
         if(events_ready > 0)
             printf("We got some events!");
 
-        sleep(2);
     }
 
     return 0;
