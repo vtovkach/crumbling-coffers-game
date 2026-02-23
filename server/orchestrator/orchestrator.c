@@ -6,11 +6,18 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netdb.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <sys/epoll.h>
+#include <netinet/tcp.h>
+#include <fcntl.h>
 
 #define LOG_FILE "log/orchestrator"
+
+#define SERVER_TCP_PORT "10000"
+#define MAX_TCP_QUEUE   128
 
 struct Client
 {
