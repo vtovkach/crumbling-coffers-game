@@ -259,6 +259,12 @@ int main(int argc, char *argv[])
         return 1; 
     }
 
+    // Establish and bind listening socket to designated PORT 
+    int listen_fd; 
+    listen_fd = setupListenSocket();
+    if(listen_fd < 0)
+        goto error; 
+
     struct HashTable *active_clients = ht_create(sizeof(int), 1, sizeof(struct Client), 1, hash, HASH_TABLE_SIZE); 
     if(!active_clients)
     {
@@ -267,12 +273,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // Establish and bind listening socket to designated PORT 
-    int listen_fd; 
-    listen_fd = setupListenSocket();
-    if(listen_fd < 0)
-        goto error; 
-
+    // Here I will set up PORTS Queue and Game Queue 
+    // TODO 
+    // .
+    // .
+    // . 
 
     // Set up epoll to monitor and react to events
     int epoll_fd;
