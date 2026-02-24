@@ -119,16 +119,43 @@ int acceptConnections(FILE *const log_file, int listen_fd, const int epoll_fd, s
         accepted++;
     }
 
+    // Flush log_file's buffer 
+    fflush(log_file);
+
     return accepted;
 }
 
 int closeConnection(FILE *const log_file, int epoll_fd, int target_fd, struct HashTable *const active_clients)
-{
+{    
+    if(epoll_ctl(epoll_fd, EPOLL_CTL_DEL, target_fd, NULL) == -1)
+    {
+        // epoll_ctl failed  
+        ht__remove_internal(active_clients, &target_fd);
+        close(target_fd);
 
-    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, cur_event.data.fd, NULL);
-    ht__remove_internal(active_clients, &cur_event.data.fd);
-    close(cur_event.data.fd);
-    fprintf(stdout, "Connection Closed fd: %d \n", cur_event.data.fd);
+        log_error_fd(log_file, "epoll_ctl DEL failed", target_fd, errno);
+
+        return -1; // Indicate critical error  
+    }
+
+    if(ht__remove_internal(active_clients, &target_fd) <= 0)
+    {
+        // Hash Table error or element not found 
+
+        close(target_fd);
+
+        log_error_fd(log_file, "Hash table removal failed or element not found (possible memory leak)", target_fd, 0);
+
+        return 1; // Indicate potential memory leak 
+    }
+
+    close(target_fd);
+
+    // Log Success 
+    log_error_fd(log_file, "Connection closed by peer", target_fd, 0);
+
+    // Flush log_file's buffer  
+    fflush(log_file);
 
     return 0;
 }
@@ -287,9 +314,15 @@ int main(int argc, char *argv[])
 
                 if(cur_event.events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP))
                 {
-                    // Disconnected 
-                    // TODO 
-                    
+                    // Peer disconnected 
+                    if(closeConnection(log_file, epoll_fd, cur_event.data.fd, active_clients) < 0)
+                    {
+                        // Critical Error happened shutdown server 
+                        // TODO 
+                        // ...
+                        printf("shutdown: Critical Error in [closeConnection]\n");
+                        break; 
+                    }
                 }
             }
         }
