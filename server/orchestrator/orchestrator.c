@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
 
         if(events_ready > 0)
         {
-            printf("We got some events!");
+            printf("We got some events!\n");
 
             for(int i = 0; i < events_ready; i++)
             {
