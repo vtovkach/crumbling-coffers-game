@@ -1,10 +1,7 @@
-extends Area2D
+extends "res://Scripts/pickup_base.gd"
 
-var value := 5
+func _ready() -> void:
+	points = 5
 
-func _on_area_2d_body_entered(body: Node2D) -> void:
+func on_collected(body: Node) -> void:
 	print("Common Item Collected.")
-	#update score +5 points
-	queue_free()
-
-	

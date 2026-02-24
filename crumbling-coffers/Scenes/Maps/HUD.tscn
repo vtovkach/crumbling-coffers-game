@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://boqmq6t5xucsj" path="res://Scripts/hud.gd" id="1_s1siy"]
 
-[node name="HUD" type="Node2D" unique_id=265116575]
+[node name="HUD" type="CanvasLayer" unique_id=666970565]
 script = ExtResource("1_s1siy")
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=1908600866]
