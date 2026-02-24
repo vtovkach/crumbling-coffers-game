@@ -15,21 +15,31 @@
 #include <sys/epoll.h>
 #include <netinet/tcp.h>
 #include <fcntl.h>
+#include <stdint.h>
 
 #include "../include/common/hashmap.h"
 #include "../include/common/util.h"
 
 #define LOG_FILE "log/orchestrator"
 
-#define SERVER_TCP_PORT "10000"
-#define MAX_TCP_QUEUE   128
-
+#define SERVER_TCP_PORT  "10000"
+#define MAX_TCP_QUEUE    128
 #define MAX_EPOLL_EVENTS 512
+#define HASH_TABLE_SIZE  4096
 
-unsigned int hash(const void *, unsigned int)
+unsigned int hash(const void *key, unsigned int table_size)
 {
-    // TODO 
-    return 0;
+    uint32_t x;
+    memcpy(&x, key, sizeof(uint32_t));
+
+    // Murmur3 finalizer mix
+    x ^= x >> 16;
+    x *= 0x85ebca6b;
+    x ^= x >> 13;
+    x *= 0xc2b2ae35;
+    x ^= x >> 16;
+
+    return x & (table_size - 1);  // table_size must be power of 2
 }
 
 struct Client
@@ -189,7 +199,7 @@ int main(int argc, char *argv[])
         return 1; 
     }
 
-    struct HashTable *active_clients = ht_create(sizeof(int), 1, sizeof(struct Client), 1, hash, 512); 
+    struct HashTable *active_clients = ht_create(sizeof(int), 1, sizeof(struct Client), 1, hash, HASH_TABLE_SIZE); 
     if(!active_clients)
         goto error;
 
