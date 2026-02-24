@@ -69,6 +69,38 @@ void set_terminate(int sig)
     terminate = 1;
 }
 
+int ht_close_all_sockets(HashTable *hash)
+{
+    if(!hash)
+        return -1;
+
+    int closed_count = 0;
+
+    for(unsigned int i = 0; i < hash->hash_table_size; ++i)
+    {
+        Node *cur = hash->hash_table[i];
+
+        while(cur)
+        {
+            if(cur->key)
+            {
+                int fd;
+                memcpy(&fd, cur->key, sizeof(int));
+
+                if(fd >= 0)
+                {
+                    if(close(fd) == 0)
+                        closed_count++;
+                }
+            }
+
+            cur = cur->nextNode;
+        }
+    }
+
+    return closed_count;
+}
+
 int setupListenSocket(void)
 {
     // Establish and bind listening socket to designated PORT 
