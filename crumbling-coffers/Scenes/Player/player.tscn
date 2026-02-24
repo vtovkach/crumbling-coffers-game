@@ -91,20 +91,21 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h8ma5"]
-radius = 44.0
-height = 250.0
+radius = 66.0
+height = 382.0
 
 [node name="Player" type="CharacterBody2D" unique_id=719838145]
 script = ExtResource("1_uvnfx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1767801801]
+scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_ei2r2")
 animation = &"idle"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=978850304]
-position = Vector2(0, 20)
+position = Vector2(0, 23)
 shape = SubResource("CapsuleShape2D_h8ma5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1999409388]
-zoom = Vector2(0.6, 0.6)
+zoom = Vector2(0.2, 0.2)

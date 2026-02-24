@@ -13,7 +13,7 @@ extends CharacterBody2D
 @export var decel: float = 500.0
 @export var braking_decel: float = 2000.0
 
-@export var jump_velocity: float = -500.0
+@export var jump_velocity: float = -1000.0
 
 func _physics_process(delta: float) -> void:
 
