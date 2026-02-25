@@ -28,6 +28,8 @@
 #define MAX_EPOLL_EVENTS 512
 #define HASH_TABLE_SIZE  4096
 
+#define TCP_SEGMENT_SIZE  10
+
 unsigned int hash(const void *key, unsigned int table_size)
 {
     uint32_t x;
@@ -48,17 +50,12 @@ struct Client
     int fd;
     struct sockaddr_in addr;
 
-    // Input Data 
-    void *input_buffer;
-    size_t i_buf_size;   // 150 bytes 
-    size_t received_bytes; 
-    bool is_fully_received; 
-
-    // Output Data 
-    void *output_buffer; // 150 bytes  
-    size_t o_buf_size;
-    size_t sent_bytes; 
-    bool is_fully_sent;  
+    uint8_t buffer[TCP_SEGMENT_SIZE];
+    size_t buf_size;
+    size_t cur_size; 
+    
+    bool is_received; // specifies if the client's game request message was received and processed
+    bool is_sent;     // specifies if the server's output message to the client is fully sent  
 };
 
 volatile sig_atomic_t terminate = 0;
@@ -157,7 +154,13 @@ int acceptConnections(FILE *const log_file, int listen_fd, const int epoll_fd, s
     // Accept all pending connections 
     while(true)
     {
+        // Initialize Client Structure
         struct Client new_client;
+        new_client.buf_size = TCP_SEGMENT_SIZE;
+        new_client.cur_size = 0;
+        new_client.is_received = false; 
+        new_client.is_sent = false;
+
         struct sockaddr_in c_addr;
         socklen_t ca_len = sizeof(c_addr);
         int conn_fd = accept4(listen_fd, (struct sockaddr *)&c_addr, &ca_len, SOCK_NONBLOCK | SOCK_CLOEXEC);
@@ -262,9 +265,69 @@ int closeConnection(FILE *const log_file, int epoll_fd, int target_fd, struct Ha
     return 0;
 }
 
-int receiveData()
+int receiveData(int epoll_fd, int target_fd, HashTable *const clients)
 {
-    // TODO 
+    uint8_t temp_buf[TCP_SEGMENT_SIZE];
+
+    ssize_t bytes = recv(target_fd, temp_buf, sizeof(temp_buf), 0);
+
+    if(bytes < 0)
+    {
+        // Error
+        // TODO  
+
+        printf("Client Closed connectio ungracefully.");
+
+        return -1;
+    }
+
+    if(bytes == 0)
+    {
+        // Peer closed connection gracefully 
+        // TODO
+
+        return 1;
+    }
+
+    struct Client *client = ht__get_internal(clients, &target_fd, sizeof(int));
+
+    if((size_t) bytes > (client->buf_size - client->cur_size))
+    {
+        // Drop message.
+        // Message exceeds protocol's size 
+
+        // Reset buffer so clinet has another chance to sent a initialization message  
+
+
+        return 2;
+    }
+    
+    memcpy(client->buffer + client->cur_size, temp_buf, bytes);
+
+    client->cur_size += bytes;
+
+    if(client->cur_size == TCP_SEGMENT_SIZE)
+    {
+        client->is_received = true;
+
+        // Remove EPOLLIN flag
+        // TODO 
+        // ... 
+
+        // Add client to the game queue 
+        // TODO 
+
+    }
+    
+    // Code only for testing
+    for(int i = 0; i < bytes; i++)
+    {
+        putchar((char)temp_buf[i]);
+    }
+    putchar('\n');
+    fflush(stdout);
+             
+    return 0;
 }
 
 int sendData()
@@ -373,8 +436,6 @@ int main(int argc, char *argv[])
 
         if(events_ready > 0)
         {
-            printf("We got some events!\n");
-
             for(int i = 0; i < events_ready; i++)
             {
 
@@ -406,6 +467,8 @@ int main(int argc, char *argv[])
                 {
                     // Read received data 
                     // TODO 
+
+                    receiveData(epoll_fd, cur_event.data.fd, active_clients);
                 }
 
                 if(cur_event.events & EPOLLOUT)
