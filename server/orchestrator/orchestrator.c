@@ -292,27 +292,26 @@ int closeConnection(FILE *const log_file, int epoll_fd, int target_fd, struct Ha
     return 0;
 }
 
-int receiveData(int epoll_fd, int target_fd, HashTable *const clients)
+int receiveData(int epoll_fd, int target_fd, HashTable *const clients, FILE *const log_file)
 {
     uint8_t temp_buf[TCP_SEGMENT_SIZE];
-
     ssize_t bytes = recv(target_fd, temp_buf, sizeof(temp_buf), 0);
 
     if(bytes < 0)
     {
-        // Error
-        // TODO  
+        if(errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR)
+        {
+            // No error: nothing available to read 
+            return 0;
+        }
 
-        printf("Client Closed connectio ungracefully.");
-
+        closeConnection(log_file, epoll_fd, target_fd, clients);
         return -1;
     }
 
     if(bytes == 0)
-    {
-        // Peer closed connection gracefully 
-        // TODO
-
+    {        
+        closeConnection(log_file, epoll_fd, target_fd, clients);
         return 1;
     }
 
@@ -320,11 +319,15 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients)
 
     if((size_t) bytes > (client->buf_size - client->cur_size))
     {
-        // Drop message.
+        // Drop message
         // Message exceeds protocol's size 
 
-        // Reset buffer so clinet has another chance to sent a initialization message  
+        // Reset buffer so clinet has another chance to sent a request to join game message  
 
+        client->cur_size = 0;
+        client->is_received = false;
+        client->ACK_sent = false;
+        client->game_info_sent = false;  
 
         return 2;
     }
@@ -333,48 +336,45 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients)
 
     client->cur_size += bytes;
 
-    if(client->cur_size == TCP_SEGMENT_SIZE)
+    if(client->cur_size >= TCP_SEGMENT_SIZE)
     {
         client->is_received = true;
 
-        // Remove EPOLLIN flag
-        // TODO 
-        // ... 
+        // Update epoll flags
+        struct epoll_event ev = {.data.fd = target_fd, .events = EPOLLOUT | EPOLLHUP | EPOLLERR | EPOLLRDHUP};
+        epoll_ctl(epoll_fd, EPOLL_CTL_MOD, target_fd, &ev);
 
         // Add client to the game queue 
-        // TODO 
+        addClientToQueue();
 
+        // Prepare ACK message into client's buffer
+        char ack_msg[TCP_SEGMENT_SIZE];
+        memset(ack_msg, 0, TCP_SEGMENT_SIZE);
+        memcpy(ack_msg, "ACK", 3);
+        
+        // Copy ACK message into the client's buffer 
+        memcpy(client->buffer, (uint8_t *)ack_msg, TCP_SEGMENT_SIZE);
     }
-    
-    // Code only for testing
+
+    // The following lines are only for testing purposes (it will be removed soon) 
     for(int i = 0; i < bytes; i++)
     {
         putchar((char)temp_buf[i]);
     }
     putchar('\n');
     fflush(stdout);
-             
+    // ------------------------------------------------
+
     return 0;
 }
 
 int sendData()
 {
     // TODO 
-}
 
-void shutdownServer(int listen_fd, int epoll_fd, struct HashTable *clients)
-{
-    // Close socket for every active connection 
-    ht_close_all_sockets(clients);
+    // Place holder for now 
 
-    ht_destroy(clients);
-
-    // Later I will have 2 more data structure that I will need to free  
-    // TODO
-    // ... 
-
-    close(epoll_fd);
-    close(listen_fd); 
+    return 0;
 }
 
 int main(int argc, char *argv[])
