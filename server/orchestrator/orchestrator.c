@@ -305,17 +305,29 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, FILE *con
             return 0;
         }
 
-        closeConnection(log_file, epoll_fd, target_fd, clients);
-        return -1;
+        if(closeConnection(log_file, epoll_fd, target_fd, clients) < 0) { return -1; }
+
+        return 1;
     }
 
     if(bytes == 0)
     {        
-        closeConnection(log_file, epoll_fd, target_fd, clients);
+        if(closeConnection(log_file, epoll_fd, target_fd, clients) < 0) { return -1; } 
+
         return 1;
     }
 
     struct Client *client = ht__get_internal(clients, &target_fd, sizeof(int));
+    if(!client)
+    {
+        // ht__get_internal did not find the active client 
+        // Close connection and stop tracking it with epoll 
+        close(target_fd);
+
+        if(epoll_ctl(epoll_fd, EPOLL_CTL_DEL, target_fd, NULL) < 0) { return -1; }
+
+        return 1; 
+    }
 
     if((size_t) bytes > (client->buf_size - client->cur_size))
     {
@@ -342,7 +354,11 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, FILE *con
 
         // Update epoll flags
         struct epoll_event ev = {.data.fd = target_fd, .events = EPOLLOUT | EPOLLHUP | EPOLLERR | EPOLLRDHUP};
-        epoll_ctl(epoll_fd, EPOLL_CTL_MOD, target_fd, &ev);
+        if(epoll_ctl(epoll_fd, EPOLL_CTL_MOD, target_fd, &ev) < 0) 
+        {
+            ht__remove_internal(clients, &target_fd);
+            return -1;
+        }
 
         // Add client to the game queue 
         addClientToQueue();
