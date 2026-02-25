@@ -50,14 +50,20 @@ struct Client
     int fd;
     struct sockaddr_in addr;
 
+    // This buffer is used to keep received initialization data and store ack message 
     uint8_t buffer[TCP_SEGMENT_SIZE];
-    uint8_t game_queue_info[TCP_SEGMENT_SIZE];
     size_t buf_size;
-    size_t cur_size; 
+    size_t cur_size;
+
+    // This buffer is used to store and send game information to the client 
+    uint8_t game_queue_info[TCP_SEGMENT_SIZE];
+    size_t game_q_size;
+    size_t game_q_cur_size;
+    bool game_q_ready; 
     
     bool is_received;  // specifies if the client's game request message was received and processed
     bool ACK_sent;     // specifies if the server's output message to the client is fully sent  
-    bool game_info_sent;
+    bool game_info_sent; // specifies if game informatio is sent 
 };
 
 volatile sig_atomic_t terminate = 0;
@@ -195,9 +201,12 @@ int acceptConnections(FILE *const log_file, int listen_fd, const int epoll_fd, s
         struct Client new_client;
         new_client.buf_size = TCP_SEGMENT_SIZE;
         new_client.cur_size = 0;
+        new_client.game_q_size = TCP_SEGMENT_SIZE;
+        new_client.game_q_cur_size = 0;
         new_client.is_received = false; 
         new_client.ACK_sent = false;
         new_client.game_info_sent = false;
+        new_client.game_q_ready = false;
 
         struct sockaddr_in c_addr;
         socklen_t ca_len = sizeof(c_addr);
