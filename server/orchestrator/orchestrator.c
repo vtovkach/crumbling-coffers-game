@@ -381,7 +381,7 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, FILE *con
         }
 
         // Add client to the game queue 
-        addClientToQueue();
+        addClientToQueue(client);
 
         // Prepare ACK message into client's buffer
         char ack_msg[TCP_SEGMENT_SIZE];
@@ -395,11 +395,37 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, FILE *con
     return 0;
 }
 
-int sendData()
+int sendData(FILE *const log_file, int epoll_fd, int target_fd, HashTable *const clients)
 {
-    // TODO 
+    struct Client *client = ht__get_internal(clients, &target_fd, sizeof(int));
+    if(!client)
+    {
+        // Error: client not found 
+        // Remove client from epoll_test 
 
-    // Place holder for now 
+        return 1; 
+    }
+
+    if(client->ACK_sent && client->game_q_ready)
+    {
+        // Send game info 
+        ssize_t bytes = send(target_fd, client->game_queue_info + client->game_q_cur_size, client->game_q_size - client->game_q_cur_size, 0);
+
+        client->game_q_cur_size += bytes;
+
+        if(client->game_q_cur_size == client->game_q_size)
+        {
+            // Close Connection: nothing else to do with the client 
+            if(closeConnection(log_file, epoll_fd, target_fd, clients) < 0) { return -1; }
+        }
+
+        return 0;
+    }
+    
+    // Otherwise 
+
+    // Send acknowledge first 
+
 
     return 0;
 }
@@ -525,9 +551,14 @@ int main(int argc, char *argv[])
                 if(cur_event.events & EPOLLOUT)
                 {
                     // Socket is writable 
-                    // TODO 
 
-                    sendData();
+                    if(sendData(log_file, epoll_fd, cur_event.data.fd, active_clients) < 0)
+                    {
+                        shutdownServer(listen_fd, epoll_fd, active_clients);
+                        printf("shutdown: Critical Error in [sendData]\n");
+                        goto exit;  
+                    }
+
                 }
 
                 if(cur_event.events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP))
