@@ -13,7 +13,7 @@ extends CharacterBody2D
 @export var decel: float = 500.0
 @export var braking_decel: float = 2000.0
 
-@export var jump_velocity: float = -500.0
+@export var jump_velocity: float = -1000.0
 
 #Daniel - adding a score to the character for when they pick up the items.
 
