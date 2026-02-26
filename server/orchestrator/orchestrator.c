@@ -401,31 +401,62 @@ int sendData(FILE *const log_file, int epoll_fd, int target_fd, HashTable *const
     if(!client)
     {
         // Error: client not found 
-        // Remove client from epoll_test 
-
+        closeConnection(log_file, epoll_fd, target_fd, clients);
         return 1; 
     }
 
     if(client->ACK_sent && client->game_q_ready)
     {
         // Send game info 
-        ssize_t bytes = send(target_fd, client->game_queue_info + client->game_q_cur_size, client->game_q_size - client->game_q_cur_size, 0);
+        ssize_t bytes = send(target_fd, client->game_queue_info + client->game_q_cur_size, client->game_q_size - client->game_q_cur_size, MSG_NOSIGNAL);
+        if(bytes < 0)
+        {
+            // Handle error exit code 
+            if(errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) { return 0; } // Not critical 
 
-        client->game_q_cur_size += bytes;
+            log_error_fd(log_file, "send failed", target_fd, errno);
+            closeConnection(log_file, epoll_fd, target_fd, clients);
+            return 1;
+        }
+
+        client->game_q_cur_size += (size_t)bytes;
 
         if(client->game_q_cur_size == client->game_q_size)
         {
             // Close Connection: nothing else to do with the client 
-            if(closeConnection(log_file, epoll_fd, target_fd, clients) < 0) { return -1; }
+            closeConnection(log_file, epoll_fd, target_fd, clients);
         }
 
         return 0;
     }
     
-    // Otherwise 
+    if(!client->ACK_sent)
+    {
+        ssize_t bytes = send(target_fd, client->buffer + client->cur_size, client->buf_size - client->cur_size, MSG_NOSIGNAL);
+        if(bytes < 0)
+        { 
+            // Handle error exit code 
+            if(errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) { return 0; } // Not critical 
 
-    // Send acknowledge first 
+            log_error_fd(log_file, "send failed", target_fd, errno);
+            closeConnection(log_file, epoll_fd, target_fd, clients);
+            return 1;
+        }
 
+        client->cur_size += (size_t)bytes;
+
+        if(client->cur_size == client->buf_size)
+        {
+            client->ACK_sent = true; 
+
+            if(!client->game_q_ready)
+            {
+                // Update epoll events: remove EPOLLOUT until game_q_ready is false 
+                struct epoll_event ev = {.data.fd = target_fd, .events = EPOLLHUP | EPOLLERR | EPOLLRDHUP };
+                if(epoll_ctl(epoll_fd, EPOLL_CTL_MOD, target_fd, &ev) < 0) { return -1; } // Critical Error 
+            }
+        }
+    }
 
     return 0;
 }
