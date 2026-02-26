@@ -28,7 +28,7 @@
 #define MAX_EPOLL_EVENTS 512
 #define HASH_TABLE_SIZE  4096
 
-#define TCP_SEGMENT_SIZE  10
+#define TCP_SEGMENT_SIZE  20 // Can be changed 
 
 unsigned int hash(const void *key, unsigned int table_size)
 {
