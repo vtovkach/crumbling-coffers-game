@@ -274,14 +274,3 @@ tile_set = SubResource("TileSet_gyh6a")
 
 [node name="Player" parent="." unique_id=719838145 instance=ExtResource("3_gyh6a")]
 position = Vector2(-5, -111)
-
-[node name="HUD" parent="." unique_id=401163621 instance=ExtResource("5_cvff3")]
-
-[node name="CommonItem" parent="." unique_id=1124751394 instance=ExtResource("4_ycfoj")]
-position = Vector2(429, -91)
-
-[node name="CommonItem2" parent="." unique_id=438378661 instance=ExtResource("4_ycfoj")]
-position = Vector2(-905, -555)
-
-[node name="CommonItem3" parent="." unique_id=1778969041 instance=ExtResource("4_ycfoj")]
-position = Vector2(1792, -546)
