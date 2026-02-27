@@ -17,7 +17,7 @@ class_name PickupItems	# Class name.
 
 var itemType : String
 @export var rarity : String	# rarity can be assigned outside of the script in "Inspector" by using @export.
-var ability : bool
+var ability = false	# default. 
 @export var score : int
 
 
@@ -33,7 +33,19 @@ func _set_rarity(new_rarity : String):
 func _set_score(new_score : int):
 	score = new_score
 
+# function used to set ability types to true.
+func _set_ability(pu : bool):
+	ability = pu # pu = powerup
+
+func _get_ability(a : bool):
+	return a
+	
+	
 func _on_item_collected():
 	print("I've been picked up!")
 # More sophisticated function will be implemented in future tasks. Placeholder in order to test functions work
 	# and collision signals are being received.
+
+func abilityCheck():
+	pass #implement test where when item is collided with, it will ask if an ability item.
+		 # check if condition and print corresponding message.

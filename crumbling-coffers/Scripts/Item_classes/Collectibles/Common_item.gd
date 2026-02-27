@@ -8,6 +8,3 @@ func _ready() -> void:
 	_set_rarity(rarity_type)
 	_set_itemType(item_type)
 	_set_score(common_score)
-	
-
-if _on_
