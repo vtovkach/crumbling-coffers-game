@@ -1,6 +1,6 @@
 # Simple recursive object build
 CC      := gcc
-CFLAGS  := -Wall -Wextra -Wfloat-equal -O2 -Iinclude
+CFLAGS  := -Wall -Wextra -Wfloat-equal -O2 -Iinclude -Iorchestrator/include -D_GNU_SOURCE
 
 OBJDIR  := obj
 BINDIR  := bin
