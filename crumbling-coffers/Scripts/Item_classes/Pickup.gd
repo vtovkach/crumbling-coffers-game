@@ -45,8 +45,8 @@ func _on_item_collected():
 	print("I've been picked up!")
 	queue_free() # frees up the scene and stops painting it to the current scene.
 	# !! MAY REWRITE "queue_free()" to be specified in specific functions if bugs come up.
-# More sophisticated function will be implemented in future tasks. Placeholder in order to test functions work
-	# and collision signals are being received.
+# More sophisticated function will be implemented in future tasks. Placeholder in order to test
+	#  functions work and collision signals are being received.
 
 func abilityCheck(a : bool):
 	if a == true:
