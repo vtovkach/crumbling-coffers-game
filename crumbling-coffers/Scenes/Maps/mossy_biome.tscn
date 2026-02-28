@@ -281,25 +281,25 @@ collision_mask = 6
 [node name="HUD" parent="." unique_id=401163621 instance=ExtResource("5_cvff3")]
 
 [node name="CommonItem" parent="." unique_id=438378661 instance=ExtResource("4_ycfoj")]
-position = Vector2(440, -37)
+position = Vector2(512, 0)
 collision_layer = 4
 
 [node name="CommonItem2" parent="." unique_id=1924998974 instance=ExtResource("4_ycfoj")]
-position = Vector2(1759, -560)
+position = Vector2(1792, -512)
 collision_layer = 4
 
 [node name="CommonItem3" parent="." unique_id=309620172 instance=ExtResource("4_ycfoj")]
-position = Vector2(-835, -556)
+position = Vector2(-768, -512)
 collision_layer = 4
 
 [node name="test-item" parent="." unique_id=643455879 instance=ExtResource("7_i3aph")]
-position = Vector2(1247, 1510)
+position = Vector2(1024, 1468)
 collision_layer = 4
 
 [node name="test-item2" parent="." unique_id=1032219937 instance=ExtResource("7_i3aph")]
-position = Vector2(-827, 1485)
+position = Vector2(-1024, 1468)
 collision_layer = 4
 
 [node name="test-item3" parent="." unique_id=46343357 instance=ExtResource("7_i3aph")]
-position = Vector2(2894, 1468)
+position = Vector2(2816, 1468)
 collision_layer = 4
