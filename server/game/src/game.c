@@ -9,8 +9,9 @@
 #include <sys/types.h>
 
 #include "net/udp_socket.h"
+#include "net/io.h"
 
-#define PORT 10001
+#define MAX_EPOLL_EVENTS 100 // will change that and move to a dedicated header file
 
 static _Atomic bool stop_net = false;
 static _Atomic bool net_dead = false;
@@ -32,8 +33,44 @@ void *netThread(void *arg)
         return NULL;
     }
 
-    
+    int epoll_fd = epoll_create1(0);
+    if(epoll_fd == 0)
+    {
+        // Error 
+        // Will handle later 
+    }
 
+    struct epoll_event eventsQueue[MAX_EPOLL_EVENTS];
+
+    struct epoll_event ev; 
+    ev.events = EPOLLIN;
+    ev.data.fd = listen_fd;
+
+    if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &ev) < 0)
+    {
+        // TODO 
+
+    }
+
+    for(;;)
+    {
+        int events_ready = epoll_wait(epoll_fd, eventsQueue, MAX_EPOLL_EVENTS, 2000);
+        
+        if(events_ready < 0)
+        {
+            // Error 
+            // TODO 
+        }
+
+        for(int i = 0; i < events_ready; i++)
+        {
+            struct epoll_event cur_event = eventsQueue[i];
+
+            udp_read(listen_fd);
+            
+        }
+
+    }
 
     free(arg);
     return NULL;
