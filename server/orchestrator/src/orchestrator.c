@@ -35,7 +35,7 @@ static void shutdownServer(int listen_fd, int epoll_fd, struct HashTable *client
 int orchestrator_run(pid_t parent_pid)
 {
     // Setup signal 
-    if(signals_install() < 0) { return -1; }
+    if(signals_install(SIGUSR1) < 0) { return -1; }
 
     struct Orchestrator orch = {0};
 
@@ -162,12 +162,10 @@ int orchestrator_run(pid_t parent_pid)
 
 fail:
     shutdownServer(orch.listen_fd, orch.epoll_fd, orch.clients, orch.log_file);
-    kill(orch.parent_pid, SIGUSR2); 
     return -1;
 
 boot_fail:
     ht_destroy(orch.clients); // safe on NULL
     fclose(orch.log_file);
-    kill(orch.parent_pid, SIGUSR2);
     return -1;
 }
