@@ -11,6 +11,7 @@
 #include "net/udp_socket.h"
 #include "net/io.h"
 #include "server-config.h"
+#include "threads/game.h"
 
 extern _Atomic bool stop_net;
 
@@ -18,12 +19,12 @@ _Atomic bool net_dead = false;
 
 void *netThread(void *arg)
 {   
-    uint16_t udp_port = *(uint16_t*)arg;
-
+    struct NetThreadArgs args = *(struct NetThreadArgs *)arg; 
+    
     // Detach from the parent 
     pthread_detach(pthread_self());
 
-    int listen_fd = make_udp_server_socket(udp_port);
+    int listen_fd = make_udp_server_socket(args.udp_port);
     if(listen_fd == -1)
     {
         // Something wrong TODO 
@@ -77,8 +78,9 @@ void *netThread(void *arg)
             udp_read(listen_fd);
             
         }
-
-        printf("Network Thread Tick: %d\n", tick++);
+        
+        sleep(2);
+        printf("[net thread] Tick: %d\n", tick++);
     }
 
     free(arg);
