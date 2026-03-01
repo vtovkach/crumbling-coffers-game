@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
-#include "game.h"
+#include "threads/game.h"
 
 
 /**
