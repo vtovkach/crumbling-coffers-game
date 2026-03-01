@@ -10,11 +10,11 @@
 
 #include "net/udp_socket.h"
 #include "net/io.h"
+#include "server-config.h"
 
-#define MAX_EPOLL_EVENTS 100 // will change that and move to a dedicated header file
+extern _Atomic bool stop_net;
 
-static _Atomic bool stop_net = false;
-static _Atomic bool net_dead = false;
+_Atomic bool net_dead = false;
 
 void *netThread(void *arg)
 {   
@@ -40,7 +40,7 @@ void *netThread(void *arg)
         // Will handle later 
     }
 
-    struct epoll_event eventsQueue[MAX_EPOLL_EVENTS];
+    struct epoll_event eventsQueue[ORCH_MAX_EPOLL_EVENTS];
 
     struct epoll_event ev; 
     ev.events = EPOLLIN;
@@ -52,9 +52,17 @@ void *netThread(void *arg)
 
     }
 
+    int tick = 0;
+
     for(;;)
     {
-        int events_ready = epoll_wait(epoll_fd, eventsQueue, MAX_EPOLL_EVENTS, 2000);
+
+        if(stop_net)
+        {
+            break; 
+        }
+
+        int events_ready = epoll_wait(epoll_fd, eventsQueue, ORCH_MAX_EPOLL_EVENTS, 2000);
         
         if(events_ready < 0)
         {
@@ -70,44 +78,9 @@ void *netThread(void *arg)
             
         }
 
+        printf("Network Thread Tick: %d\n", tick++);
     }
 
     free(arg);
     return NULL;
-}
-
-int runGame(uint16_t port)
-{
-    // Setup UDP Networking Thread 
-    pthread_t net_thread; 
-
-    uint16_t *port_arg = malloc(sizeof(*port_arg));     
-    if(!port)
-    {
-        perror("[game] malloc");
-        return -1;
-    }
-
-    if(pthread_create(&net_thread, NULL, netThread, port_arg) != 0)
-    {
-        perror("[game] pthread_create");
-        return -1;
-    }
-    
-    // Here I will have a main game loop    
-    // TODO ...
-
-    int tick = 0;
-
-    for(;;)
-    {
-        if(net_dead)
-            break; 
-
-        printf("[game] Tick: %d\n", tick++);
-
-        sleep(2);
-    }
-
-    return 0; 
 }
