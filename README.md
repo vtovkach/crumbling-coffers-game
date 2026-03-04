@@ -47,6 +47,41 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 ### Contributions
 
+**Aurora**: "Added assets for player and level scenes as well as laid out the level, added collision to interactable ground, and added a player camera."  
+
+- `Jira Task: Learn TileMap and create a basic map level`  
+    - [PROJ-28](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-28), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-28-Learn-Tilemap)  
+- `Jira Task: Agree on Base Game`  
+    - [PROJ-68](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-68). [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-68-BASE-GAME)  
+- `Jira Task: Level Architecture & Collision Design`  
+    - [PROJ-33](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-33), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/feature/PROJ-33-collision)  
+- `Jira Task: Player Spawning & Camera Integration`  
+    - [PROJ-35](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-35), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-35-player-camera)  
+- `Jira Task: Interactive Item & Platform Placement`  
+    - [PROJ-36](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-36), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-36-item-platforms)  
+
+**Andrea**: "incorporated an unrefined inheritance framework for how item classes will be created, and wrote tests testing initial character movment collisions." 
+
+- `Jira Task: Learn Node System & Scene Composition`  
+    - [PROJ-47](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-47), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-47-learn-node-system-scene-composit)  
+- `Jira Task: Learn Timers, Autoloads & Basic Game State Management`  
+    - [PROJ-52](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-52), [Bitbucket](http://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-52-learn-timers-autoloads-basic-gam)  
+- `Jira Task: Define classes for different items and classifications`  
+    - [PROJ-40](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-40), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/feature/PROJ-40-defining-abstract-item-objects)  
+- `Jira Task: Testing Collisions`  
+    - [PROJ-65](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-65), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-65-testing-collisions)  
+
+**Daniel Pelley**: "Added a basic item and system that allows the player to pick up items along with the framework for the player's inventory/backpack."
+
+- `Jira Task: Learning GDScript and GoDot`
+    - [PROJ-29](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-29), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-29-learning-gdscript)
+- `Jira Task: Learn Event System & Signals Through Item Collection`
+    - [PROJ-48](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-48), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-48-learn-event-system-signals-throu)
+- `Jira Task: Design: Ability Item System Spec`
+    - [PROJ-21](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-21), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-21-design-ability-item-system-spec)
+ - `Jira Task: Design: Ability Item System Spec`
+    - [PROJ-25](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-25), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-25-implementation-client-godot-gdsc)
+ 
 **Nicholas**: "added a player-character that users can move with keyboard input, and related tests."
 
 - `Jira Task: learn godot movement + collision ideas`
@@ -60,29 +95,6 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 - `Jira Task: Testing Movement System`
     - [PROJ-64](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-64), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-64-testing-movement-system)  
 
-**Andrea**: "incorporated an unrefined inheritance framework for how item classes will be created, and wrote tests testing initial character movment collisions." 
-
-- `Jira Task: Learn Node System & Scene Composition`  
-    - [PROJ-47](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-47), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-47-learn-node-system-scene-composit)  
-- `Jira Task: Learn Timers, Autoloads & Basic Game State Management`  
-    - [PROJ-52](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-52), [Bitbucket](http://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-52-learn-timers-autoloads-basic-gam)  
-- `Jira Task: Define classes for different items and classifications`  
-    - [PROJ-40](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-40), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/feature/PROJ-40-defining-abstract-item-objects)  
-- `Jira Task: Testing Collisions`  
-    - [PROJ-65](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-65), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-65-testing-collisions)  
-
-
-**Daniel Pelley**: "Added a basic item and system that allows the player to pick up items along with the framework for the player's inventory/backpack."
-
-- `Jira Task: Learning GDScript and GoDot`
-    - [PROJ-29](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-29), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-29-learning-gdscript)
-- `Jira Task: Learn Event System & Signals Through Item Collection`
-    - [PROJ-48](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-48), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-48-learn-event-system-signals-throu)
-- `Jira Task: Design: Ability Item System Spec`
-    - [PROJ-21](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-21), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-21-design-ability-item-system-spec)
- - `Jira Task: Design: Ability Item System Spec`
-    - [PROJ-25](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-25), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-25-implementation-client-godot-gdsc)
- 
 ### Reports
 
 ![Sprint 1 Burnup Chart](docs/screenshots/Sprint1-burnup-chart.png)
@@ -91,7 +103,9 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 **Aurora:**
 
-- [Plans for next steps here]
+- Finish fully spanning first map design
+- Test map against player mechanics to ensure playability
+- Order foreground/background layers for non/interactive parts of scene
 
 **Andrea:**
 
