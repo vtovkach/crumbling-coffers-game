@@ -45,44 +45,72 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 ### Sprint 1
 
-**Nicholas**: added a player-character that users can move with keyboard input, and related tests.
-- Jira Task: learn godot movement + collision ideas
+### Contributions
+
+**Nicholas**: "added a player-character that users can move with keyboard input, and related tests."
+
+- `Jira Task: learn godot movement + collision ideas`
     - [PROJ-66](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-66), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-66-learn-godot-movement-collision-i)
-- Jira Task: Player horizontal movement rules
+- `Jira Task: Player horizontal movement rules`
     - [PROJ-51](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-51), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/feature/PROJ-51-player-horizontal-movement-rules)
-- Jira Task: Player vertical movement rules
+- `Jira Task: Player vertical movement rules`
     - [PROJ-55](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-55), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/feature/PROJ-55-player-vertical-movement-rules)
-- Jira Task: Player moves with keypresses
+- `Jira Task: Player moves with keypresses`
     - [PROJ-63](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-63), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/feature/PROJ-63-player-moves-with-keypresses)
-- Jira Task: Testing Movement System
+- `Jira Task: Testing Movement System`
     - [PROJ-64](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-64), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-64-testing-movement-system)  
 
+**Andrea**: "incorporated an unrefined inheritance framework for how item classes will be created, and wrote tests testing initial character movment collisions." 
 
-[Rest of stuff copied from previous readme. remove as you add linked up version i guess.]
+- `Jira Task: Learn Node System & Scene Composition`  
+    - [PROJ-47](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-47), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-47-learn-node-system-scene-composit)  
+- `Jira Task: Learn Timers, Autoloads & Basic Game State Management`  
+    - [PROJ-52](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-52), [Bitbucket](http://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-52-learn-timers-autoloads-basic-gam)  
+- `Jira Task: Define classes for different items and classifications`  
+    - [PROJ-40](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-40), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/feature/PROJ-40-defining-abstract-item-objects)  
+- `Jira Task: Testing Collisions`  
+    - [PROJ-65](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-65), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-65-testing-collisions)  
+
 
 **Daniel Pelley**: "Added a basic item and system that allows the player to pick up items along with the framework for the player's inventory/backpack."
 
-- Jira Task: Learning GDScript and GoDot
-
-    - [PROJ-29](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-29), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-29-learning-gdscript)
-- Jira Task: Learn Event System & Signals Through Item Collection
-
-    - [PROJ-48](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-48), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-48-learn-event-system-signals-throu)
-- Jira Task: Design: Ability Item System Spec
-
-    - [PROJ-21](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-21), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-21-design-ability-item-system-spec)
+- `Jira Task: Learning GDScript and GoDot`
+    - [PROJ-29](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-29), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-29-learning-gdscript)
+- `Jira Task: Learn Event System & Signals Through Item Collection`
+    - [PROJ-48](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-48), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-48-learn-event-system-signals-throu)
+- `Jira Task: Design: Ability Item System Spec`
+    - [PROJ-21](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-21), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-21-design-ability-item-system-spec)
+ - `Jira Task: Design: Ability Item System Spec`
+    - [PROJ-25](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-25), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-25-implementation-client-godot-gdsc)
  
- - Jira Task: Design: Ability Item System Spec
- 
-    - [PROJ-25](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-25), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-25-implementation-client-godot-gdsc)
- 
+### Reports
 
 ### Next Steps
 
-Daniel:
-- Adding functional items that affect the player in various ways. 
-- Adding to the player the ability to use the items.
+**Aurora:**
 
+- [Plans for next steps here]
+
+**Andrea:**
+
+- Refine item inventory and score UI design (HUD, "head-up display")
+- Global match timer UI and game timer (for singleplayer)
+- Implement simple "end-of-match" redirection and score tally page
+
+**Daniel:**
+
+- Adding functional items that affect the player in various ways. 
+- Adding to the player the ability to use the items. 
+ 
+**Nicholas:**
+
+- [Plans for next steps here]
+
+**Vadym:**
+
+- [Plans for next steps here]
+
+[information below was from original README for features.]
 &nbsp;
 ---
 - Learning Godot Engine  
