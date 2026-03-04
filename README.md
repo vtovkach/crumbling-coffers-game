@@ -58,8 +58,33 @@ The game also includes temporary **boost items (spells)** that enhance abilities
     - [PROJ-64](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-64), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-64-testing-movement-system)  
 
 
-
 [Rest of stuff copied from previous readme. remove as you add linked up version i guess.]
+
+**Daniel Pelley**: "Added a basic item and system that allows the player to pick up items along with the framework for the player's inventory/backpack."
+
+- Jira Task: Learning GDScript and GoDot
+
+    - [PROJ-29](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-29), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-29-learning-gdscript)
+- Jira Task: Learn Event System & Signals Through Item Collection
+
+    - [PROJ-48](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-48), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-48-learn-event-system-signals-throu)
+- Jira Task: Design: Ability Item System Spec
+
+    - [PROJ-21](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-21), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-21-design-ability-item-system-spec)
+ 
+ - Jira Task: Design: Ability Item System Spec
+ 
+    - [PROJ-25](https://cs3398-callisto-s26.atlassian.net/jira/software/projects/PROJ/list?jql=project%20%3D%20PROJ%20AND%20Sprint%20%3D%201%20AND%20assignee%20%3D%20712020%3A54a653fc-7334-4d31-a6ac-5c694c4a09f7%20ORDER%20BY%20created%20DESC&selectedIssue=PROJ-25), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-25-implementation-client-godot-gdsc)
+ 
+
+### Next Steps
+
+Daniel:
+- Adding functional items that affect the player in various ways. 
+- Adding to the player the ability to use the items.
+
+&nbsp;
+---
 - Learning Godot Engine  
 - Leaning GDScript  
 - Map Design & Interactivity  
