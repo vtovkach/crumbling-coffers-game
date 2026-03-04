@@ -79,7 +79,7 @@ The game also includes temporary **boost items (spells)** that enhance abilities
     - [PROJ-48](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-48), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-48-learn-event-system-signals-throu)
 - `Jira Task: Design: Ability Item System Spec`
     - [PROJ-21](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-21), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-21-design-ability-item-system-spec)
- - `Jira Task: Design: Ability Item System Spec`
+ - `Jira Task: Implementation Item Inventory (Client, Godot/GDScript)`
     - [PROJ-25](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-25), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-25-implementation-client-godot-gdsc)
  
 **Nicholas**: "added a player-character that users can move with keyboard input, and related tests."
