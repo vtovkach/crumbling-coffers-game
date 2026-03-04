@@ -97,8 +97,22 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 **Vadym**: created the initial version of the server and established the core infrastructure and foundation for the backend.
 
-- `Jira Tasks`
-    - PROJ-17, PROJ-24, PROJ-49, PROJ-41, PROJ-30, PROJ-32, PROJ-75, PROJ-74
+- `Jira Task: Design the server architecture and produce a corresponding system diagram outlining core components and their interactinos.`
+    - PROJ-17, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/feature/PROJ-17-design-the-server-architecture-a)
+- `Jira Task: Initial Server Setup`
+    - PROJ-24, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-24-initial-server-setup)
+- `Jira Task: Explore Godot Engine and GDSCRIPT`
+    - PROJ-49, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-49-explore-godot-engine-and-gdscript)
+- `Jira Task: Set up Orchestrator Process`
+    - PROJ-41, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-41-set-up-orchestrator-process)
+- `Jira Task: Finish Supervisor Process`
+    - PROJ-30, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-30-finish-supervisor-process)
+- `Jira Task: Setup Game Server Process`
+    - PROJ-32, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-32-setup-game-server-process)
+- `Jira Task: Finish integrate of epoll into the child game process network thread.`
+    - PROJ-75, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-75-create-a-dedicated-network-thread-structure)
+- `Jira Task: Create a dedicated network thread context structure.`
+    - PROJ-74, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-74-finish-integrate-of-epoll)
 
 - `Sprint Work`
     - Contributed 200+ commits during Sprint 1.
