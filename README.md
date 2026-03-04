@@ -95,6 +95,19 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 - `Jira Task: Testing Movement System`
     - [PROJ-64](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-64), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/%7Bced1f902-e50a-4f0b-8f64-5d31e5447f90%7D/branch/PROJ-64-testing-movement-system)  
 
+**Vadym**: created the initial version of the server and established the core infrastructure and foundation for the backend.
+
+- `Jira Tasks`
+    - PROJ-17, PROJ-24, PROJ-49, PROJ-41, PROJ-30, PROJ-32, PROJ-75, PROJ-74
+
+- `Sprint Work`
+    - Contributed 200+ commits during Sprint 1.
+    - Implemented basic server communication.
+    - Built the foundation and overall skeleton of the server infrastructure.
+
+- `Next Steps`
+    - Continue building on the existing foundation and expand the server functionality.
+    
 ### Reports
 
 ![Sprint 1 Burnup Chart](docs/screenshots/Sprint1-burnup-chart.png)
