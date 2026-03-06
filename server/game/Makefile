@@ -1,5 +1,5 @@
 CC      := gcc
-CFLAGS  := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE -Iinclude
+CFLAGS  := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE -Iinclude -I../common/include
 SRC_DIR := src
 OBJ_DIR := obj
 

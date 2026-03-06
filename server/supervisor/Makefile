@@ -1,15 +1,18 @@
 CC     := gcc
-CFLAGS := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE
+CFLAGS := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE -I../include -I../common/include
 
 SRC := main.c
-OBJ := main.o
+OBJ := obj/main.o
 
-all: $(OBJ)
+all: dirs $(OBJ)
+
+dirs:
+	mkdir -p obj
 
 $(OBJ): $(SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -rf obj
 
-.PHONY: all clean
+.PHONY: all clean dirs
