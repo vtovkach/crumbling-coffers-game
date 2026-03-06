@@ -51,6 +51,9 @@ Thumbs.db
 *.wmv
 
 # Server Ignore Files 
+server/common/obj/*
+server/game/obj/*
+server/orchestrator/obj/*
+server/supervisor/obj/*
 server/log/*
-server/obj
 server/bin
