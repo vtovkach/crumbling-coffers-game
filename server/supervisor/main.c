@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <sys/poll.h>
 
-#include "../include/common/util.h"
+#include "util.h"
 
 // Logging CONSTANTS  
 #define LOG_DIR "log/"

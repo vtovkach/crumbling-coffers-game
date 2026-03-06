@@ -1,7 +1,7 @@
 #include <signal.h>
 #include <stdio.h>
 
-#include "../include/common/signals.h"
+#include "signals.h"
 
 static volatile sig_atomic_t g_terminate = 0;
 

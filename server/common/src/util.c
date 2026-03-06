@@ -5,7 +5,7 @@
 #include <time.h>
 #include <string.h>
 
-#include "../include/common/util.h"
+#include "util.h"
 
 int redirect_stderr(const char *path)
 {
