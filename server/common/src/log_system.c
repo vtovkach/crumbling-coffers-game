@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stddef.h>
 #include "util.h"
+#include "server-config.h"
 
 void log_message(FILE *const log_file, const char *msg)
 {
@@ -10,6 +11,32 @@ void log_message(FILE *const log_file, const char *msg)
 
     fprintf(log_file, "%s %s", time, msg);
 }
+
+void log_net_data(FILE *const log_file, char *const buf, size_t buf_size)
+{
+    (void) log_file;
+
+    /*
+    fprintf(log_file, "Received data: ");
+
+    for(size_t i = 0; i < buf_size; i++)
+    {
+        if(buf[i] == '\0') 
+        {
+            fputc('*', log_file);
+            continue;
+        }
+        fputc(buf[i], log_file);
+    }
+    fputc('\n', log_file);
+
+    printf("I am here!");
+
+    // Remove fflush later can hurt performance if called often 
+    fflush(log_file);
+    */
+}
+
 
 void log_error(FILE *const log_file, const char *msg, int errno_code)
 {
