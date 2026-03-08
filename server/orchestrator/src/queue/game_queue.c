@@ -2,10 +2,39 @@
 #include "orchestrator/state/client.h"
 #include <unistd.h>      
 #include <sys/types.h>
+#include <stdlib.h>
 
 #include "server-config.h"            
+#include "ds/ds_queue.h"
+#include "orchestrator/queue/game_queue.h"
 
-int addClientToQueue(struct Client *client)
+struct GameQueue *createGameQueue()
+{   
+    struct GameQueue *gq = malloc(sizeof(*gq));
+    if(!gq)
+        return NULL;
+
+    gq->gameQueue = q_init(MAX_GAME_QUEUE, sizeof(struct Client));
+    if(!gq->gameQueue)
+    {
+        free(gq);
+        return NULL;
+    }
+
+    gq->max_capacity = MAX_GAME_QUEUE;
+    
+    return gq;
+}
+
+void freeGameQueue(struct GameQueue *gq)
+{
+    if(!gq) return; 
+
+    q_destroy(gq->gameQueue);
+    free(gq);
+}
+
+int addClientToQueue(struct GameQueue *gq, struct Client *client)
 {
     // Just a place holder for now
     // TODO 
@@ -20,41 +49,6 @@ int addClientToQueue(struct Client *client)
     }
     putchar('\n');
     fflush(stdout);
-
-    /*
-    // For now, only used for 'testing' 
-    // Spawning game process 
-    pid_t p_pid = getpid();
-    pid_t g_pid = fork();
-    if(g_pid < 0)
-    {
-        // Error happened 
-        perror("[addClientQueue] fork");
-    }
-
-    if(g_pid == 0)
-    {
-        char string_p_pid[32];
-        char string_pipe_fd[32];
-
-        snprintf(string_p_pid, sizeof(string_p_pid), "%d", p_pid);
-        snprintf(string_pipe_fd, sizeof(string_pipe_fd), "%d", 476);
-
-        char *argv[] = {
-            GAME_PROCESS,
-            string_p_pid,
-            UDP_GAME_PROCESS_PORT,
-            string_pipe_fd,
-            NULL
-        };
-
-        execv(GAME_PROCESS, argv);
-
-        // Runs only if execv fails 
-        perror("[addClientQueue] execv");
-        _exit(1);
-    }
-    */
    
     return 0;
     
