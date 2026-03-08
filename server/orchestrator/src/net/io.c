@@ -15,8 +15,9 @@
 #include "log_system.h"                   
 #include "orchestrator/net/conn.h"          
 #include "orchestrator/queue/game_queue.h"  
+#include "orchestrator/queue/game_queue.h"
 
-int receiveData(int epoll_fd, int target_fd, HashTable *const clients, FILE *const log_file)
+int receiveData(int epoll_fd, int target_fd, HashTable *const clients, struct GameQueue *gq, FILE *const log_file)
 {
     uint8_t temp_buf[TCP_SEGMENT_SIZE];
     ssize_t bytes = recv(target_fd, temp_buf, sizeof(temp_buf), 0);
@@ -85,7 +86,7 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, FILE *con
         }
 
         // Add client to the game queue 
-        addClientToQueue(client);
+        addClientToQueue(gq, client);
 
         // Prepare ACK message into client's buffer
         char ack_msg[TCP_SEGMENT_SIZE];
