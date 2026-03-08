@@ -10,6 +10,7 @@
 
 #include "ds/hashmap.h"
 #include "util.h"
+#include "log_system.h"
 #include "server-config.h" 
 #include "orchestrator/state/client.h"
 

@@ -11,7 +11,8 @@
 #include "server-config.h"          
 #include "orchestrator/state/client.h"      
 #include "ds/hashmap.h"                 
-#include "util.h"                    
+#include "util.h" 
+#include "log_system.h"                   
 #include "orchestrator/net/conn.h"          
 #include "orchestrator/queue/game_queue.h"  
 
