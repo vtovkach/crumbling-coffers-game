@@ -12,6 +12,7 @@
 #include "orchestrator/net/conn.h"
 #include "orchestrator/net/io.h"
 #include "orchestrator/net/listen_socket.h"
+#include "orchestrator/queue/game_queue.h"
 #include "server-config.h"
 #include "ds/hashmap.h"
 #include "signals.h"
@@ -60,9 +61,21 @@ int orchestrator_run(pid_t parent_pid)
         return -1;
     }
 
-    // Here I will set up PORTS QUEUE and GAME QUEUE (LATER)
+    struct GameQueue *gq = createGameQueue();
+    orch.gq = gq;
+    if(!orch.gq)
+    { 
+        perror("[orchestrator] createGameQueue");
+        close(orch.listen_fd);
+        goto boot_fail;
+    }
+
+    
+    // Here I will set up PORTS QUEUE 
     // TODO 
     // ...
+
+
 
     // Setup EPOLL 
     struct epoll_event eventQueue[ORCH_MAX_EPOLL_EVENTS];
