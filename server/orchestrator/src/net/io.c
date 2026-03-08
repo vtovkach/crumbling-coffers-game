@@ -85,6 +85,8 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, struct Ga
             return -1;
         }
 
+        log_net_data(log_file, (char *) client->buffer, client->buf_size);
+
         // Add client to the game queue 
         addClientToQueue(gq, client);
 
