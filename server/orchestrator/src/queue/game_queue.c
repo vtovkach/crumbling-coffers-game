@@ -1,13 +1,23 @@
 #include <stdio.h>                          
-#include "orchestrator/state/client.h"
 #include <unistd.h>      
 #include <sys/types.h>
 #include <stdlib.h>
 
+#include "orchestrator/state/client.h"
 #include "server-config.h"            
 #include "ds/ds_queue.h"
+#include "ds/ds_tree.h"
 #include "orchestrator/queue/game_queue.h"
 #include "log_system.h"
+
+int compare_func(void *left, void *right)
+{
+    struct Client *left_c = (struct Client *)left;
+    struct Client *right_c = (struct Client *)right; 
+
+    return (left_c->client_id > right_c->client_id) - 
+           (left_c->client_id < right_c->client_id);
+}
 
 struct GameQueue *createGameQueue()
 {   
