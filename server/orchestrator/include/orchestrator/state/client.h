@@ -5,6 +5,7 @@
 #include <stddef.h>        
 #include <stdbool.h>       
 #include <netinet/in.h>    
+#include <time.h>
 
 #include "server-config.h" 
 
@@ -25,6 +26,8 @@ struct Client
     bool is_received;
     bool ACK_sent;
     bool game_info_sent;
+
+    struct timespec ts;
 };
 
 #endif
