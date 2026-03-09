@@ -32,7 +32,6 @@ struct GameQueue *createGameQueue()
     }
 
     gq->max_capacity = MAX_GAME_QUEUE;
-    gq->valid_entries = 0;
 
     return gq;
 }

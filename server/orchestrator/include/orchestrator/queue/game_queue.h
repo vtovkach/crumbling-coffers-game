@@ -9,7 +9,6 @@ struct GameQueue
     AVL_Tree *gameQueue;
 
     size_t max_capacity;
-    size_t valid_entries; 
 };
 
 int addClientToQueue(struct GameQueue *gq, struct Client *client);
