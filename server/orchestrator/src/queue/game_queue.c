@@ -66,7 +66,7 @@ int removeClientFromQueue(struct GameQueue *const gq, struct Client *const clien
     if ((size_t)avl__getSize(gq->gameQueue) == 0)
         return 0;
 
-    avl__remove_internal(gq->gameQueue, &client);
+    avl__remove_internal(gq->gameQueue, (void *)&client);
 
     return 0;
 }
