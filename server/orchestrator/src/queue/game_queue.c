@@ -44,7 +44,7 @@ void freeGameQueue(struct GameQueue *gq)
     free(gq);
 }
 
-int addClientToQueue(struct GameQueue *gq, struct Client *client)
+int addClientToQueue(struct GameQueue *const gq, struct Client *const client)
 {
     size_t cur_queue_size = gq->gameQueue->num_elements; 
 

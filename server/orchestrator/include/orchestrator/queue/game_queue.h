@@ -11,10 +11,14 @@ struct GameQueue
     size_t max_capacity;
 };
 
-int addClientToQueue(struct GameQueue *gq, struct Client *client);
-
 struct GameQueue *createGameQueue();
 
 void freeGameQueue(struct GameQueue *gq);
+
+int addClientToQueue(struct GameQueue *const gq, struct Client *const client);
+
+struct Client *retrieveClientFromQueue(struct GameQueue *const gq);
+
+int removeClientFromQueue(struct GameQueue *const gq, struct Client *const client);
 
 #endif
