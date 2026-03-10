@@ -9,9 +9,9 @@ extends CharacterBody2D
 @export var max_runspeed: float = 2000.0
 @export var max_fallingspeed: float = 10000.0
 
-@export var accel: float = 1000.0
-@export var decel: float = 500.0
-@export var braking_decel: float = 2000.0
+@export var accel: float = 2000.0
+@export var decel: float = 2000.0
+@export var braking_decel: float = 4000.0
 
 @export var jump_velocity: float = -1000.0
 
