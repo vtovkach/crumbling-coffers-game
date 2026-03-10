@@ -44,20 +44,22 @@ void freeGameQueue(struct GameQueue *gq)
     free(gq);
 }
 
-int addClientToQueue(struct GameQueue *const gq, struct Client *const client)
+int addClientToQueue(struct GameQueue *const gq, struct Client *const client, FILE *const log_file)
 {
     if((size_t)avl__getSize(gq->gameQueue) == gq->max_capacity)
     {
         // Log error queue is full 
+        log_error(log_file, "[addClientToQueue] game queue is full.", 0);
         return -1;
     }
-
+    
     if(avl__insert_internal(gq->gameQueue, &client) < 0)
     {
         // Log error 
+        log_error(log_file, "[addClientToQueue] failed inserting element into game queue.", 0);
         return -1; 
     }
-    
+
     return 0;
 }
 
