@@ -52,7 +52,7 @@ int addClientToQueue(struct GameQueue *const gq, struct Client *const client)
         return -1;
     }
 
-    if(avl__insert_internal(gq->gameQueue, client) < 0)
+    if(avl__insert_internal(gq->gameQueue, &client) < 0)
     {
         // Log error 
         return -1; 
