@@ -29,14 +29,14 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, struct Ga
             return 0;
         }
 
-        if(closeConnection(log_file, epoll_fd, target_fd, clients) < 0) { return -1; }
+        if(closeConnection(log_file, epoll_fd, target_fd, clients, gq) < 0) { return -1; }
 
         return 1;
     }
 
     if(bytes == 0)
     {        
-        if(closeConnection(log_file, epoll_fd, target_fd, clients) < 0) { return -1; } 
+        if(closeConnection(log_file, epoll_fd, target_fd, clients, gq) < 0) { return -1; } 
 
         return 1;
     }
@@ -102,13 +102,13 @@ int receiveData(int epoll_fd, int target_fd, HashTable *const clients, struct Ga
     return 0;
 }
 
-int sendData(FILE *const log_file, int epoll_fd, int target_fd, HashTable *const clients)
+int sendData(FILE *const log_file, int epoll_fd, int target_fd, HashTable *const clients, struct GameQueue *gq)
 {
     struct Client *client = ht__get_internal(clients, &target_fd, sizeof(int));
     if(!client)
     {
         // Error: client not found 
-        closeConnection(log_file, epoll_fd, target_fd, clients);
+        closeConnection(log_file, epoll_fd, target_fd, clients, gq);
         return 1; 
     }
 
@@ -122,7 +122,7 @@ int sendData(FILE *const log_file, int epoll_fd, int target_fd, HashTable *const
             if(errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) { return 0; } // Not critical 
 
             log_error_fd(log_file, "send failed", target_fd, errno);
-            closeConnection(log_file, epoll_fd, target_fd, clients);
+            closeConnection(log_file, epoll_fd, target_fd, clients, gq);
             return 1;
         }
 
@@ -131,7 +131,7 @@ int sendData(FILE *const log_file, int epoll_fd, int target_fd, HashTable *const
         if(client->game_q_cur_size == client->game_q_size)
         {
             // Close Connection: nothing else to do with the client 
-            closeConnection(log_file, epoll_fd, target_fd, clients);
+            closeConnection(log_file, epoll_fd, target_fd, clients, gq);
         }
 
         return 0;
@@ -146,7 +146,7 @@ int sendData(FILE *const log_file, int epoll_fd, int target_fd, HashTable *const
             if(errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) { return 0; } // Not critical 
 
             log_error_fd(log_file, "send failed", target_fd, errno);
-            closeConnection(log_file, epoll_fd, target_fd, clients);
+            closeConnection(log_file, epoll_fd, target_fd, clients, gq);
             return 1;
         }
 
