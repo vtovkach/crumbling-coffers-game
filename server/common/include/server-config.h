@@ -17,4 +17,7 @@
 #define GM_MAX_EPOLL_EVENTS     64  
 #define UDP_DATAGRAM_SIZE       20
 
+// GAME INFO 
+#define PLAYERS_PER_MATCH 2
+
 #endif
