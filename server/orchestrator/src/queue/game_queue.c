@@ -46,7 +46,7 @@ void freeGameQueue(struct GameQueue *gq)
 
 int addClientToQueue(struct GameQueue *const gq, struct Client *const client, FILE *const log_file)
 {
-    if((size_t)avl__getSize(gq->gameQueue) == gq->max_capacity)
+    if((size_t)avl__get_size(gq->gameQueue) == gq->max_capacity)
     {
         // Log error queue is full 
         log_error(log_file, "[addClientToQueue] game queue is full.", 0);
@@ -65,7 +65,7 @@ int addClientToQueue(struct GameQueue *const gq, struct Client *const client, FI
 
 int removeClientFromQueue(struct GameQueue *const gq, struct Client *const client)
 {
-    if ((size_t)avl__getSize(gq->gameQueue) == 0)
+    if ((size_t)avl__get_size(gq->gameQueue) == 0)
         return 0;
 
     avl__remove_internal(gq->gameQueue, (void *)&client);
@@ -75,7 +75,7 @@ int removeClientFromQueue(struct GameQueue *const gq, struct Client *const clien
 
 struct Client *retrieveClientFromQueue(struct GameQueue *const gq)
 {
-    if((size_t)avl__getSize(gq->gameQueue) == 0)
+    if((size_t)avl__get_size(gq->gameQueue) == 0)
         return NULL;
 
     struct Client **client = (struct Client **)find_min(gq->gameQueue);
@@ -88,7 +88,7 @@ struct Client *retrieveClientFromQueue(struct GameQueue *const gq)
 
 bool gq_ready(struct GameQueue *const gq, unsigned int clients)
 {
-    unsigned int queue_size = avl__getSize(gq->gameQueue);
+    unsigned int queue_size = avl__get_size(gq->gameQueue);
 
     // Returns true when the game queue contains the required number of clients
     return queue_size == clients;
