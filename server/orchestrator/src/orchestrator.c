@@ -146,7 +146,7 @@ int orchestrator_run(pid_t parent_pid)
             if(cur_event.events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP))
             {
                 // Peer disconnected 
-                if(closeConnection(orch.log_file, orch.epoll_fd, cur_event.data.fd, orch.clients) < 0)
+                if(closeConnection(orch.log_file, orch.epoll_fd, cur_event.data.fd, orch.clients, orch.gq) < 0)
                 {
                     // Critical Error happened shutdown server 
                     printf("[orchestrator] closeConnection failed.\n");
@@ -168,7 +168,7 @@ int orchestrator_run(pid_t parent_pid)
             if(cur_event.events & EPOLLOUT)
             {
                 // Socket is writable 
-                if(sendData(orch.log_file, orch.epoll_fd, cur_event.data.fd, orch.clients) < 0)
+                if(sendData(orch.log_file, orch.epoll_fd, cur_event.data.fd, orch.clients, orch.gq) < 0)
                 {
                     printf("[orchestrator] sendData failed.\n");
                     goto fail;
