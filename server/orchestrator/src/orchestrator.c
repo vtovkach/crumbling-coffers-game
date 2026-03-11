@@ -19,15 +19,20 @@
 
 static uint64_t id_counter = 0;
 
-static void shutdownServer(int listen_fd, int epoll_fd, 
-                           struct HashTable *clients, FILE *log_file)
+static void shutdownServer(int listen_fd, 
+                           int epoll_fd, 
+                           struct HashTable *clients, 
+                           FILE *log_file, 
+                           struct GameQueue *gq)
 {
     // Close socket for every active connection 
-    ht_close_all_sockets(clients);
+    ht_close_all_sockets(clients, epoll_fd);
+
+    freeGameQueue(gq);
 
     ht_destroy(clients);
 
-    // Later I will have 2 more data structure that I will need to free  
+    // Later I will have 1 more data structure that I will need to free  
     // TODO
     // ... 
 
