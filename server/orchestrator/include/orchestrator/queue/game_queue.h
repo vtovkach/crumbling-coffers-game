@@ -23,4 +23,6 @@ struct Client *retrieveClientFromQueue(struct GameQueue *const gq);
 
 int removeClientFromQueue(struct GameQueue *const gq, struct Client *const client);
 
+bool gq_ready(struct GameQueue *const gq, unsigned int clients);
+
 #endif
