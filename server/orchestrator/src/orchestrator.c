@@ -16,6 +16,7 @@
 #include "server-config.h"
 #include "ds/hashmap.h"
 #include "signals.h"
+#include "log_system.h"
 
 static uint64_t id_counter = 0;
 
@@ -128,6 +129,24 @@ int orchestrator_run(pid_t parent_pid)
             // Gracefully terminate this process by invoking shutdownServer function   
             shutdownServer(orch.listen_fd, orch.epoll_fd, orch.clients, orch.log_file, orch.gq);
             break;
+        }
+
+        // Later also check if there is available port 
+        if(gq_ready(orch.gq, PLAYERS_PER_MATCH))
+        {
+            if(formSession(orch.log_file, orch.gq) == -1)
+            {
+                // Critical Error happened 
+                // TODO 
+            }
+
+            if(spawnGameProcess(orch.log_file) == -1)
+            {
+                // Critical Error 
+                // TODO 
+            }
+
+            log_message(orch.log_file, "Game Created successfully!\n");
         }
 
         int events_ready = epoll_wait(orch.epoll_fd, eventQueue, ORCH_MAX_EPOLL_EVENTS, 2000);
