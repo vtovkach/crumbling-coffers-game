@@ -41,6 +41,18 @@ static void shutdownServer(int listen_fd,
     fclose(log_file);
 }
 
+static int spawnGameProcess(FILE *const log_file)
+{
+    // PARAMETERS: Data that needs to be passed to game process 
+
+    // TODO
+    // ... 
+
+    log_message(log_file, "GAME PROCESS has been spawned.\n");
+    
+    return 0;
+}
+
 int orchestrator_run(pid_t parent_pid)
 {
     // Setup signal 
