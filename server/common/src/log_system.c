@@ -55,4 +55,7 @@ void log_error_fd(FILE *const log_file, const char *err_msg, int conn_fd, int er
         fprintf(log_file, "%s %s fd (%d)\n", time, err_msg, conn_fd);
     else
         fprintf(log_file, "%s %s fd (%d): %s\n", time, err_msg, conn_fd, strerror(errno_code));
+
+    // Remove fflush later can hurt performance if called often 
+    fflush(log_file);
 }
