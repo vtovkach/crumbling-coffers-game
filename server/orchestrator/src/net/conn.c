@@ -61,9 +61,6 @@ int closeConnection(FILE *const log_file, int epoll_fd, int target_fd, struct Ha
     // Log Success 
     log_error_fd(log_file, "Connection closed by peer", target_fd, 0);
 
-    // Flush log_file's buffer  
-    fflush(log_file);
-
     return 0;
 }
 
