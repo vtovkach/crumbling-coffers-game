@@ -36,6 +36,6 @@ int removeClientFromQueue(struct GameQueue *const gq, struct Client *const clien
 
 bool gq_ready(struct GameQueue *const gq, unsigned int clients);
 
-int formSession(FILE *const log_file, struct GameQueue *const gq, int available_port);
+int formSession(FILE *const log_file, struct GameQueue *const gq, uint16_t available_port, uint32_t ip);
 
 #endif
