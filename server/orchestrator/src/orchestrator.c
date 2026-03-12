@@ -20,6 +20,8 @@
 
 static uint64_t id_counter = 0;
 
+int port_counter = 0;
+
 static void shutdownServer(int listen_fd, 
                            int epoll_fd, 
                            struct HashTable *clients, 
@@ -134,7 +136,10 @@ int orchestrator_run(pid_t parent_pid)
         // Later also check if there is available port 
         if(gq_ready(orch.gq, PLAYERS_PER_MATCH))
         {
-            if(formSession(orch.log_file, orch.gq) == -1)
+            // Later I will use api call to my future port pull structure to get real available port
+            int av_port = 10001 + port_counter++;
+
+            if(formSession(orch.log_file, orch.gq, av_port) == -1)
             {
                 // Critical Error happened 
                 // TODO 
