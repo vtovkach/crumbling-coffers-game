@@ -100,7 +100,7 @@ bool gq_ready(struct GameQueue *const gq, unsigned int clients)
     return queue_size == clients;
 }
 
-int formSession(FILE *const log_file, struct GameQueue *const gq,
+int formSession(FILE *const log_file, struct GameQueue *const gq, int epoll_fd,
                 uint16_t available_port, uint32_t ip)
 {
     uint8_t game_id[GAME_ID_SIZE] = {0};
