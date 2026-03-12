@@ -44,15 +44,17 @@ static void shutdownServer(int listen_fd,
     fclose(log_file);
 }
 
-static int spawnGameProcess(FILE *const log_file)
+static int spawnGameProcess(FILE *const log_file, int port)
 {
     // PARAMETERS: Data that needs to be passed to game process 
 
     // TODO
     // ... 
 
-    log_message(log_file, "GAME PROCESS has been spawned.\n");
-    
+    char log_msg[100];
+    snprintf(log_msg, sizeof(log_msg), "Game process was spawned. Port: %d", port);
+    log_message(log_file, log_msg);
+
     return 0;
 }
 
