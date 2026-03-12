@@ -20,7 +20,7 @@
 
 static uint64_t id_counter = 0;
 
-int port_counter = 0;
+uint16_t port_counter = 0;
 
 static void shutdownServer(int listen_fd, 
                            int epoll_fd, 
@@ -74,6 +74,8 @@ int orchestrator_run(pid_t parent_pid)
     orch.parent_pid = parent_pid;
     orch.listen_fd = setupListenSocket();
     if(orch.listen_fd < 0) { return -1; }
+
+    uint32_t server_ip = get_client_ip(orch.listen_fd);
 
     // Setup clients hashmap
     orch.clients = ht_create(sizeof(int), 1, sizeof(struct Client), 1, hash, HASH_TABLE_SIZE); 
@@ -136,10 +138,11 @@ int orchestrator_run(pid_t parent_pid)
         // Later also check if there is available port 
         if(gq_ready(orch.gq, PLAYERS_PER_MATCH))
         {
-            // Later I will use api call to my future port pull structure to get real available port
-            int av_port = 10001 + port_counter++;
+            // Later I will use api call to my future port pull structure 
+            // to get real available port
+            uint16_t av_port = 10001 + port_counter++;
 
-            if(formSession(orch.log_file, orch.gq, av_port) == -1)
+            if(formSession(orch.log_file, orch.gq, av_port, server_ip) == -1)
             {
                 // Critical Error happened 
                 // TODO 
