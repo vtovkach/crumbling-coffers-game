@@ -10,6 +10,17 @@
 
 #include "server-config.h" 
 
+uint32_t get_client_ip(int fd)
+{
+    struct sockaddr_in addr;
+    socklen_t len = sizeof(addr);
+
+    if (getpeername(fd, (struct sockaddr *)&addr, &len) == -1)
+        return 0;
+
+    return addr.sin_addr.s_addr; // IP in network byte order
+}
+
 int setupListenSocket(void)
 {
     // Establish and bind listening socket to designated PORT 
