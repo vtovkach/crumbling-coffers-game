@@ -18,7 +18,6 @@ func test_player_has_collision():
 
 # Now that player verified, simulate WorldBoundary @ x=0 & verify player cannot cross
 func test_boundary_stops_player():
-	# MAKE BOUNDARY
 	# Create StaticBody2D with WorldBoundaryShape2D @ x=0
 	var wall = StaticBody2D.new()
 	var collision = CollisionShape2D.new()
@@ -34,19 +33,46 @@ func test_boundary_stops_player():
 	add_child_autofree(wall)
 	wall.global_position = Vector2(0, 0)
 	
-	# SET UP PLAYER
+	# Set up player
 	var player = PlayerScene.instantiate()
 	add_child_autofree(player)
 	
 	# Set player position @ x=50
 	player.global_position = Vector2(50, 0)
 	
-	# SIMULATE MOVEMENT
 	# Press the move key and wait for physics engine to calculate collision
 	Input.action_press("left")
 	await wait_frames(25)
 	Input.action_release("left")
 	
-	# CONCLUSION
 	# Player should be blocked @ x=0
 	assert_gt(player.global_position.x, -1.0, "Player should be stopped by the WorldBoundary @ x=0.")
+	
+# Test for speed causing boundary glitch
+func test_high_speed_boundary_glitch():
+	var player = PlayerScene.instantiate()
+	add_child_autofree(player)
+	
+	# Set boundary
+	var wall = StaticBody2D.new()
+	var collision = CollisionShape2D.new()
+	var shape = WorldBoundaryShape2D.new()
+	
+	shape.normal = Vector2.RIGHT
+	collision.shape = shape
+	wall.add_child(collision)
+	add_child_autofree(wall)
+	
+	# Position player against wall
+	player.global_position = Vector2(5, 0)
+	
+	# Apply extreme situation with push() from player.gd
+	# Push left (-1, 0) @ magnitude 5000
+	player.push(Vector2.LEFT, 5000.0)
+	
+	# Wait for 1 physics frame for glitch
+	await wait_frames(1)
+	
+	# Player's x should still be >= 0
+	assert_true(player.global_position.x >= 0.0, "Player should not glitch through boundary; x >= 0")
+	
