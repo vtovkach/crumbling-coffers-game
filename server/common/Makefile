@@ -1,5 +1,10 @@
 CC      := gcc
 CFLAGS  := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE -Iinclude
+
+ifdef DEBUG
+CFLAGS := -Wall -Wextra -Wfloat-equal -O0 -g -D_GNU_SOURCE -Iinclude -I../common/include
+endif
+
 SRC_DIR := src
 OBJ_DIR := obj
 
