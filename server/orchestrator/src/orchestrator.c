@@ -139,22 +139,22 @@ int orchestrator_run(pid_t parent_pid)
         if(gq_ready(orch.gq, PLAYERS_PER_MATCH))
         {
             // Later I will use api call to my future port pull structure 
-            // to get real available port
+            // to get a real available port from the port queue 
             uint16_t av_port = 10001 + port_counter++;
 
             if(formSession(orch.log_file, orch.gq, orch.epoll_fd, av_port, server_ip) == -1)
             {
                 // Critical Error happened 
-                // TODO 
+                printf("[formSession] critical error.\n");
+                goto fail; 
             }
 
-            if(spawnGameProcess(orch.log_file) == -1)
+            if(spawnGameProcess(orch.log_file, av_port - 1) == -1)
             {
                 // Critical Error 
-                // TODO 
+                printf("[spawnGameProcess] critical error.\n");
+                goto fail; 
             }
-
-            log_message(orch.log_file, "Game Created successfully!\n");
         }
 
         int events_ready = epoll_wait(orch.epoll_fd, eventQueue, ORCH_MAX_EPOLL_EVENTS, 2000);
