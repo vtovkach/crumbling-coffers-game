@@ -94,13 +94,40 @@ bool gq_ready(struct GameQueue *const gq, unsigned int clients)
     return queue_size == clients;
 }
 
-int formSession(FILE *const log_file, struct GameQueue *const gq, int available_port)
+int formSession(FILE *const log_file, struct GameQueue *const gq,
+                uint16_t available_port, uint32_t ip)
 {
+    uint8_t game_id[GAME_ID_SIZE] = {0};
+
+    if (!secure_random_bytes(game_id, GAME_ID_SIZE))
+        return -1;
+
+    for (int i = 0; i < PLAYERS_PER_MATCH; i++)
+    {
+        struct Client *cur_client = retrieveClientFromQueue(gq);
+        if (!cur_client)
+            return -1;
+
+        uint8_t player_id[PLAYER_ID_SIZE] = {0};
+        if (!secure_random_bytes(player_id, PLAYER_ID_SIZE))
+            return -1;
+
+        struct TCP_Game_Packet packet = {
+            .ip   = ip,
+            .port = available_port,
+        };
+
+        memcpy(packet.game_id, game_id, GAME_ID_SIZE);
+        memcpy(packet.player_id, player_id, PLAYER_ID_SIZE);
+
+        memcpy(cur_client->game_queue_info, &packet, sizeof(packet));
+
+        ssize_t remaining_bytes = TCP_SEGMENT_SIZE - sizeof(packet);
+        if (remaining_bytes > 0)
+            memset(cur_client->game_queue_info + sizeof(packet), 0, remaining_bytes);
+
+        cur_client->game_q_ready = true;
+    }
     
-    
-
-
-    log_message(log_file, "Session is created!\n");
-
     return 0;
 }
