@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://mmtyafpepn4d"]
+
+[ext_resource type="Texture2D" uid="uid://b662g1htkpbv6" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00000.png" id="1_emndy"]
+
+[node name="CharSelection" type="Node2D" unique_id=517563277]
+
+[node name="Label" type="Label" parent="." unique_id=1310236115]
+offset_left = 73.0
+offset_top = 19.0
+offset_right = 308.0
+offset_bottom = 161.0
+text = "Character Selection Page (PLACEHOLDER)"
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=901467443]
+offset_left = 32.0
+offset_top = 152.0
+offset_right = 389.0
+offset_bottom = 564.0
+
+[node name="TextureRect" type="TextureRect" parent="CenterContainer" unique_id=1394959048]
+layout_mode = 2
+texture = ExtResource("1_emndy")
