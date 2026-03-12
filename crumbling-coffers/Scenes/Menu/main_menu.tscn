@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://5pmjsum7rsoe"]
 
+[ext_resource type="Script" uid="uid://neghvjtxu1xd" path="res://Scripts/MainMenu/main_menu.gd" id="1_bkwd7"]
+
 [node name="MainMenu" type="MarginContainer" unique_id=254413112]
 anchors_preset = -1
 anchor_left = 0.062000003
@@ -13,6 +15,7 @@ offset_bottom = 94.063965
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.85, 0.85)
+script = ExtResource("1_bkwd7")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2115496746]
 layout_mode = 2
@@ -49,10 +52,15 @@ size_flags_vertical = 6
 theme_override_font_sizes/font_size = 32
 text = "Character Selection"
 
-[node name="Button" type="Button" parent="VBoxContainer" unique_id=1672525556]
+[node name="quit" type="Button" parent="VBoxContainer" unique_id=1672525556]
 custom_minimum_size = Vector2(360, 80)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 6
 theme_override_font_sizes/font_size = 32
 text = "Quit Game"
+
+[connection signal="pressed" from="VBoxContainer/lobby" to="." method="_on_lobby_pressed"]
+[connection signal="pressed" from="VBoxContainer/singleplayer" to="." method="_on_singleplayer_pressed"]
+[connection signal="pressed" from="VBoxContainer/character select" to="." method="_on_character_select_pressed"]
+[connection signal="pressed" from="VBoxContainer/quit" to="." method="_on_quit_pressed"]
