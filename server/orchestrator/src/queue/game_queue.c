@@ -143,7 +143,7 @@ int formSession(FILE *const log_file, struct GameQueue *const gq, int epoll_fd,
 
         cur_client->game_q_ready = true;
 
-        // Add file descriptor to epoll monitoring 
+        // Update monitored events for this client fd
         struct epoll_event ev = {
         .data.fd = cur_client->fd,
         .events =
@@ -154,10 +154,8 @@ int formSession(FILE *const log_file, struct GameQueue *const gq, int epoll_fd,
         };
 
         if(epoll_ctl(epoll_fd, EPOLL_CTL_MOD, cur_client->fd, &ev) < 0)
-        {
-            // Critical Error 
             return -1;
-        }
+        
     }
 
     return 0;
