@@ -15,15 +15,15 @@ const DEFAULT_BRAKING_DECEL: float = 16000.0
 const DEFAULT_JUMP_VELOCITY: float = -3000.0
 
 
-@export var max_speed: float = 10000.0
-@export var max_runspeed: float = 1600.0
+@export var max_speed: float = DEFAULT_MAX_SPEED
+@export var max_runspeed: float = DEFAULT_MAX_RUNSPEED
 @export var max_fallingspeed: float = 5600.0
 
-@export var accel: float = 8000.0
-@export var decel: float = 8000.0
-@export var braking_decel: float = 16000.0
+@export var accel: float = DEFAULT_ACCEL
+@export var decel: float = DEFAULT_DECEL
+@export var braking_decel: float = DEFAULT_BRAKING_DECEL
 
-@export var jump_velocity: float = -3000.0
+@export var jump_velocity: float = DEFAULT_JUMP_VELOCITY
 
 @export var inv: Inv
 
