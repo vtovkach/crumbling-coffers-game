@@ -23,8 +23,8 @@ const BASE_JUMP_VELOCITY: float = -3000.0
 @export var braking_decel: float = BASE_BRAKING_DECEL
 @export var jump_velocity: float = BASE_JUMP_VELOCITY
 
-# 1: Normal | -1: Inverted
-@export var invert_multiplier: int = 1
+# DO NOT MODIFY outside of set_inverted(bool)
+var _invert_multiplier: int = 1
 
 @export var inv: Inv
 
@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 		jump()
 	
 	# Update left/right velocity
-	var direction = invert_multiplier * Input.get_axis("left", "right")
+	var direction = _invert_multiplier * Input.get_axis("left", "right")
 	move(direction, delta)
 		
 	# Update position
@@ -81,7 +81,7 @@ func brake(direction:float, delta: float) -> void:
 
 # handle inversions through this function only
 func set_inverted(inverted:bool) -> void:
-	invert_multiplier = -1 if inverted else 1
+	_invert_multiplier = -1 if inverted else 1
 		
 # Push this character in a direction, may exceed their max runspeed (but not their max speed)
 # Adds to initial velocity
