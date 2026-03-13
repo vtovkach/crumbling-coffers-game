@@ -23,6 +23,9 @@ const BASE_JUMP_VELOCITY: float = -3000.0
 @export var braking_decel: float = BASE_BRAKING_DECEL
 @export var jump_velocity: float = BASE_JUMP_VELOCITY
 
+# 1: Normal | -1: Inverted
+@export var invert_multiplier: int = 1
+
 @export var inv: Inv
 
 #Daniel - adding a score to the character for when they pick up the items.
@@ -46,7 +49,7 @@ func _physics_process(delta: float) -> void:
 		jump()
 	
 	# Update left/right velocity
-	var direction = Input.get_axis("left", "right")
+	var direction = invert_multiplier * Input.get_axis("left", "right")
 	move(direction, delta)
 		
 	# Update position
@@ -75,7 +78,10 @@ func move(direction: float, delta: float) -> void:
 # May prefer a state to handle this, especially if custom animation
 func brake(direction:float, delta: float) -> void:
 	velocity.x = move_toward(velocity.x, direction * max_runspeed, braking_decel * delta)
-	
+
+# handle inversions through this function only
+func set_inverted(inverted:bool) -> void:
+	invert_multiplier = -1 if inverted else 1
 		
 # Push this character in a direction, may exceed their max runspeed (but not their max speed)
 # Adds to initial velocity
