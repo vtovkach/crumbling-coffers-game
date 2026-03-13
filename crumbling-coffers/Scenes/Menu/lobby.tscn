@@ -1,3 +1,29 @@
 [gd_scene format=3 uid="uid://cdsnhg8uaeq3c"]
 
+[ext_resource type="Script" uid="uid://c4k8b82ut4f2v" path="res://Scripts/MainMenu/lobby.gd" id="1_h2qw5"]
+
 [node name="lobby" type="Node" unique_id=1850513131]
+script = ExtResource("1_h2qw5")
+
+[node name="Placeholder" type="Label" parent="." unique_id=183724482]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Hello! This is a placeholder space for the lobby (multiplayer functions)."
+
+[node name="back_button" type="Button" parent="." unique_id=1043127306]
+offset_left = 20.0
+offset_top = 15.0
+offset_right = 136.0
+offset_bottom = 46.0
+text = "< Back button"
+
+[connection signal="pressed" from="back_button" to="." method="_on_back_button_pressed"]
