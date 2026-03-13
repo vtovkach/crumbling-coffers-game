@@ -175,17 +175,29 @@ animations = [{
 "speed": 25.0
 }]
 
-[node name="TestDummy" type="Node2D" unique_id=1531798817]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wtlgn"]
+radius = 72.0
+height = 310.0
+
+[node name="TestDummy" type="CharacterBody2D" unique_id=1721842898]
+collision_mask = 2
 script = ExtResource("1_wtlgn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1973889802]
 scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_oc43d")
-animation = &"running"
+animation = &"idle"
 autoplay = "idle"
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=706162138]
+position = Vector2(-4, 41)
+shape = SubResource("CapsuleShape2D_wtlgn")
+
 [node name="RayCastRight" type="RayCast2D" parent="." unique_id=1319877102]
-target_position = Vector2(89, 0)
+target_position = Vector2(91, 2)
+collision_mask = 3
+collide_with_areas = true
 
 [node name="RayCast2Left" type="RayCast2D" parent="." unique_id=1198370540]
-target_position = Vector2(-93, -1)
+target_position = Vector2(-94, -1)
+collision_mask = 3

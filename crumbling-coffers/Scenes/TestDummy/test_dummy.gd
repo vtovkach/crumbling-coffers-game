@@ -1,18 +1,23 @@
-extends Node2D
+extends CharacterBody2D
 
-const SPEED = 60
+const SPEED = 600.0
+const GRAVITY = 900.0
+
 var direction = 1
 
 @onready var ray_cast_right = $RayCastRight
-@onready var ray_cast_2_left = $RayCast2Left
+@onready var ray_cast_left = $RayCast2Left
 
+func _physics_process(delta):
+	if not is_on_floor():
+		velocity.y += GRAVITY * delta
+	else:
+		velocity.y = 0
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float):
 	if ray_cast_right.is_colliding():
 		direction = -1
-	if ray_cast_2_left.is_colliding():
+	elif ray_cast_left.is_colliding():
 		direction = 1
-		
-	position.x = direction * SPEED * delta
-		
+
+	velocity.x = direction * SPEED
+	move_and_slide()
