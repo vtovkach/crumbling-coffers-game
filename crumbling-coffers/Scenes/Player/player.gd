@@ -7,6 +7,7 @@ extends CharacterBody2D
 # Most of these values are placeholder.
 const DEFAULT_MAX_SPEED: float = 10000.0
 const DEFAULT_MAX_RUNSPEED: float = 1600.0
+const DEFAULT_MAX_FALLINGSPEED: float = 5600.0
 
 const DEFAULT_ACCEL: float = 8000.0
 const DEFAULT_DECEL: float = 8000.0
@@ -17,7 +18,7 @@ const DEFAULT_JUMP_VELOCITY: float = -3000.0
 
 @export var max_speed: float = DEFAULT_MAX_SPEED
 @export var max_runspeed: float = DEFAULT_MAX_RUNSPEED
-@export var max_fallingspeed: float = 5600.0
+@export var max_fallingspeed: float = DEFAULT_MAX_FALLINGSPEED
 
 @export var accel: float = DEFAULT_ACCEL
 @export var decel: float = DEFAULT_DECEL
