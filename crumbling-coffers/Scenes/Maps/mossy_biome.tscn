@@ -299,3 +299,14 @@ collision_layer = 4
 
 [node name="TestDummy" parent="." unique_id=1531798817 instance=ExtResource("8_cvf1c")]
 position = Vector2(853, -148)
+
+[node name="QuitConfirmation" type="ConfirmationDialog" parent="." unique_id=228908350]
+process_mode = 3
+oversampling_override = 1.0
+title = "Quit training?"
+position = Vector2i(0, 36)
+size = Vector2i(297, 100)
+dialog_text = "You'll be returned to the Main Menu"
+
+[connection signal="canceled" from="QuitConfirmation" to="." method="_on_quit_confirmation_canceled"]
+[connection signal="confirmed" from="QuitConfirmation" to="." method="_on_quit_confirmation_confirmed"]

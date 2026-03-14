@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var player = $Player
 @onready var hud = $HUD
+@onready var quit_confirm = $QuitConfirmation
 
 # Variable to track countdown state
 var countdown_number: int = 3
@@ -40,3 +41,18 @@ func start_training() -> void:
 func start_game_clock() -> void:
 	# Start the 60s timer in HUD
 	hud.start_game_timer()
+
+func _input(event:InputEvent) -> void:
+	# Check for the escape key
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().paused = true
+		quit_confirm.popup_centered()
+
+# Connect from 'confirmed' signal
+func _on_quit_confirmation_confirmed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
+
+# Connect from 'canceled' signal
+func _on_quit_confirmation_canceled() -> void:
+	get_tree().paused = false
