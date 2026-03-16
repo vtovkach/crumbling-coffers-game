@@ -87,6 +87,7 @@ struct GameQueue *createGameQueue()
     }
 
     gq->max_capacity = MAX_GAME_QUEUE;
+    gq->cur_size = 0;
 
     return gq;
 }
@@ -102,7 +103,7 @@ void freeGameQueue(struct GameQueue *gq)
 int addClientToQueue(struct GameQueue *const gq, struct Client *const client,
                      FILE *const log_file)
 {
-    if((size_t)avl__get_size(gq->gameQueue) == gq->max_capacity)
+    if(gq->cur_size == gq->max_capacity)
     {
         // Log error queue is full 
         log_error(log_file, "[addClientToQueue] game queue is full.", 0);
@@ -117,15 +118,18 @@ int addClientToQueue(struct GameQueue *const gq, struct Client *const client,
         return -1; 
     }
 
+    gq->cur_size++;
+
     return 0;
 }
 
 int removeClientFromQueue(struct GameQueue *const gq, struct Client *const client)
 {
-    if ((size_t)avl__get_size(gq->gameQueue) == 0)
+    if (gq->cur_size == 0)
         return 0;
 
     avl__remove_internal(gq->gameQueue, (void *)&client);
+    gq->cur_size--;
 
     return 0;
 }
@@ -142,6 +146,7 @@ struct Client *retrieveClientFromQueue(struct GameQueue *const gq)
     struct Client *client = *avl_client_entry;
 
     avl__remove_internal(gq->gameQueue, (void *)avl_client_entry);
+    gq->cur_size--;
 
     // Retrieve the client with lowest admission id 
     return client;
@@ -149,10 +154,8 @@ struct Client *retrieveClientFromQueue(struct GameQueue *const gq)
 
 bool gq_ready(struct GameQueue *const gq, unsigned int clients)
 {
-    unsigned int queue_size = avl__get_size(gq->gameQueue);
-
     // Returns true when the game queue contains the required number of clients
-    return queue_size == clients;
+    return gq->cur_size == clients;
 }
 
 int formSession(FILE *const log_file, struct GameQueue *const gq, int epoll_fd,
