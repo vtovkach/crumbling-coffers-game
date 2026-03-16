@@ -13,6 +13,7 @@ struct GameQueue
 {
     AVL_Tree *gameQueue;
 
+    size_t cur_size; 
     size_t max_capacity;
 };
 
