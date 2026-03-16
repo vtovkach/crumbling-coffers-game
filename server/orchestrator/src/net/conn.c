@@ -32,7 +32,10 @@ int closeConnection(FILE *const log_file, int epoll_fd, int target_fd, struct Ha
     }
 
     // Remove client from the game queue 
-    if(client->is_received) {avl__remove_internal(gq->gameQueue, &client); }
+    if(client->is_received) 
+    {
+        removeClientFromQueue(gq, client);
+    }
 
     if(epoll_ctl(epoll_fd, EPOLL_CTL_DEL, target_fd, NULL) == -1)
     {
