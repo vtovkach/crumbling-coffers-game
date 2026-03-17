@@ -11,13 +11,6 @@
 
 int spawnGameProcess(struct PortManager *pm, FILE *const log_file, uint16_t port)
 {
-    // Insert PID to PORT mapping to the hashtable 
-    if(ht_insert_port(pm, c_pid, port, log_file) < 0)
-    {
-        log_message(log_file, "[spawnGameProcess] ht_insert_port failed.");
-        return -1;
-    }
-
     // Spawn a child process 
     pid_t c_pid = fork();    
     if(c_pid < 0)
@@ -37,6 +30,13 @@ int spawnGameProcess(struct PortManager *pm, FILE *const log_file, uint16_t port
         // Runs only if execv fails 
         log_error(log_file, "[spawnGameProcess] execv failed.", errno);
         _exit(1);
+    }
+    
+    // Insert PID to PORT mapping to the hashtable 
+    if(ht_insert_port(pm, c_pid, port, log_file) < 0)
+    {
+        log_message(log_file, "[spawnGameProcess] ht_insert_port failed.");
+        return -1;
     }
 
     char log_msg[128];
