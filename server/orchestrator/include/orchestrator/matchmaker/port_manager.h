@@ -12,6 +12,8 @@
 #define QUEUE_CAPACITY 128
 #define HT_CAPACITY 128
 
+#define INVALID_PORT 0
+
 struct PortManager
 {
     Queue *port_queue; 
