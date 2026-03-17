@@ -221,6 +221,17 @@ static int initializePorts(struct PortManager *pm, FILE *const file_log)
 
 struct PortManager *initPortManager(FILE *const log_file)
 {
+    // Block SIGCHLD so it is handled synchronously by the reaper thread.
+    // Must be done before creating threads so all threads inherit this mask.
+    sigset_t chld_set; 
+    sigemptyset(&chld_set);
+    sigaddset(&chld_set, SIGCHLD);
+    if(pthread_sigmask(SIG_BLOCK, &chld_set, NULL) != 0)
+    {
+        log_message(log_file, "[initPortManager] pthread_sigmask failed.");
+        return NULL;
+    }
+
     struct PortManager *pm = calloc(1, sizeof(*pm));
     if(!pm)
     {
