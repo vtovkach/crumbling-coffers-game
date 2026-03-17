@@ -34,9 +34,19 @@ static uint16_t pop_queue(struct PortManager *pm, FILE *const log_file)
     return port; 
 }
 
-static int push_queue(struct PortManager *pm, FILE *const log_file)
+static int push_queue(struct PortManager *pm, uint16_t port, FILE *const log_file)
 {
+    pthread_mutex_lock(&pm->ports_lock);
+    int rc = q_enqueue(pm->port_queue, uint16_t, port);
+    pthread_mutex_unlock(&pm->ports_lock);
+
+    if(rc != 0)
+    {
+        log_message(log_file, "[push_queue] q_enqueue failed.");
+        return -1;
+    }
     
+    return 0;
 }
 
 // ===============================================================================================================
