@@ -8,6 +8,22 @@
 
 #define INVALID_PORT 0
 
+static unsigned int pid_hash(const void *key, unsigned int table_size)
+{
+    pid_t pid = *(const pid_t *)key;
+
+    uint32_t x = (uint32_t)pid;
+
+    /* bit mixing */
+    x ^= x >> 16;
+    x *= 0x7feb352d;
+    x ^= x >> 15;
+    x *= 0x846ca68b;
+    x ^= x >> 16;
+
+    return x % table_size;
+}
+
 // ===================================== Internal Wrappers ==================================================== 
 static size_t get_queue_size(struct PortManager *pm)
 {
@@ -87,10 +103,22 @@ struct PortManager *initPortManager(FILE *const log_file)
         return NULL;
     }
 
+    pm->pid_to_port_table = ht_create(sizeof(pid_t), 1, sizeof(uint16_t), 1, 
+                                      pid_hash, HT_CAPACITY);
+
+    if(!pm->pid_to_port_table)
+    {
+        log_message(log_file, "[initPortManager] ht_create failed.");
+        q_destroy(pm->port_queue);
+        free(pm);
+        return NULL;
+    }
+
     if(pthread_mutex_init(&pm->ports_lock, NULL) != 0)
     {
         log_message(log_file, "[initPortManager] pthread_mutex_init failed.");
         q_destroy(pm->port_queue);
+        ht_destroy(pm->pid_to_port_table);
         free(pm);
         return NULL;
     }
@@ -101,6 +129,7 @@ struct PortManager *initPortManager(FILE *const log_file)
         log_message(log_file, "[initPortManager] ReaperArgs malloc failed.");
         q_destroy(pm->port_queue);
         pthread_mutex_destroy(&pm->ports_lock);
+        ht_destroy(pm->pid_to_port_table);
         free(pm);
         return NULL;
     }
@@ -117,6 +146,7 @@ struct PortManager *initPortManager(FILE *const log_file)
         log_message(log_file, "[initPortManager] pthread_create failed.");
         free(args);
         q_destroy(pm->port_queue);
+        ht_destroy(pm->pid_to_port_table);
         pthread_mutex_destroy(&pm->ports_lock);
         free(pm);
         return NULL;
