@@ -1,4 +1,6 @@
 #include "orchestrator/core/port-manager/port_manager.h"
+#include "server-config.h"
+
 #include "log_system.h"
 #include <stdlib.h>
 #include <unistd.h>
@@ -195,6 +197,23 @@ static void *reaper_thread(void *args)
     r_args->pm->reaper_exit_status = EXIT_SUCCESS;
     free(args);
     return NULL;
+}
+
+// Must be called before concurrent access begins
+static int initializePorts(struct PortManager *pm, FILE *const file_log)
+{
+    uint16_t base_port = (uint16_t) atoi(SERVER_TCP_PORT);
+
+    for(int i = 1; i <= PORTS_LIMIT; i++)
+    {
+        if(q_enqueue(pm->port_queue, uint16_t, base_port + i) < 0)
+        {
+            log_message(file_log, "[initializePorts] q_enqueue failed.");
+            return -1;
+        }
+    }  
+
+    return 0;
 }
 
 struct PortManager *initPortManager(FILE *const log_file)
