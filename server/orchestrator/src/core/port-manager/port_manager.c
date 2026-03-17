@@ -6,6 +6,41 @@
 #define REAPER_FAILURE 1
 #define REAPER_NORMAL 0
 
+#define INVALID_PORT 0
+
+// ===================================== Internal Wrappers ==================================================== 
+static size_t get_queue_size(struct PortManager *pm)
+{
+    size_t cur_size; 
+    pthread_mutex_lock(&pm->ports_lock);
+    cur_size = q_size(pm->port_queue);
+    pthread_mutex_unlock(&pm->ports_lock);
+    return cur_size;
+}
+
+static uint16_t pop_queue(struct PortManager *pm, FILE *const log_file)
+{
+    uint16_t port = 0; 
+    pthread_mutex_lock(&pm->ports_lock);
+    int rc = q_dequeue(pm->port_queue, &port);
+    pthread_mutex_unlock(&pm->ports_lock);
+
+    if(rc != 0)
+    {
+        log_message(log_file, "[pop_queue] q_dequeue failed.");
+        return INVALID_PORT;
+    }
+
+    return port; 
+}
+
+static int push_queue(struct PortManager *pm, FILE *const log_file)
+{
+    
+}
+
+// ===============================================================================================================
+
 struct ReaperArgs
 {
     struct PortManager *pm;
@@ -99,17 +134,13 @@ void destroyPortManager(struct PortManager *pm, FILE *const log_file)
     free(pm);
 }   
 
-static size_t get_queue_size(struct PortManager *pm)
-{
-    size_t cur_size; 
-    pthread_mutex_lock(&pm->ports_lock);
-    cur_size = q_size(pm->port_queue);
-    pthread_mutex_unlock(&pm->ports_lock);
-    return cur_size;
-}
-
 bool pm_ready(struct PortManager *pm, FILE *const log_file)
 {
     (void)log_file; // silence compiler warning 
     return get_queue_size(pm) > 0;
+}
+
+uint16_t getPort(struct PortManager *pm, FILE *const log_file)
+{
+    return pop_queue(pm, log_file);
 }
