@@ -51,9 +51,14 @@ int runGame(uint16_t port)
             break;
         }
         
-        printf("[game] Tick: %d\n", tick++);
-        sleep(2);
+        sleep(1);
+
+        if(tick++ == 2) break; 
     }
+
+    stop_net = true; 
+    // Wait for network thread 
+    pthread_join(net_thread, NULL);
 
     return 0; 
 }
