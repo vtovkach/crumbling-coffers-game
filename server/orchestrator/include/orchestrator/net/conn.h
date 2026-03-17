@@ -5,7 +5,7 @@
 #include "ds/hashmap.h"     
 #include "orchestrator/state/client.h"
 #include "server-config.h" 
-#include "orchestrator/queue/game_queue.h"
+#include "orchestrator/matchmaker/game_queue.h"
 
 int closeConnection(FILE *log_file, int epoll_fd, int target_fd, struct HashTable *active_clients, struct GameQueue *gq);
 

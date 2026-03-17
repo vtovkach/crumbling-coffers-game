@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "ds/hashmap.h"
-#include "orchestrator/queue/game_queue.h"
+#include "orchestrator/matchmaker/game_queue.h"
 struct Orchestrator 
 {
     pid_t parent_pid;

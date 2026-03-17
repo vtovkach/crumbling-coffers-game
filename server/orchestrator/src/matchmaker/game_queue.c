@@ -9,7 +9,7 @@
 #include "orchestrator/state/client.h"
 #include "server-config.h"            
 #include "ds/ds_tree.h"
-#include "orchestrator/queue/game_queue.h"
+#include "orchestrator/matchmaker/game_queue.h"
 #include "log_system.h"
 #include "random.h"
 

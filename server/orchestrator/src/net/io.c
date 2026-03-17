@@ -14,7 +14,7 @@
 #include "util.h" 
 #include "log_system.h"                   
 #include "orchestrator/net/conn.h"          
-#include "orchestrator/queue/game_queue.h"  
+#include "orchestrator/matchmaker/game_queue.h"  
 
 int receiveData(int epoll_fd, int target_fd, HashTable *const clients, struct GameQueue *const gq, FILE *const log_file)
 {

@@ -12,7 +12,7 @@
 #include "orchestrator/net/conn.h"
 #include "orchestrator/net/io.h"
 #include "orchestrator/net/listen_socket.h"
-#include "orchestrator/queue/game_queue.h"
+#include "orchestrator/matchmaker/game_queue.h"
 #include "server-config.h"
 #include "ds/hashmap.h"
 #include "signals.h"
