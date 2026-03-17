@@ -19,7 +19,8 @@ $(GAME_BIN): modules
 	$(CC) \
 		$$(find game/obj -type f -name '*.o') \
 		$$(find common/obj -type f -name '*.o') \
-		-o $@
+		-o $@ \
+		-pthread
 
 $(SUPERVISOR_BIN): modules
 	@mkdir -p bin
@@ -33,7 +34,8 @@ $(ORCH_BIN): modules
 	$(CC) \
 		$$(find orchestrator/obj -type f -name '*.o') \
 		$$(find common/obj -type f -name '*.o') \
-		-o $@
+		-o $@ \
+		-pthread
 	
 run:
 	./$(SUPERVISOR_BIN)
