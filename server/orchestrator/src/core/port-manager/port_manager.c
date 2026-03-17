@@ -233,6 +233,14 @@ struct PortManager *initPortManager(FILE *const log_file)
         return NULL;
     }
 
+    if(initializePorts(pm, log_file) < 0)
+    {    
+        log_message(log_file, "[initPortManager] initializePorts failed.");
+        q_destroy(pm->port_queue);
+        free(pm);
+        return NULL;
+    }
+
     pm->pid_to_port_table = ht_create(sizeof(pid_t), 1, sizeof(uint16_t), 1, 
                                       pid_hash, HT_CAPACITY);
 
