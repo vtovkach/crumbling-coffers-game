@@ -14,7 +14,7 @@
 
 // UDP GAME PROCESS 
 #define UDP_GAME_PROCESS_PORT   "10001"
-#define GAME_PROCESS            "./bin/game/game"
+#define GAME_PROCESS            "./bin/game"
 #define GM_MAX_EPOLL_EVENTS     64  
 #define UDP_DATAGRAM_SIZE       200
 
