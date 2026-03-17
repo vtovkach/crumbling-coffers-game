@@ -62,7 +62,7 @@ static uint16_t ht_retrieve_port(struct PortManager *pm, pid_t process_id,
     return port;
 }
 
-static int ht_insert_port(struct PortManager *pm, pid_t process_id, 
+int ht_insert_port(struct PortManager *pm, pid_t process_id, 
                           uint16_t port, FILE *const log_file)
 {
     int rc;
