@@ -30,7 +30,17 @@ static unsigned int pid_hash(const void *key, unsigned int table_size)
     return x % table_size;
 }
 
-// ===================================== Internal Wrappers ==================================================== 
+static uint16_t ht_retrieve_port(struct PortManager *pm, pid_t process_id, FILE *const log_file)
+{
+    // Remove mapping 
+}
+
+static int ht_insert_port(struct PortManager *pm, pid_t process_id, uint16_t port, FILE *const log_file)
+{
+
+}
+
+// ===================================== Internal Wrappers QUEUE ==================================================== 
 static size_t get_queue_size(struct PortManager *pm)
 {
     size_t cur_size; 
@@ -70,8 +80,6 @@ static int push_queue(struct PortManager *pm, uint16_t port, FILE *const log_fil
     
     return 0;
 }
-
-// ===============================================================================================================
 
 struct ReaperArgs
 {
