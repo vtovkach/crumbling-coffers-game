@@ -38,4 +38,6 @@ bool pm_ready(struct PortManager *pm, FILE *const log_file);
 
 uint16_t getPort(struct PortManager *pm, FILE *const log_file);
 
+int ht_insert_port(struct PortManager *pm, pid_t process_id, uint16_t port, FILE *const log_file);
+
 #endif 
