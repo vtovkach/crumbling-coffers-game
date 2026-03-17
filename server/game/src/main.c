@@ -21,11 +21,10 @@
 int main(int argc, char *argv[])
 {
     (void) argc; // Silence compiler warning 
-
     signals_install(SIGUSR1); 
 
-    uint16_t game_port = (uint16_t) atoi(argv[2]);
-    
+    uint16_t game_port = (uint16_t) atoi(argv[1]);
+
     int status = runGame(game_port);
 
     return status;
