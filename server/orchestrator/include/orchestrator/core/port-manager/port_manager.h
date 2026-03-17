@@ -7,8 +7,10 @@
 #include <stdio.h>
 
 #include "ds/ds_queue.h"
+#include "ds/hashmap.h"
 
 #define QUEUE_CAPACITY 128
+#define HT_CAPACITY 128
 
 struct PortManager
 {
@@ -20,6 +22,9 @@ struct PortManager
     _Atomic bool reaper_thread_active;  // Indicate if reaper thread active
     _Atomic bool reaper_thread_stop;    // Flag set by parent to request child thread exit 
     _Atomic uint8_t reaper_exit_status; // Holds reaper thread exit status
+
+    // Hashmap (pid_t -> port) <Later will be moved to a separate matchmaker module> 
+    HashTable *pid_to_port_table; 
 };
 
 struct PortManager *initPortManager(FILE *const log_file);
