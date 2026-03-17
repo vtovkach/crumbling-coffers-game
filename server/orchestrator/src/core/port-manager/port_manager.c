@@ -185,11 +185,21 @@ struct PortManager *initPortManager(FILE *const log_file)
         return NULL;
     }
 
+    if(pthread_mutex_init(&pm->ht_lock, NULL) != 0)
+    {
+        log_message(log_file, "[initPortManager] pthread_mutex_init failed.");
+        q_destroy(pm->port_queue);
+        ht_destroy(pm->pid_to_port_table);
+        free(pm);
+        return NULL;
+    }
+
     if(pthread_mutex_init(&pm->ports_lock, NULL) != 0)
     {
         log_message(log_file, "[initPortManager] pthread_mutex_init failed.");
         q_destroy(pm->port_queue);
         ht_destroy(pm->pid_to_port_table);
+        pthread_mutex_destroy(&pm->ht_lock);
         free(pm);
         return NULL;
     }
@@ -200,6 +210,7 @@ struct PortManager *initPortManager(FILE *const log_file)
         log_message(log_file, "[initPortManager] ReaperArgs malloc failed.");
         q_destroy(pm->port_queue);
         pthread_mutex_destroy(&pm->ports_lock);
+        pthread_mutex_destroy(&pm->ht_lock);
         ht_destroy(pm->pid_to_port_table);
         free(pm);
         return NULL;
