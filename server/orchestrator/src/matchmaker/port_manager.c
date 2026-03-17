@@ -11,7 +11,6 @@
 
 #define REAPER_FAILURE 1
 #define REAPER_NORMAL 0
-
 #define INVALID_PORT 0
 
 // ===================================== Internal HASHTABLE HELPERS ==================================================== 
