@@ -3,34 +3,142 @@
 [ext_resource type="Script" uid="uid://cfpg2nwwh0nfn" path="res://Scripts/MainMenu/lobby.gd" id="1_kvum6"]
 [ext_resource type="VideoStream" uid="uid://ckvxcm7rco8ij" path="res://Assets/Videos/lobby-bckg-vid.ogv" id="2_kvum6"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvum6"]
+bg_color = Color(0.003921569, 0.003921569, 0.003921569, 0.88235295)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77rn1"]
+bg_color = Color(0.15686275, 0.47058824, 0.29411766, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4kof"]
+bg_color = Color(0.23529412, 0.627451, 0.39215687, 0.88235295)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sjd7m"]
+bg_color = Color(0, 0, 0, 0.88235295)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jsy8u"]
+bg_color = Color(0.11764706, 0.15686275, 0.19607843, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2xmqc"]
+bg_color = Color(0.16862746, 0.22745098, 0.27058825, 0.88235295)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+corner_detail = 20
+
 [node name="Control (lobby)" type="Control" unique_id=1414690081]
 layout_mode = 3
 anchors_preset = 0
-offset_right = 1160.0
-offset_bottom = 650.0
+offset_right = 1152.0
+offset_bottom = 648.0
+scale = Vector2(1.07, 1.07)
 script = ExtResource("1_kvum6")
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="." unique_id=473960485]
 layout_mode = 1
-anchors_preset = -1
-offset_left = -3.000001
-offset_top = -1.0
-offset_right = 1925.3333
-offset_bottom = 1079.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.65, 0.65)
 size_flags_horizontal = 0
 stream = ExtResource("2_kvum6")
 autoplay = true
+expand = true
 loop = true
 
-[node name="back_button" type="Button" parent="." unique_id=1043127306]
-layout_mode = 0
-offset_left = 485.0
-offset_top = 414.0
-offset_right = 714.0
-offset_bottom = 502.0
-text = "Back button"
+[node name="ColorRect" type="ColorRect" parent="." unique_id=458514501]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07058824, 0.07058824, 0.07058824, 0.3137255)
 
-[connection signal="pressed" from="back_button" to="." method="_on_back_button_pressed"]
+[node name="SearchTimer" type="Timer" parent="." unique_id=625365267]
+
+[node name="MarginContainer1" type="MarginContainer" parent="." unique_id=835378368]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="SearchTimerLabel" type="Label" parent="MarginContainer1" unique_id=837279021]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=896206980]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -33.0
+offset_right = 48.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer" unique_id=602587554]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer2" unique_id=33519858]
+layout_mode = 2
+theme_override_constants/separation = 43
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/MarginContainer2/VBoxContainer" unique_id=396065788]
+layout_mode = 2
+theme_override_font_sizes/font_size = 45
+text = "MULTIPLAYER MODE"
+horizontal_alignment = 1
+
+[node name="find_match_button" type="Button" parent="CenterContainer/MarginContainer2/VBoxContainer" unique_id=449168390]
+custom_minimum_size = Vector2(400, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxFlat_kvum6")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_77rn1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_m4kof")
+text = "Find Match"
+
+[node name="main_menu_button" type="Button" parent="CenterContainer/MarginContainer2/VBoxContainer" unique_id=1043127306]
+custom_minimum_size = Vector2(400, 80)
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+theme_override_styles/normal = SubResource("StyleBoxFlat_sjd7m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jsy8u")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2xmqc")
+text = "Main Menu"
+
+[connection signal="pressed" from="CenterContainer/MarginContainer2/VBoxContainer/find_match_button" to="." method="_on_find_match_button_pressed"]
+[connection signal="pressed" from="CenterContainer/MarginContainer2/VBoxContainer/main_menu_button" to="." method="_on_back_button_pressed"]
