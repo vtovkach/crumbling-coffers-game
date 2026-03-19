@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var max_active_items: int = 100
-@export var spawn_interval: float = 2
+@export var spawn_interval: float = 1
 @export var spawn_attempts_per_cycle: int = 60
 @export var min_distance_between_items: float = 24.0
 @export var ground_collision_mask: int = 2
