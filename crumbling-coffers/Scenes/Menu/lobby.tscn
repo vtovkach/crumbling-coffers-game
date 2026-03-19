@@ -2,25 +2,15 @@
 
 [ext_resource type="Script" uid="uid://cfpg2nwwh0nfn" path="res://Scripts/MainMenu/lobby.gd" id="1_kvum6"]
 [ext_resource type="VideoStream" uid="uid://ckvxcm7rco8ij" path="res://Assets/Videos/lobby-bckg-vid.ogv" id="2_kvum6"]
+[ext_resource type="StyleBox" uid="uid://cxppcp0vt8i4s" path="res://Styles/lobby_menu/pressed_cancel_style.tres" id="3_m4kof"]
+[ext_resource type="StyleBox" uid="uid://djxl63swtm28f" path="res://Styles/lobby_menu/hover_cancel_style.tres" id="3_sjd7m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xspda"]
+bg_color = Color(0.15686275, 0.3529412, 0.27450982, 0.7058824)
+shadow_color = Color(0, 0, 0, 0.47058824)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kvum6"]
 bg_color = Color(0.003921569, 0.003921569, 0.003921569, 0.88235295)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
-corner_detail = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77rn1"]
-bg_color = Color(0.15686275, 0.47058824, 0.29411766, 1)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
-corner_detail = 20
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m4kof"]
-bg_color = Color(0.23529412, 0.627451, 0.39215687, 0.88235295)
 corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
@@ -79,7 +69,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.07058824, 0.07058824, 0.07058824, 0.3137255)
+color = Color(0.07058824, 0.07058824, 0.07058824, 0.57254905)
 
 [node name="SearchTimer" type="Timer" parent="." unique_id=625365267]
 
@@ -90,8 +80,15 @@ anchor_right = 1.0
 offset_bottom = 23.0
 grow_horizontal = 2
 
-[node name="SearchTimerLabel" type="Label" parent="MarginContainer1" unique_id=837279021]
+[node name="SearchPanelContainer" type="PanelContainer" parent="MarginContainer1" unique_id=2060652206]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xspda")
+
+[node name="SearchTimerLabel" type="Label" parent="MarginContainer1/SearchPanelContainer" unique_id=837279021]
+custom_minimum_size = Vector2(0, 65)
+layout_mode = 2
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 25
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -111,24 +108,32 @@ grow_vertical = 2
 
 [node name="MarginContainer2" type="MarginContainer" parent="CenterContainer" unique_id=602587554]
 layout_mode = 2
+theme_override_constants/margin_top = 20
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MarginContainer2" unique_id=33519858]
 layout_mode = 2
-theme_override_constants/separation = 43
+theme_override_constants/separation = 28
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/MarginContainer2/VBoxContainer" unique_id=396065788]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8627451, 0.88235295, 0.9019608, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 45
 text = "MULTIPLAYER MODE"
 horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="CenterContainer/MarginContainer2/VBoxContainer" unique_id=383580513]
+custom_minimum_size = Vector2(50, 10)
+layout_mode = 2
 
 [node name="find_match_button" type="Button" parent="CenterContainer/MarginContainer2/VBoxContainer" unique_id=449168390]
 custom_minimum_size = Vector2(400, 80)
 layout_mode = 2
 theme_override_font_sizes/font_size = 35
 theme_override_styles/normal = SubResource("StyleBoxFlat_kvum6")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_77rn1")
-theme_override_styles/hover = SubResource("StyleBoxFlat_m4kof")
+theme_override_styles/pressed = ExtResource("3_m4kof")
+theme_override_styles/hover = ExtResource("3_sjd7m")
 text = "Find Match"
 
 [node name="main_menu_button" type="Button" parent="CenterContainer/MarginContainer2/VBoxContainer" unique_id=1043127306]
