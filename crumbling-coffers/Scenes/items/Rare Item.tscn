@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://ca4xrdyvb24qm"]
+
+[ext_resource type="Script" uid="uid://br7hexnds6dhu" path="res://Scripts/Item_classes/Collectibles/Legendary_item.gd" id="1_04iyg"]
+[ext_resource type="Texture2D" uid="uid://bmbxy8kdalfcy" path="res://Assets/Items/PNG/shiny/16.png" id="2_26p0y"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ldn3d"]
+radius = 65.37584
+
+[node name="LegendaryItem" type="Area2D" unique_id=438378661]
+script = ExtResource("1_04iyg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=570691080]
+position = Vector2(0, -64)
+shape = SubResource("CircleShape2D_ldn3d")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=47869958]
+position = Vector2(0.03, -63.19)
+scale = Vector2(0.5708333, 0.5177083)
+texture = ExtResource("2_26p0y")

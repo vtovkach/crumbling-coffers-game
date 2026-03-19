@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bifnv1qm0vp37"]
+
+[ext_resource type="Script" uid="uid://c4q4rq7sy28wv" path="res://Scripts/Item_classes/Collectibles/Rare_item.gd" id="1_e1pl7"]
+[ext_resource type="Texture2D" uid="uid://ctpwuuapxfjt4" path="res://Assets/Items/PNG/simple/11.png" id="2_e1pl7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ldn3d"]
+radius = 65.37584
+
+[node name="RareItem" type="Area2D" unique_id=438378661]
+script = ExtResource("1_e1pl7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=570691080]
+position = Vector2(0, -64)
+shape = SubResource("CircleShape2D_ldn3d")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=47869958]
+position = Vector2(0.03, -63.19)
+scale = Vector2(0.5708333, 0.5177083)
+texture = ExtResource("2_e1pl7")

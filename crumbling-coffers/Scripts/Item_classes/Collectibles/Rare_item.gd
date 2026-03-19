@@ -1,11 +1,9 @@
-extends PickupItems
-class_name Rare
-
-var rarity_type = "rare"
-var item_type = "collectible"
-var rare_score = 5		# default score. Can be changed for each subclass.
+extends "res://Scripts/pickup_base.gd"
 
 func _ready() -> void:
-	_set_rarity(rarity_type)
-	_set_itemType(item_type)
-	_set_score(rare_score)
+	super()
+	points = 10
+
+func on_collected(body: Node) -> void:
+	if body.has_method("add_score"):
+		body.add_score(points)

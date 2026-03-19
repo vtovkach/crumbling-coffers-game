@@ -1,11 +1,9 @@
-extends PickupItems
-class_name Legendary
-
-var rarity_type = "legendary"
-var item_type = "collectible"
-var legendary_score = 20		# default score. Can be changed for each subclass.
+extends "res://Scripts/pickup_base.gd"
 
 func _ready() -> void:
-	_set_rarity(rarity_type)
-	_set_itemType(item_type)
-	_set_score(legendary_score)
+	super()
+	points = 35
+
+func on_collected(body: Node) -> void:
+	if body.has_method("add_score"):
+		body.add_score(points)
