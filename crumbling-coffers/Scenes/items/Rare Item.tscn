@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ca4xrdyvb24qm"]
+[gd_scene format=3 uid="uid://xofahnso8j72"]
 
 [ext_resource type="Script" uid="uid://br7hexnds6dhu" path="res://Scripts/Item_classes/Collectibles/Legendary_item.gd" id="1_04iyg"]
 [ext_resource type="Texture2D" uid="uid://bmbxy8kdalfcy" path="res://Assets/Items/PNG/shiny/16.png" id="2_26p0y"]

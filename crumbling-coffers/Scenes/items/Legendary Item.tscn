@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bifnv1qm0vp37"]
+[gd_scene format=3 uid="uid://cjn27mygahs0q"]
 
 [ext_resource type="Script" uid="uid://c4q4rq7sy28wv" path="res://Scripts/Item_classes/Collectibles/Rare_item.gd" id="1_e1pl7"]
 [ext_resource type="Texture2D" uid="uid://ctpwuuapxfjt4" path="res://Assets/Items/PNG/simple/11.png" id="2_e1pl7"]
