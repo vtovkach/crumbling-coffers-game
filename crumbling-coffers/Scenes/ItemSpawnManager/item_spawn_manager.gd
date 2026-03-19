@@ -5,6 +5,8 @@ extends Node2D
 @export var spawn_attempts_per_cycle: int = 20
 @export var min_distance_between_items: float = 24.0
 @export var ground_collision_mask: int = 2
+@export var blocking_collision_mask: int = 4
+@export var item_spawn_radius: float = 8.0
 
 @export var common_weight: int = 70
 @export var rare_weight: int = 25
@@ -91,7 +93,7 @@ func get_floor_position(start_pos: Vector2):
 
 	var query = PhysicsRayQueryParameters2D.create(
 		start_pos,
-		start_pos + Vector2(0, 200)
+		start_pos + Vector2(0, 1000)
 	)
 	query.collision_mask = ground_collision_mask
 
@@ -115,14 +117,14 @@ func is_overlapping_wall(pos: Vector2) -> bool:
 	var space_state = get_world_2d().direct_space_state
 
 	var circle = CircleShape2D.new()
-	circle.radius = 8.0
+	circle.radius = item_spawn_radius
 
 	var params = PhysicsShapeQueryParameters2D.new()
 	params.shape = circle
 	params.transform = Transform2D(0, pos)
 	params.collide_with_bodies = true
-	params.collide_with_areas = false
-	params.collision_mask = ground_collision_mask
+	params.collide_with_areas = true
+	params.collision_mask = blocking_collision_mask
 
 	var results = space_state.intersect_shape(params)
 	return results.size() > 0
