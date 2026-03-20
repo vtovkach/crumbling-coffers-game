@@ -2,6 +2,8 @@
 class_name State
 extends Node
 
+signal transitioned
+
 # Enter state, update state, exit state cycle
 @abstract func enter()
 @abstract func exit()
