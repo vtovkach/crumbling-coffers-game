@@ -1,5 +1,7 @@
 extends Node
 
+@export var initial_state : State
+
 var active_state : State
 var states : Dictionary = {}
 
@@ -8,6 +10,9 @@ func _ready() -> void:
 		if child is State:
 			states[child.name] = child
 			child.transitioned.connect(on_child_transition)
+	if initial_state:
+		initial_state.enter()
+		active_state = initial_state
 
 func _process(delta: float) -> void:
 	if active_state:
