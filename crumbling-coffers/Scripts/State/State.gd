@@ -6,5 +6,5 @@ extends Node
 @abstract func enter()
 @abstract func exit()
 @abstract func update(delta: float)
-@abstract func update_physics(delta: float)
+@abstract func physics_update(delta: float)
 	
