@@ -3,6 +3,7 @@
 #	and other connected players in same room 
 
 extends CharacterBody2D
+class_name Player
 
 # Baseline values. Player has this by default.
 const BASE_MAX_SPEED: float = 10000.0

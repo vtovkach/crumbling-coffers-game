@@ -1,6 +1,8 @@
 extends State
 class_name PlayerIdle
 
+@export var player_character: Player
+
 func enter() -> void:
 	pass#placeholder
 	
