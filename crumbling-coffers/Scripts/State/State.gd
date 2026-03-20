@@ -9,4 +9,3 @@ signal transitioned
 @abstract func exit()
 @abstract func update(delta: float)
 @abstract func physics_update(delta: float)
-	
