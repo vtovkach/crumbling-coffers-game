@@ -23,6 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://duct1f2gfpnvw" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00018.png" id="20_ogmfp"]
 [ext_resource type="Texture2D" uid="uid://bce4pmfs0mpx6" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00019.png" id="21_ixrbb"]
 [ext_resource type="PackedScene" uid="uid://d1nf7qbl005j0" path="res://Inventory/inv_ui.tscn" id="23_rqdc0"]
+[ext_resource type="Script" uid="uid://73k0lcauha43" path="res://Scripts/State/StateMachine.gd" id="24_rqdc0"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ei2r2"]
 animations = [{
@@ -119,3 +120,6 @@ offset_left = -914.0
 offset_top = -1564.0
 offset_right = -297.0
 offset_bottom = -846.0
+
+[node name="StateMachine" type="Node" parent="." unique_id=172053909]
+script = ExtResource("24_rqdc0")
