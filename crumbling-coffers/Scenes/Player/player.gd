@@ -24,6 +24,10 @@ const BASE_JUMP_VELOCITY: float = -3000.0
 @export var braking_decel: float = BASE_BRAKING_DECEL
 @export var jump_velocity: float = BASE_JUMP_VELOCITY
 
+# Values for states
+@export var direction: float = 0
+@export var jump_pressed: bool = false
+
 # DO NOT MODIFY outside of set_inverted(bool)
 var _invert_multiplier: int = 1
 
@@ -47,10 +51,12 @@ func _physics_process(delta: float) -> void:
 		velocity.y = move_toward(velocity.y, max_fallingspeed, get_gravity().y * delta)
 	
 	if (Input.is_action_pressed("jump")):
-		jump()
+		jump_pressed = true
+	else:
+		jump_pressed = false
 	
 	# Update left/right velocity
-	var direction = _invert_multiplier * Input.get_axis("left", "right")
+	direction = _invert_multiplier * Input.get_axis("left", "right")
 	move(direction, delta)
 		
 	# Update position
