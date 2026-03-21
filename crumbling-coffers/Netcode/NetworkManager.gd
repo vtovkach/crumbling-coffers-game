@@ -146,3 +146,26 @@ func udp_send(packet: PackedByteArray) -> bool:
 
 	return true
 
+func udp_receive(expected_size: int) -> PackedByteArray:
+	if not game_server_udp:
+		push_error("udp_receive(): UDP instance is null")
+		return PackedByteArray()
+
+	if expected_size <= 0:
+		push_error("udp_receive(): expected_size must be greater than 0")
+		return PackedByteArray()
+
+	if game_server_udp.get_available_packet_count() <= 0:
+		return PackedByteArray()
+
+	var packet: PackedByteArray = game_server_udp.get_packet()
+	var err: int = game_server_udp.get_packet_error()
+
+	if err != OK:
+		push_error("udp_receive(): failed to receive packet: %s" % err)
+		return PackedByteArray()
+
+	if packet.size() != expected_size:
+		return PackedByteArray()
+
+	return packet
