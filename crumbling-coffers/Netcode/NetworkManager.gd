@@ -114,3 +114,19 @@ func is_server_tcp_connected() -> bool:
 		
 	server_tcp.poll()
 	return server_tcp.get_status() == StreamPeerTCP.STATUS_CONNECTED
+
+# =================== UDP API =====================
+func init_udp(ip: String, port: int) -> bool:
+	if game_server_udp:
+		game_server_udp.close()
+
+	game_server_udp = PacketPeerUDP.new()
+
+	var err: int = game_server_udp.bind(0)
+	if err != OK:
+		push_error("init_udp(): failed to bind UDP socket: %s" % err)
+		return false
+
+	game_server_udp.set_dest_address(ip, port)
+	return true
+
