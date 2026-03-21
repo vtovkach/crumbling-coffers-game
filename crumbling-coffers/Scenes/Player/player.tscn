@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://cx4qvh51f854a" path="res://Scripts/State/PlayerState/PlayerFall.gd" id="25_bmb2s"]
 [ext_resource type="Script" uid="uid://cq3twrefhj7a0" path="res://Scripts/State/PlayerState/PlayerIdle.gd" id="26_ur3l4"]
 [ext_resource type="Script" uid="uid://upf8fro5n3lg" path="res://Scripts/State/PlayerState/PlayerRun.gd" id="27_2ahak"]
+[ext_resource type="Script" uid="uid://cscmp5m0h8ema" path="res://Scripts/State/PlayerState/PlayerJump.gd" id="28_ur3l4"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ei2r2"]
 animations = [{
@@ -142,3 +143,8 @@ metadata/_custom_type_script = "uid://cq3twrefhj7a0"
 script = ExtResource("27_2ahak")
 player = NodePath("../..")
 metadata/_custom_type_script = "uid://upf8fro5n3lg"
+
+[node name="PlayerJump" type="Node" parent="StateMachine" unique_id=1897472396 node_paths=PackedStringArray("player")]
+script = ExtResource("28_ur3l4")
+player = NodePath("../..")
+metadata/_custom_type_script = "uid://cscmp5m0h8ema"
