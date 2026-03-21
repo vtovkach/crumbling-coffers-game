@@ -50,20 +50,10 @@ func add_score(amount: int) -> void:
 # Daniel - ending here
 
 func _physics_process(delta: float) -> void:
-
-	# Update up/down velocity
-	if not is_on_floor():
-		apply_gravity(delta)
-	
-	if (Input.is_action_pressed("jump")):
-		jump_pressed = true
-	else:
-		jump_pressed = false
-	
-	# Update left/right velocity
+	# Get inputs
 	direction = _invert_multiplier * Input.get_axis("left", "right")
-	move(direction, delta)
-		
+	jump_pressed = Input.is_action_pressed("jump")
+	
 	# Update position
 	move_and_slide()
 
