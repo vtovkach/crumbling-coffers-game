@@ -105,3 +105,9 @@ func send_server_tcp(packet: PackedByteArray) -> bool:
 
 	return true
 	
+func is_server_tcp_connected() -> bool:
+	if not server_tcp:
+		return false
+		
+	server_tcp.poll()
+	return server_tcp.get_status() == StreamPeerTCP.STATUS_CONNECTED
