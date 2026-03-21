@@ -56,3 +56,29 @@ func disconnect_server_tcp() -> void:
 	server_tcp = StreamPeerTCP.new()
 	return 
 	
+func recv_server_tcp() -> PackedByteArray:
+	if not server_tcp:
+		push_error("recv_server_tcp(): TCP instance is null")
+		return PackedByteArray()
+
+	server_tcp.poll()
+
+	if server_tcp.get_status() != StreamPeerTCP.STATUS_CONNECTED:
+		push_error("recv_server_tcp(): TCP connection is not established")
+		main_server_connect = false
+		return PackedByteArray()
+
+	var available: int = server_tcp.get_available_bytes()
+	if available <= 0:
+		return PackedByteArray()
+
+	var result: Array = server_tcp.get_data(available)
+	var err: int = result[0]
+	var data: PackedByteArray = result[1]
+
+	if err != OK:
+		push_error("recv_server_tcp(): failed to receive data: %s" % err)
+		return PackedByteArray()
+
+	return data
+	
