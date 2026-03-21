@@ -9,8 +9,7 @@ func physics_update(delta: float) -> void:
 		transitioned.emit(self, "PlayerFall")
 		return
 	elif player.jump_pressed:
-		player.jump()
-		transitioned.emit(self, "PlayerFall")
+		transitioned.emit(self, "PlayerJump")
 		return
 	if player.direction != 0:
 		transitioned.emit(self, "PlayerRun")
