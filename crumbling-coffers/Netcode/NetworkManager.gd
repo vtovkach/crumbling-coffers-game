@@ -5,7 +5,10 @@ var main_server_connect = false;
 var game_server_connect = false; 
 
 # Orchestrator Server 
-var server_tcp: StreamPeerTCP = StreamPeerTCP.new()
+var server_tcp: StreamPeerTCP
+var game_server_udp: PacketPeerUDP
+
+# Main Server Info
 var server_ip: String = "127.0.0.1"
 var server_port: int = 10000
 
