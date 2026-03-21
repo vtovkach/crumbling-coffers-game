@@ -1,0 +1,42 @@
+!!!!!NOTE!!!!!
+# All TCP and UDP send/receive operations require an active connection.
+# If a connection is not established, send functions will return false
+# and receive-related functions will return empty results.
+
+# ================================= TCP API ========================================
+# Establishes a TCP connection to the main server.
+# Returns true if the connection was created successfully, otherwise false.
+func connect_server_tcp() -> bool:
+
+# Closes the current TCP connection and clears related networking state.
+func disconnect_server_tcp() -> void:
+
+# Sends one TCP packet to the server.
+# Returns true if the packet was handed off successfully, otherwise false.
+func send_server_tcp(packet: PackedByteArray) -> bool:
+
+# Returns true if at least one complete TCP frame is ready to be read.
+func has_server_tcp_frame() -> bool:
+
+# Returns the next complete TCP frame from the receive queue.
+# Returns an empty PackedByteArray if no frame is available.
+func get_server_tcp_frame() -> PackedByteArray:
+
+# Returns true if the TCP connection to the server is currently active.
+func is_server_tcp_connected() -> bool
+
+# ================================= UDP API ========================================
+# Initializes UDP communication with the given IP address and port.
+# Returns true if UDP was set up successfully, otherwise false.
+func init_udp(ip: String, port: int) -> bool:
+
+# Closes the current UDP connection and clears related state.
+func disconnect_udp() -> void:
+
+# Sends one UDP packet.
+# Returns true if the packet was sent successfully, otherwise false.
+func udp_send(packet: PackedByteArray) -> bool:
+
+# Returns the next received UDP packet.
+# Returns an empty PackedByteArray if no packet is available.
+func udp_receive() -> PackedByteArray:
