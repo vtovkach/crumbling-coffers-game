@@ -5,27 +5,26 @@
 
 [node name="inv_ui_slot" type="Panel" unique_id=1523684463]
 self_modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(400, 400)
-offset_left = 2.0
-offset_top = -1.0
-offset_right = 463.0
-offset_bottom = 399.0
+custom_minimum_size = Vector2(16, 16)
+offset_right = 16.0
+offset_bottom = 16.0
 script = ExtResource("1_x8d8c")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=236264793]
 texture_filter = 1
-position = Vector2(229.00002, 200.00002)
-scale = Vector2(27.992186, 24.960934)
+position = Vector2(8, 8)
 texture = ExtResource("1_s06lr")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=749623453]
-custom_minimum_size = Vector2(460, 401)
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
-offset_right = 460.0
-offset_bottom = 401.0
+offset_right = 16.0
+offset_bottom = 16.0
 
 [node name="Panel" type="Panel" parent="CenterContainer" unique_id=227682138]
+visible = false
 layout_mode = 2
 
 [node name="item_display" type="Sprite2D" parent="CenterContainer/Panel" unique_id=668592544]
+visible = false
 position = Vector2(-20, -20)
