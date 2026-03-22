@@ -22,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://62px3dfjwj6y" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00017.png" id="19_m6ahd"]
 [ext_resource type="Texture2D" uid="uid://duct1f2gfpnvw" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00018.png" id="20_ogmfp"]
 [ext_resource type="Texture2D" uid="uid://bce4pmfs0mpx6" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00019.png" id="21_ixrbb"]
-[ext_resource type="PackedScene" uid="uid://d1nf7qbl005j0" path="res://Inventory/inv_ui.tscn" id="23_rqdc0"]
 [ext_resource type="Script" uid="uid://73k0lcauha43" path="res://Scripts/State/StateMachine.gd" id="24_rqdc0"]
 [ext_resource type="Script" uid="uid://cx4qvh51f854a" path="res://Scripts/State/PlayerState/PlayerFall.gd" id="25_bmb2s"]
 [ext_resource type="Script" uid="uid://cq3twrefhj7a0" path="res://Scripts/State/PlayerState/PlayerIdle.gd" id="26_ur3l4"]
@@ -118,12 +117,6 @@ shape = SubResource("CapsuleShape2D_h8ma5")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1999409388]
 zoom = Vector2(0.2, 0.2)
-
-[node name="Inv_Ui" parent="." unique_id=664736319 instance=ExtResource("23_rqdc0")]
-offset_left = -914.0
-offset_top = -1564.0
-offset_right = -297.0
-offset_bottom = -846.0
 
 [node name="StateMachine" type="Node" parent="." unique_id=172053909 node_paths=PackedStringArray("initial_state")]
 script = ExtResource("24_rqdc0")
