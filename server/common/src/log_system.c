@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <stddef.h>
+#include <pthread.h>
+
 #include "util.h"
 #include "server-config.h"
+
+static pthread_mutex_t logging_lock = PTHREAD_MUTEX_INITIALIZER;
 
 void log_message(FILE *const log_file, const char *msg)
 {
