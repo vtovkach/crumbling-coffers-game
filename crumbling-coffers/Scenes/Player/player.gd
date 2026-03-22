@@ -13,6 +13,7 @@ const BASE_ACCEL: float = 8000.0
 const BASE_DECEL: float = 8000.0
 const BASE_BRAKING_DECEL: float = 16000.0
 const BASE_JUMP_VELOCITY: float = -3000.0
+const BASE_GRAVITY_STRENGTH: float = 1.0
 
 # Values used in calculation. Can increase or decrease with
 # temporary status effects, can reset to BASE value on expiration.
@@ -23,6 +24,7 @@ const BASE_JUMP_VELOCITY: float = -3000.0
 @export var decel: float = BASE_DECEL
 @export var braking_decel: float = BASE_BRAKING_DECEL
 @export var jump_velocity: float = BASE_JUMP_VELOCITY
+@export var gravity_strength: float = BASE_GRAVITY_STRENGTH
 
 # Values for states
 @export var direction: float = 0
@@ -58,8 +60,9 @@ func jump() -> void:
 	if is_on_floor():
 		velocity.y = jump_velocity
 		
-func apply_gravity(delta: float) -> void:
-	velocity.y = move_toward(velocity.y, max_fallingspeed, get_gravity().y * delta)
+func apply_gravity(gravity_multiplier: float, delta: float) -> void:
+	velocity.y = move_toward(velocity.y, max_fallingspeed, gravity_multiplier * gravity_strength * get_gravity().y * delta)
+	
 
 # Update velocity according to direction of movement
 # direction: a float in [-1, 1]
