@@ -14,7 +14,9 @@ const BASE_DECEL: float = 8000.0
 const BASE_BRAKING_DECEL: float = 16000.0
 const BASE_JUMP_VELOCITY: float = -3000.0
 const BASE_GRAVITY_STRENGTH: float = 1.0
-const BASE_DASH_COOLDOWN: float = 5.0 # seconds
+const BASE_DASH_COOLDOWN: float = 3 # seconds
+const BASE_DASH_STRENGTH: float = 3600.0
+
 
 # Values used in calculation. Can increase or decrease with
 # temporary status effects, can reset to BASE value on expiration.
@@ -27,6 +29,7 @@ const BASE_DASH_COOLDOWN: float = 5.0 # seconds
 @export var jump_velocity: float = BASE_JUMP_VELOCITY
 @export var gravity_strength: float = BASE_GRAVITY_STRENGTH
 @export var dash_cooldown: float = BASE_DASH_COOLDOWN # seconds
+@export var dash_strength: float = BASE_DASH_STRENGTH
 
 # Values for states
 @export var direction: float = 0
@@ -55,6 +58,10 @@ func _physics_process(delta: float) -> void:
 	jump_pressed = Input.is_action_pressed("jump")
 	down_pressed = Input.is_action_pressed("down")
 
+	dash_cooldown = move_toward(dash_cooldown, 0, delta)
+	if Input.is_action_pressed("dash"):
+		dash()
+	
 	# Update position
 	move_and_slide()
 
@@ -82,8 +89,10 @@ func move(direction: float, delta: float) -> void:
 	
 # Similar to push, but a player-applied dash with cooldown. 
 func dash() -> void:
-	pass
-	
+	if dash_cooldown > 0:				# no dash
+		return
+	dash_cooldown = BASE_DASH_COOLDOWN 	# yes dash
+	push(Vector2(direction, 0), dash_strength)
 	
 # When acceleration direction is against current velocity
 # May prefer a state to handle this, especially if custom animation
