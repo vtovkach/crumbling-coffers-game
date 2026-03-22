@@ -28,7 +28,7 @@ const BASE_DASH_STRENGTH: float = 3600.0
 @export var braking_decel: float = BASE_BRAKING_DECEL
 @export var jump_velocity: float = BASE_JUMP_VELOCITY
 @export var gravity_strength: float = BASE_GRAVITY_STRENGTH
-@export var dash_cooldown: float = BASE_DASH_COOLDOWN # seconds
+@export var dash_cooldown: float = 0 # seconds
 @export var dash_strength: float = BASE_DASH_STRENGTH
 
 # Values for states
