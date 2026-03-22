@@ -52,7 +52,7 @@ func _physics_process(delta: float) -> void:
 	direction = _invert_multiplier * Input.get_axis("left", "right")
 	jump_pressed = Input.is_action_pressed("jump")
 	down_pressed = Input.is_action_pressed("down")
-	
+
 	# Update position
 	move_and_slide()
 
