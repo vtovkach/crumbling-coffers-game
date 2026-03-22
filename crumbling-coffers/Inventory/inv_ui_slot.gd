@@ -1,11 +1,14 @@
 extends Panel
 
-@onready var item_visual: Sprite2D = $CenterContainer/Panel/item_display
+# will add future textures that will make use of the variable "bgSprite". its main use would be to switch textures 
+# within the specific sprite frame.
+#@onready var bgSprite: Sprite2D = $background
+@onready var itemVisual: Sprite2D = $CenterContainer/Panel/item_display
 
 
-func update(item: InvItem):
+func update(item: InventoryItem):
 	if !item:
-		item_visual.visible = false
+		itemVisual.visible = false
 	else:
-		item_visual.visible = true
-		item_visual.texture = item.texture
+		itemVisual.visible = true
+		itemVisual.texture = item.texture

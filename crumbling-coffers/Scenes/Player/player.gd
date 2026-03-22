@@ -39,7 +39,7 @@ const BASE_DASH_STRENGTH: float = 3600.0
 # DO NOT MODIFY outside of set_inverted(bool)
 var _invert_multiplier: int = 1
 
-#@export var inv: Inv
+@export var inventory: Inventory
 
 #Daniel - adding a score to the character for when they pick up the items.
 

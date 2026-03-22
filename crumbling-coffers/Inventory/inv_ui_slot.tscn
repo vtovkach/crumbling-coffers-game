@@ -10,7 +10,7 @@ offset_right = 16.0
 offset_bottom = 16.0
 script = ExtResource("1_x8d8c")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=236264793]
+[node name="background" type="Sprite2D" parent="." unique_id=236264793]
 texture_filter = 1
 position = Vector2(8, 8)
 texture = ExtResource("1_s06lr")
@@ -22,9 +22,7 @@ offset_right = 16.0
 offset_bottom = 16.0
 
 [node name="Panel" type="Panel" parent="CenterContainer" unique_id=227682138]
-visible = false
 layout_mode = 2
 
 [node name="item_display" type="Sprite2D" parent="CenterContainer/Panel" unique_id=668592544]
-visible = false
 position = Vector2(-20, -20)

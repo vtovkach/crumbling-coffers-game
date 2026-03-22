@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="Inv" format=3 uid="uid://bw50gq41hhdr"]
+[gd_resource type="Resource" script_class="Inventory" format=3 uid="uid://bw50gq41hhdr"]
 
 [ext_resource type="Script" uid="uid://f6j08xi4a6wt" path="res://Inventory/inventory_item.gd" id="1_3auly"]
-[ext_resource type="Resource" uid="uid://bpwcnqecbbqtm" path="res://Inventory/items/common_item.tres" id="2_y7vrm"]
+[ext_resource type="Resource" uid="uid://ihi734jyxixf" path="res://Inventory/items/gem1.tres" id="2_y7vrm"]
+[ext_resource type="Resource" uid="uid://bpwcnqecbbqtm" path="res://Inventory/items/gem2.tres" id="3_5r6hm"]
 [ext_resource type="Script" uid="uid://c00uwlui0818b" path="res://Inventory/inventory.gd" id="3_tdus5"]
 
 [resource]
 script = ExtResource("3_tdus5")
-items = Array[ExtResource("1_3auly")]([ExtResource("2_y7vrm"), null, ExtResource("2_y7vrm"), null, null, null, null, null, null, null, null, null])
+items = Array[ExtResource("1_3auly")]([ExtResource("2_y7vrm"), ExtResource("3_5r6hm"), null, null, ExtResource("3_5r6hm"), ExtResource("2_y7vrm"), ExtResource("3_5r6hm"), null, null, null])
 metadata/_custom_type_script = "uid://c00uwlui0818b"
