@@ -6,15 +6,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
-struct Herald
-{
-    uint8_t *packet_buf; 
-    size_t packet_size;
-    pthread_mutex_t lock;
-    atomic_bool ready;
-};
+#include "server-config.h"
 
-struct Herald *herald_init(size_t packet_size);
+struct Herald;
+
+struct Herald *herald_init();
 
 void herald_destroy(struct Herald *herald);
 
