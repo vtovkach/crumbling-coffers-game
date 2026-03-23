@@ -1,5 +1,7 @@
 extends MarginContainer
 
+func _ready() -> void:
+	MusicManager.play_music("res://Assets/Music/little-bird.mp3")
 
 func _on_lobby_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Menu/lobby.tscn")

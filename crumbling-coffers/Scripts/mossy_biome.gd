@@ -8,6 +8,7 @@ extends Node2D
 var countdown_number: int = 3
 
 func _ready() -> void:
+	MusicManager.stop_music()
 	hud.bind_to_player(player)
 	
 	# Start training ground

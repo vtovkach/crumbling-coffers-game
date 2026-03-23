@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 NetworkManager="*uid://c1njv2hxbdkey"
+MusicManager="*uid://cpq6rllo7t00h"
 
 [display]
 

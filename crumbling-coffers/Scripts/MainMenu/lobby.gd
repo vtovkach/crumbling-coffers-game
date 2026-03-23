@@ -16,6 +16,9 @@ var searching: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Playe music 
+	MusicManager.play_music("res://Assets/Music/little-bird.mp3")
+	
 	search_panel.visible = false
 	timer_label.visible = false
 	timer_label.text = "00:00"
