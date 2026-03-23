@@ -13,6 +13,8 @@
 #include "server-config.h"
 #include "threads/game.h"
 
+#include "packet.h"
+
 extern _Atomic bool stop_net; // Parent signals when to stop netThread  
 
 _Atomic bool net_dead = false;
