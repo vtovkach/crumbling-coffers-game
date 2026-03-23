@@ -37,4 +37,18 @@ bool herald_is_ready(const struct Herald *herald)
     );
 }
 
+int herald_write(struct Herald *herald, void *packet, size_t size)
+{ 
+    if(!packet || size != herald->packet_size) return -1;
+
+    pthread_mutex_lock(&herald->lock);
+
+    memcpy(herald->packet_buf, packet, size);
+    atomic_store_explicit(&herald->ready, true, memory_order_release);
+
+    pthread_mutex_unlock(&herald->lock);
+
+    return 0;
+}
+
 }
