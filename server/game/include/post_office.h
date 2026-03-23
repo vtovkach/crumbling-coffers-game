@@ -33,6 +33,6 @@ int post_office_write(const struct PostOffice *post_office,
 int post_office_read(struct PostOffice *post_office,
                      size_t player_index,
                      void *dest,
-                     size_t dest_capacity,);
+                     size_t dest_capacity);
 
 #endif
