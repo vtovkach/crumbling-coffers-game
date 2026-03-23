@@ -1,6 +1,7 @@
 #ifndef _POST_OFFICE_
 #define _POST_OFFICE_
 
+#include <stdint.h>
 #include <pthread.h>
 #include <stdatomic.h>
 
@@ -18,7 +19,7 @@ struct PostOffice
     size_t players;
 };
 
-struct PostOffice *post_office_init(size_t mailbox_count, size_t mailbox_capacity);
+struct PostOffice *post_office_init(size_t mailbox_count);
 
 void post_office_destroy(struct PostOffice *post_office);
 
