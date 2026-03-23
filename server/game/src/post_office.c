@@ -88,5 +88,28 @@ int post_office_read(struct PostOffice *post_office,
                      void *dest,
                      size_t dest_capacity)
 {
+    // Check validity of the player index 
+    if (player_index >= post_office->players) return -1;
 
+    struct Mailbox *target_mailbox = &post_office->mailboxes[player_index];
+
+    // Check if destination capacity matches the packet size of the mailbox 
+    if (dest_capacity != target_mailbox->packet_size) return -1;
+
+    if (!atomic_load_explicit(&target_mailbox->ready, memory_order_acquire))
+        return 1; // Not ready 
+
+    pthread_mutex_lock(&target_mailbox->lock);
+
+    if (!atomic_load_explicit(&target_mailbox->ready, memory_order_relaxed)) 
+    {
+        pthread_mutex_unlock(&target_mailbox->lock);
+        return 1;
+    }
+
+    memcpy(dest, target_mailbox->packet_buf, dest_capacity);
+    atomic_store_explicit(&target_mailbox->ready, false, memory_order_release);
+
+    pthread_mutex_unlock(&target_mailbox->lock);
+    return 0;
 }
