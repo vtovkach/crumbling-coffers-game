@@ -51,9 +51,17 @@ ssize_t udp_read(int target_fd, struct sockaddr_in *addr, void *dest, size_t des
     if(bytes < 0)
         return -1;
     
+    if(bytes < dest_size)
+    {
+        memset(dest, 0, dest_size);
+        return 0;
+    }
 
     if(msg.msg_flags & MSG_TRUNC)
+    {
+        memset(dest, 0, dest_size);
         return 0;
+    }
 
     *addr = src_addr;
 
