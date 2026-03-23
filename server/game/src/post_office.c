@@ -2,7 +2,7 @@
 #include "server-config.h"
 
 #include <stdlib.h>
-
+#include <string.h>
 
 static void clean_mailboxes(struct Mailbox *mailboxes, size_t num_boxes)
 {
@@ -64,12 +64,23 @@ bool post_office_is_ready(const struct PostOffice *post_office,
     );
 }
 
-int post_office_write(const struct PostOffice *post_office,
+int post_office_write(struct PostOffice *post_office,
                       size_t player_index,
                       const void *src,
                       size_t size)
 {
+    if(player_index >= post_office->players) return -1; // Incorrect index 
 
+    struct Mailbox *target_mailbox = &post_office->mailboxes[player_index];
+
+    if(size > target_mailbox->packet_size) return -1; // Incorrect size 
+
+    pthread_mutex_lock(&target_mailbox->lock);
+    memcpy(target_mailbox->packet_buf, src, size);
+    atomic_store_explicit(&target_mailbox->ready, true, memory_order_release);
+    pthread_mutex_unlock(&target_mailbox->lock);
+
+    return 0;
 }
 
 int post_office_read(struct PostOffice *post_office,
