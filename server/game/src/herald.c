@@ -51,4 +51,19 @@ int herald_write(struct Herald *herald, void *packet, size_t size)
     return 0;
 }
 
+int herald_read(struct Herald *herald, void *dest, size_t dest_size)
+{
+    if(!dest || dest_size != herald->packet_size) return -1;
+
+    if(!atomic_load_explicit(&herald->ready, memory_order_acquire))
+        return 1;
+
+    pthread_mutex_lock(&herald->lock);
+
+    memcpy(dest, herald->packet_buf, dest_size);
+    atomic_store_explicit(&herald->ready, false, memory_order_release);
+
+    pthread_mutex_unlock(&herald->lock);
+
+    return 0;
 }
