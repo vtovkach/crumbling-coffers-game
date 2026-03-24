@@ -31,6 +31,9 @@ const BASE_DASH_STRENGTH: float = 3600.0
 @export var dash_cooldown: float = 0 # seconds
 @export var dash_strength: float = BASE_DASH_STRENGTH
 
+@export var is_frozen: bool = false
+@export var freeze_time_left: float = 0.0
+
 # Values for states
 @export var direction: float = 0
 @export var jump_pressed: bool = false
@@ -114,6 +117,16 @@ func push(direction: Vector2, pushStrength: float) -> void:
 	velocity += direction.normalized() * pushStrength
 	velocity.x = clamp(velocity.x, -max_speed, max_speed)
 	velocity.y = clamp(velocity.y, -max_speed, max_speed)
+	
+func apply_freeze(duration: float) -> void:
+	is_frozen = true
+	freeze_time_left = duration
+
+func clear_freeze() -> void:
+	is_frozen = false
+	freeze_time_left = 0.0
+	
+
 
 
 # Function "collect": When player comes across an item, it will call func  "insert" from "inventory_slot.gd"
