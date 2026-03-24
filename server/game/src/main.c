@@ -13,8 +13,8 @@
 
 #define LOG_PATH "../../log/game"
 
-extern atomic_bool net_stop;
-extern atomic_bool game_stop; 
+atomic_bool net_stop = false;
+atomic_bool game_stop = false;
 
 static ssize_t read_full(int fd, void *buf, size_t size)
 {
@@ -149,6 +149,8 @@ int main(int argc, char *argv[])
     game_t_args->post_office = po;
     game_t_args->herald = herald;
     game_t_args->players_num = players_num;
+    game_t_args->game_stop_flag = &game_stop;
+    game_t_args->net_stop_flag = &net_stop;
 
     // Network Thread Arguments 
     net_t_args->game_id = game_id;
@@ -157,6 +159,8 @@ int main(int argc, char *argv[])
     net_t_args->post_office = po;
     net_t_args->herald = herald;
     net_t_args->players_num = players_num;
+    net_t_args->game_stop_flag = &game_stop;
+    net_t_args->net_stop_flag = &net_stop;
 
     // Spawn game and network threads 
     if(pthread_create(&game_t, NULL, run_game_t, game_t_args) != 0)
@@ -164,10 +168,15 @@ int main(int argc, char *argv[])
 
     if(pthread_create(&network_t, NULL, run_net_t, net_t_args) != 0)
     {
-        atomic_store_explicit(&game_stop, true, memory_order_release);
+        atomic_store(&game_stop, true);
         pthread_join(game_t, NULL);
         goto failure; 
     }
+
+    sleep(5);
+
+    atomic_store(&game_stop, true);
+    atomic_store(&net_stop, true);
 
     pthread_join(game_t, NULL);
     pthread_join(network_t, NULL);
