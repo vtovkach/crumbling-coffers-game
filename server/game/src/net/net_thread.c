@@ -53,6 +53,8 @@ void *run_net_t(void *t_args)
         goto exit;
     }
 
+    int tick = 0;
+
     for(;;)
     {
         if(2 == 3)
@@ -77,8 +79,10 @@ void *run_net_t(void *t_args)
             struct epoll_event cur_event = eventsQueue[0];
             //udp_read(cur_event.data.fd);
         }
-        
-        sleep(1);
+
+        printf("hello world");
+
+        if(tick++ == 5) goto exit;
     }
 
 exit: 

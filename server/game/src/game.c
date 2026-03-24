@@ -21,9 +21,11 @@ void *run_game_t(void *t_args)
     int tick = 0;
     for(;;)
     {   
-        sleep(1);
 
-        if(tick++ == 2) break; 
+        printf("hello world\n");
+
+        sleep(1);
+        if(tick++ == 5) break; 
     }
 
     return 0; 
