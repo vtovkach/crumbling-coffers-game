@@ -49,19 +49,100 @@ static ssize_t read_full(int fd, void *buf, size_t size)
  */
 int main(int argc, char *argv[])
 {
-    (void) argc; // Silence compiler warning 
+    int pipe_fd;
+    uint16_t port;
+    uint8_t game_id[GAME_ID_SIZE];
+    uint32_t players_num;
+
+    FILE *log_file = NULL;
+    uint8_t *player_ids = NULL;
+    struct PostOffice *po = NULL;
+    struct Herald *herald = NULL;
+
+    struct GameArgs *game_t_args = NULL;
+    struct NetArgs *net_t_args = NULL;
+
+    pthread_t game_t;
+    pthread_t network_t;
+
+    if(argc != 2)
+        return 1; 
+
+    pipe_fd = atoi(argv[1]);
+    
     signals_install(SIGUSR1); 
 
-    uint16_t game_port = (uint16_t) atoi(argv[1]);
+    log_file = fopen("log/game", "a");
+    if(!log_file)
+        return 0;
 
-    // Define all structures here 
-    // Spawn 2 threads here 
-    // and wait for both of them to join at the end 
+    if (read_full(pipe_fd, &port, sizeof(port)) < 0)
+        goto failure;
 
-    int status = runGame(game_port);
+    if (read_full(pipe_fd, game_id, GAME_ID_SIZE) < 0)
+        goto failure; 
 
-    return status;
+    if (read_full(pipe_fd, &players_num, sizeof(players_num)) < 0)
+        goto failure;
+
+    player_ids = malloc(PLAYER_ID_SIZE * players_num);
+    if(!player_ids)
+        goto failure;
+
+    if(read_full(pipe_fd, player_ids, PLAYER_ID_SIZE * players_num) < 0)
+        goto failure;
+    
+    // Declare and initialize shard data stuctures 
+    po = post_office_init((size_t) players_num);
+    if(!po) 
+        goto failure; 
+
+    herald = herald_init();
+    if(!herald)
+        goto failure; 
+
+    game_t_args = malloc(sizeof(*game_t_args));
+    net_t_args = malloc(sizeof(*net_t_args));
+    if(!game_t_args || !net_t_args) 
+        goto failure;
+
+    // Game Thread Arguments 
+    game_t_args->game_id = game_id;
+    game_t_args->players_ids = player_ids;
+    game_t_args->post_office = po;
+    game_t_args->herald = herald;
+    game_t_args->players_num = players_num;
+
+    // Network Thread Arguments 
+    net_t_args->game_id = game_id;
+    net_t_args->players_ids = player_ids;
+    net_t_args->port = port;
+    net_t_args->post_office = po;
+    net_t_args->herald = herald;
+    net_t_args->players_num = players_num;
+
+    // Spawn game and network threads 
+    if(pthread_create(&game_t, NULL, run_game_t, game_t_args) != 0)
+        goto failure; 
+
+    if(pthread_create(&network_t, NULL, run_net_t, net_t_args) != 0)
+    {
+        atomic_store_explicit(&game_stop, true, memory_order_release);
+        pthread_join(game_t, NULL);
+        goto failure; 
+    }
+
+    pthread_join(game_t, NULL);
+    pthread_join(network_t, NULL);
+
+    return 0;
+
+failure:
+    post_office_destroy(po);
+    herald_destroy(herald);
+    free(player_ids);
+    free(game_t_args);
+    free(net_t_args);
+    fclose(log_file);
+    return 1;
 }
-
-// Use waitpid(... WNOHANG) from orchestrator to track when game processes terminated 
-// Use signal to notify child to terminate process 
