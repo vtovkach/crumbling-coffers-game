@@ -15,6 +15,9 @@ struct GameArgs
     struct Herald *herald;
 
     size_t players_num;
+
+    atomic_bool *game_stop_flag;
+    atomic_bool *net_stop_flag;
 };
 
 void *run_game_t(void *t_args);

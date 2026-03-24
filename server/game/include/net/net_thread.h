@@ -16,6 +16,9 @@ struct NetArgs
     struct Herald *herald;
 
     size_t players_num;
+
+    atomic_bool *game_stop_flag;
+    atomic_bool *net_stop_flag;
 };
 
 void *run_net_t(void *t_args);
