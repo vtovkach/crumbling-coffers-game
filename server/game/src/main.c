@@ -43,7 +43,7 @@ static ssize_t read_full(int fd, void *buf, size_t size)
  * @param argv Argument vector.
  *
  * Expected arguments:
- *   argv[1] - UDP game port (uint16_t)
+ *   argv[1] - pipe's reading fd (int)
  *
  * @return 0 on success, non-zero on error.
  */
