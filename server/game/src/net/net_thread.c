@@ -16,78 +16,21 @@
 
 #include "packet.h"
 
-atomic_bool net_stop;
-
 void *run_net_t(void *t_args)
 {   
-    struct NetArgs net_args = *(struct NetArgs *)t_args; 
-    int listen_fd = -1; 
-    int epoll_fd = -1;
-    
-    listen_fd = make_udp_server_socket(net_args.port);
-    if(listen_fd == -1)
-    {
-        // Something is wrong
-        printf("[net thread] make_udp_server_socket failed.\n");
-        goto exit;
+    uint8_t *game_id = ((struct NetArgs *) t_args)->game_id; 
+    uint8_t *players_ids = ((struct NetArgs *) t_args)->players_ids;
+    size_t players_nun = ((struct NetArgs *) t_args)->players_num;
+
+    struct PostOffice *post_office = ((struct NetArgs *) t_args)->post_office;
+    struct Herald *herald = ((struct NetArgs *) t_args)->herald;
+
+    atomic_bool *game_stop = ((struct NetArgs *) t_args)->game_stop_flag;
+    atomic_bool *net_stop = ((struct NetArgs *) t_args)->net_stop_flag;
+
+    while(!atomic_load(game_stop) && !atomic_load(net_stop))
+    {   
+        printf("Net Thread\n");
+        sleep(1);
     }
-
-    epoll_fd = epoll_create1(0);
-    if(epoll_fd == 0)
-    {
-        // Epoll initialization failed  
-        perror("[net thread] epoll_create");
-        goto exit; 
-    }
-
-    struct epoll_event eventsQueue[GM_MAX_EPOLL_EVENTS];
-
-    struct epoll_event ev; 
-    ev.events = EPOLLIN;
-    ev.data.fd = listen_fd;
-
-    if(epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &ev) < 0)
-    {
-        // Failed registering listen_fd with epoll 
-        perror("[net thread] epoll_ctl (listen_fd)");
-        goto exit;
-    }
-
-    int tick = 0;
-
-    for(;;)
-    {
-        if(2 == 3)
-        {
-            //printf("[net thread] parent requests termination.\n");
-            goto exit;  
-        }
-
-        int events_ready = epoll_wait(epoll_fd, eventsQueue, GM_MAX_EPOLL_EVENTS, 1);
-        if(events_ready < 0)
-        {
-            if(errno == EINTR) {continue; } // Safe to continue 
-
-            perror("[net thread] epoll_wait");
-            goto exit; 
-        }
-
-        // I have only one listening file descriptor 
-        // No need for the loop 
-        if(events_ready > 0)
-        {
-            struct epoll_event cur_event = eventsQueue[0];
-            //udp_read(cur_event.data.fd);
-        }
-
-        printf("hello world");
-
-        if(tick++ == 5) goto exit;
-    }
-
-exit: 
-    if(epoll_fd != -1)  { close(epoll_fd);  }
-    if(listen_fd != -1) { close(listen_fd); }
-    free(t_args);
-    return NULL;
 }
