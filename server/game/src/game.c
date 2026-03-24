@@ -8,24 +8,27 @@
 #include <sys/epoll.h>
 #include <sys/types.h>
 
-#include "net/udp_socket.h"
-#include "net/io.h"
-#include "net/net_thread.h"
 #include "server-config.h"
 #include "game.h"
-
-atomic_bool game_stop; 
+#include "post_office.h"
+#include "herald.h"
 
 void *run_game_t(void *t_args)
-{    
-    int tick = 0;
-    for(;;)
+{   
+    uint8_t *game_id = ((struct GameArgs *) t_args)->game_id; 
+    uint8_t *players_ids = ((struct GameArgs *) t_args)->players_ids;
+    size_t players_nun = ((struct GameArgs *) t_args)->players_num;
+
+    struct PostOffice *post_office = ((struct GameArgs *) t_args)->post_office;
+    struct Herald *herald = ((struct GameArgs *) t_args)->herald;
+
+    atomic_bool *game_stop = ((struct GameArgs *) t_args)->game_stop_flag;
+    atomic_bool *net_stop = ((struct GameArgs *) t_args)->net_stop_flag;
+
+    while(!atomic_load(game_stop) && !atomic_load(net_stop))
     {   
-
-        printf("hello world\n");
-
+        printf("Game Thread\n");
         sleep(1);
-        if(tick++ == 5) break; 
     }
 
     return 0; 
