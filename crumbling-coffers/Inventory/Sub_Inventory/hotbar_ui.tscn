@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dacs7auwvde71" path="res://Inventory/Sub_Inventory/hotbar_ui.gd" id="1_ktvic"]
 
 [node name="hotbar_ui" type="Control" unique_id=998640288]
+modulate = Color(1, 1, 1, 0.78431374)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

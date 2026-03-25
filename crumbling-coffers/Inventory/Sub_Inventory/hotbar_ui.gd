@@ -2,15 +2,36 @@ extends Control
 
 @onready var hotbar: Hotbar = preload("res://Inventory/Sub_Inventory/playerHotbar.tres")
 @onready var slots: Array = $HBoxContainer.get_children()
+# Signal to send out that the active item is highlighting a new item.
+signal active_item_updated
+# variable that will keep track of what index the selection is on.
+var active_item_slot = 0
 
 func _ready():
 	hotbar.update.connect(self.update_hotbar_slots)
+	# connect the active_item_updated signal 
+	active_item_updated.connect(update_active_item_visual)
+	# call the updates to have scene be up to date when first ran.
 	update_hotbar_slots()
+	update_active_item_visual()
+	# ^^ need to implement this function later.
 	
-	# debugging
-	print(hotbar)
 
 # the update function for the hotbar will be the same functionality as the inventory's.
 func update_hotbar_slots():
 	for i in range(min(hotbar.hotbar_slots.size(), slots.size())):
 		slots[i].update(hotbar.hotbar_slots[i])
+
+
+func active_item_scroll_up():
+	# Using modulation so the active item slot does not go out of bounds.
+	active_item_slot = (active_item_slot + 1) % hotbar.size()
+	active_item_updated.emit()
+
+func active_item_scroll_down():
+	if active_item_slot == 0:
+		active_item_slot = hotbar.size() - 1
+	else:
+		active_item_slot -= 1
+	
+	active_item_updated.emit()

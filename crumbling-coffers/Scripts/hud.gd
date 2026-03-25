@@ -7,7 +7,7 @@ extends CanvasLayer
 # Variable to track seconds
 var time_left: int = 60
 @onready var inventory = $Inv_UI
-@onready var hotbar = $hotbar_ui
+@onready var hotbar = Hotbar
 
 func _ready() -> void:
 	# Hide the countdown by default
@@ -54,3 +54,11 @@ func _input(event):
 			inventory.close()
 		else:
 			inventory.open()
+	
+	# Adding in scroll mechanics for the hotbar.
+	if event.is_action_pressed("scroll_up"):
+		print("scrolling up.")
+		hotbar.active_item_scroll_up()
+	elif event.is_action_pressed("scroll_down"):
+		print("scrolling down")
+		hotbar.active_item_scroll_down()
