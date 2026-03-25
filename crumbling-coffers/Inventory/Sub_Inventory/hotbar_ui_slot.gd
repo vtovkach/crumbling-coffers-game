@@ -10,16 +10,25 @@ var slot_active: bool = false
 
 # This update function is the same as the inventory's logic. Name conventions are changed to
 # associate with hotbar instead of inventory.
+# UPDATED "update" function to handle the updating more cleanly and safely.
 func update(hotbar_slot: HotbarSlot):
-	if !hotbar_slot.hotbar_item:
+	# Checking both conditions if there is no item or if hotbar_slot == null.
+	if (!hotbar_slot.hotbar_item) || (hotbar_slot == null):
 		hotbarItemVisual.visible = false
 		hotbarAmtVisual.visible = false
-	else:
-		hotbarItemVisual.visible = true
-		hotbarItemVisual.texture = hotbar_slot.hotbar_item.texture
-		if hotbar_slot.amount > 1: 
-			hotbarAmtVisual.visible = true
+		return
+
+# Taken out "else" condition, so if the "if" condition is not met, automatically update visibility.
+	hotbarItemVisual.visible = true
+	hotbarItemVisual.texture = hotbar_slot.hotbar_item.texture
+	
+	# Also adding when amount is < 1, then the visibility of the amount will be disabled.
+	if hotbar_slot.amount > 1: 
+		hotbarAmtVisual.visible = true
 		hotbarAmtVisual.text = str(hotbar_slot.amount)
+	else: 
+		hotbarAmtVisual.visible = false
+
 
 # Update function that will change the visual from a normal slot png to the highlighted slot png..
 func update_active_slot_visual():

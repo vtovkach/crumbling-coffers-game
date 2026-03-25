@@ -10,6 +10,10 @@ signal item_used(index)
 @export var hotbar_slots: Array[HotbarSlot]
 var EMPTY_SLOT = null
 
+# When initialized, connect the signal "item_used" to the function "_on_item_used".
+func _init():
+	item_used.connect(self._on_item_used)
+
 func hotbar_insert(item: HotbarItem):
 	var itemSlots = hotbar_slots.filter(func(slot): return slot.hotbar_item == item) 
 	if !itemSlots.is_empty():
@@ -23,11 +27,22 @@ func hotbar_insert(item: HotbarItem):
 	update.emit()
 
 func _on_item_used(index):
-	if hotbar_slots[index].amount > 1:
-		hotbar_slots[index].amount -= 1
-		update.emit()
-	elif hotbar_slots[index].amount == 1:
-		# DO NOTHING FOR NOW - NEED TO DEBUG ERROR SO BASE OBJECT IS NOT NULL.
-		#hotbar_slots[index] = EMPTY_SLOT
-		update.emit()
-		
+	# !!!
+	# PLACE FUNCTIONS TO CHECK WHAT TYPE OF ITEM WAS USED IN ORDER TO APPLY CORRECT ABILITIES/PROPERTIES>
+	# var item = hotbar_slots[index].hotbar_item
+	# item.apply_effect()
+	# ^^ CALL THIS FUNCTION AND FLUSH OUT 
+	# !!!
+	
+	var slot = hotbar_slots[index]
+	# check if the slot's hotbar_item is null, then just return (DO NOTHING).
+	if (slot == null) || (slot.hotbar_item == null):
+		return
+	# Decrement the amount by 1.
+	if slot.amount > 1:
+		slot.amount -= 1
+	else: # if slot item is 0, then update the slot properties to be a brand new, empty slot.
+		slot.hotbar_item = null
+		slot.amount = 0
+	
+	update.emit()

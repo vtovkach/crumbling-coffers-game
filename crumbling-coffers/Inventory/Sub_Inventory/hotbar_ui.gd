@@ -14,9 +14,6 @@ func _ready():
 	# call the updates to have scene be up to date when first ran.
 	update_hotbar_slots()
 	update_active_item_visual()
-	#connect the item_used signal
-	hotbar.item_used.connect(hotbar._on_item_used)
-	
 
 # the update function for the hotbar will be the same functionality as the inventory's.
 func update_hotbar_slots():
@@ -49,19 +46,9 @@ func active_item_scroll_down():
 # Will only remove the selected item from the array for now.
 func _input(event):
 	# Adding in the ability to use an item -- will only currently remove it from hotbar.
-	if event.is_action_pressed("item_used"):
+	if event.is_action_pressed("item_used"): # "item_used" is right mouse click.
 		use_active_item()
 
-
 func use_active_item():
-	var selected_item = hotbar.hotbar_slots[active_item_slot]
-	
-	if selected_item == null:
-		return # return to ensure no game crash -- does nothing.
-	
-	# This function will be implemented to have the item affect the player/other players.
-	# Not defined for now. Need to define in the future.
-	# apply_item_effect(selected_item)
-	
 	# Send out signal that an item was used.
 	hotbar.item_used.emit(active_item_slot)
