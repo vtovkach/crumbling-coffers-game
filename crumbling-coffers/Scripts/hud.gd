@@ -59,3 +59,8 @@ func _input(event):
 		hotbar.active_item_scroll_up()
 	elif event.is_action_pressed("scroll_down"):
 		hotbar.active_item_scroll_down()
+	
+	# Hotbar slot can be selected with numbers.
+	for i in range(9):
+		if event.is_action_pressed("hotbar_slot_%d" %(i+1)):
+			hotbar.set_active_slot(i)

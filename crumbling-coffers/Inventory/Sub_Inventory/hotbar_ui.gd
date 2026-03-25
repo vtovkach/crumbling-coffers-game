@@ -42,6 +42,16 @@ func active_item_scroll_down():
 	
 	active_item_updated.emit()
 
+# Functionality for using numbers to select hotbar slot.
+func set_active_slot(index: int):
+	# Return, and change/do nothing, if index is out of bounds.
+	if (index < 0) || (index >= hotbar.hotbar_slots.size()):
+		return
+	# Assign the index number to active_item_slot variable, then update.
+	active_item_slot = index
+	active_item_updated.emit()
+
+
 # Will check if the button (right mouse click) is pressed to use the highlighted item.
 # Will only remove the selected item from the array for now.
 func _input(event):
