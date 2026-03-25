@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HotbarItem" format=3 uid="uid://ck8r8lwv2yw5"]
+
+[ext_resource type="Script" uid="uid://dfwywy614rur6" path="res://Inventory/Sub_Inventory/hotbar_item.gd" id="1_grxdk"]
+[ext_resource type="Texture2D" uid="uid://8q3v2epsplnc" path="res://Assets/Items/PNG/shiny/2.png" id="2_m4ttx"]
+
+[resource]
+script = ExtResource("1_grxdk")
+name = "consumableTest"
+texture = ExtResource("2_m4ttx")
+metadata/_custom_type_script = "uid://dfwywy614rur6"

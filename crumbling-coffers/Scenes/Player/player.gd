@@ -43,6 +43,7 @@ var _invert_multiplier: int = 1
 @export var inventory: Inventory
 @export var itemRes: InventoryItem
 @export var hotbar: Hotbar
+@export var hotbar_itemRes: HotbarItem
 
 #Daniel - adding a score to the character for when they pick up the items.
 
@@ -123,5 +124,5 @@ func collect(itemRes):
 
 # Consumables will call for this function when Player walks over and collides with the hit/collision box. 
 # This functionality is the same as inventory's.
-func consumable_collect(item):
-	hotbar.hotbar_insert(item)
+func consumable_collect(hotbar_itemRes):
+	hotbar.hotbar_insert(hotbar_itemRes)

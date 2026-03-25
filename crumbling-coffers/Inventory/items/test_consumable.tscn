@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bx4l2n8sr3nyr"]
+
+[ext_resource type="Script" uid="uid://l25c2jexmbq4" path="res://Inventory/items/test_consumable.gd" id="1_3b7s4"]
+[ext_resource type="Texture2D" uid="uid://8q3v2epsplnc" path="res://Assets/Items/PNG/shiny/2.png" id="1_pgjva"]
+[ext_resource type="Resource" uid="uid://ck8r8lwv2yw5" path="res://Inventory/items/consumableTest.tres" id="2_afqfp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3b7s4"]
+size = Vector2(134, 132)
+
+[node name="test_consumable" type="Area2D" unique_id=1535960858]
+script = ExtResource("1_3b7s4")
+hotbar_itemRes = ExtResource("2_afqfp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=682673937]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_3b7s4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=765661672]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_pgjva")

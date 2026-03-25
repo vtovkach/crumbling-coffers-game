@@ -7,6 +7,7 @@ extends CanvasLayer
 # Variable to track seconds
 var time_left: int = 60
 @onready var inventory = $Inv_UI
+@onready var hotbar = $hotbar_ui
 
 func _ready() -> void:
 	# Hide the countdown by default

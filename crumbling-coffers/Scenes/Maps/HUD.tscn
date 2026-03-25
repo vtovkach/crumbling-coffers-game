@@ -49,7 +49,7 @@ theme_override_font_sizes/font_size = 40
 scale = Vector2(0.2, 0.2)
 pivot_offset_ratio = Vector2(0.5, 0.5)
 
-[node name="hotbar" parent="." unique_id=998640288 instance=ExtResource("3_4exg6")]
+[node name="hotbar_ui" parent="." unique_id=998640288 instance=ExtResource("3_4exg6")]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
