@@ -51,6 +51,11 @@ static int net_receive_packets(FILE *log_file,
     return 0;
 }
 
+static int net_broadcast_state(FILE *log_file, struct PlayersRegistry *players_reg)
+{
+    // TODO 
+}
+
 void *run_net_t(void *t_args)
 {   
     uint8_t *game_id = ((struct NetArgs *) t_args)->game_id; 
