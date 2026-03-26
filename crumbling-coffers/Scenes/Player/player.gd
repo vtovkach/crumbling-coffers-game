@@ -36,6 +36,10 @@ const BASE_DASH_STRENGTH: float = 3600.0
 const BASE_FROZEN_DECEL: float = 1000.0
 @export var frozen_decel: float = BASE_FROZEN_DECEL
 
+@export var is_disoriented: bool = false
+@export var disorientation_time_left: float = 0.0
+
+
 # Values for states
 @export var direction: float = 0
 @export var jump_pressed: bool = false
@@ -59,6 +63,7 @@ var score: int = 0
 func _ready() -> void:
 	add_to_group("freezable")
 	add_to_group("player")
+	add_to_group("disorientable")
 
 func add_score(amount: int) -> void:
 	score += amount
@@ -70,6 +75,13 @@ func _physics_process(delta: float) -> void:
 		freeze_time_left -= delta
 		if freeze_time_left <= 0:
 			clear_freeze()
+			
+	if is_disoriented:
+		disorientation_time_left -= delta
+		if disorientation_time_left <= 0:
+			clear_disorientation()			
+			
+			
 	if not is_frozen:
 	# Get inputs
 		direction = _invert_multiplier * Input.get_axis("left", "right")
@@ -108,6 +120,7 @@ func move(direction: float, delta: float) -> void:
 	if is_frozen:
 		velocity.x = move_toward(velocity.x, 0, frozen_decel * delta)
 		return
+		
 	
 	if direction:
 		if (velocity.x > 0 and direction < 0) or (velocity.x < 0 and direction > 0):
@@ -149,6 +162,16 @@ func clear_freeze() -> void:
 	is_frozen = false
 	freeze_time_left = 0.0
 	
+	
+func apply_disorientation(duration: float) -> void:
+	is_disoriented = true
+	disorientation_time_left = duration
+	set_inverted(true)
+	
+func clear_disorientation() -> void:
+	is_disoriented = false
+	disorientation_time_left = 0.0
+	set_inverted(false)
 
 
 
