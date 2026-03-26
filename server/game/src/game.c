@@ -29,9 +29,39 @@ void *run_game_t(void *t_args)
 
     while(!atomic_load(game_stop) && !atomic_load(net_stop))
     {   
-        printf("Game Thread\n");
+        for (size_t i = 0; i < PLAYERS_PER_MATCH; i++)
+        {
+            uint8_t udp_packet[UDP_DATAGRAM_SIZE];
+
+            if (post_office_read(post_office, i, udp_packet, UDP_DATAGRAM_SIZE) != 0)
+                continue;
+
+            struct Header header;
+            memcpy(&header, udp_packet, sizeof(header));
+
+            // ---- Print Game ID ----
+            printf("Game ID: ");
+            for (size_t j = 0; j < GAME_ID_SIZE; j++)
+                printf("%02x ", header.game_id[j]);
+            printf("\n");
+
+            // ---- Print Player ID ----
+            printf("Player ID: ");
+            for (size_t j = 0; j < PLAYER_ID_SIZE; j++)
+                printf("%02x ", header.player_id[j]);
+            printf("\n");
+
+            // ---- Print Payload ----
+            const char *payload = (char *)(udp_packet + sizeof(header));
+
+            printf("Payload: %.*s\n",
+                header.payload_size,
+                payload);
+
+            printf("--------\n");
+        }
         sleep(1);
     }
 
-    return 0; 
+    return 0;
 }
