@@ -6,6 +6,10 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#define CTRL_REL_PACKET 0x00    // Reliable packet 
+#define CTRL_REG_PACKET 0x01    // Regular packet 
+#define CTRL_INIT_PACKET 0x02   // Init packet 
+
 /*
     Packet Header Layout (40 bytes)
 
@@ -19,8 +23,11 @@
     control (2 bytes):
         Bitfield for packet metadata and flags.
         bit 0:
-            0 → reliable packet (uses reliability layer)
-            1 → regular packet (no reliability guarantees)
+            0 -> reliable packet (uses reliability layer)
+            1 -> regular packet (no reliability guarantees)
+        bit 1:
+            0: -> established connection  
+            1: -> init connection
         Remaining bits are reserved for future use.
 
     payload_size (2 bytes):
