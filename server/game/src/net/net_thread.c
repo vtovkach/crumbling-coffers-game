@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <string.h>
 #include <stdbool.h>
 #include <stdatomic.h>
 #include <unistd.h>
@@ -18,7 +19,8 @@
 
 #define EPOLL_WAIT_TIMEOUT 100      // time in milliseconds
 
-static int net_receive_packets(FILE *log_file, 
+static uint8_t player_index = 0;
+
 static void net_receive_packets(FILE *log_file, 
                                int fd, 
                                uint8_t *game_id, 
@@ -185,7 +187,7 @@ void *run_net_t(void *t_args)
         {
             // TODO 
             // There are incoming UDP datagrams
-            // Invoke correct routine  
+            // Invoke correct routine   
 
             net_receive_packets(
                 log_file, 
@@ -196,8 +198,6 @@ void *run_net_t(void *t_args)
                 players_num
             );
         }
-        
-        printf("Net Thread\n");
     }
 
 exit:
