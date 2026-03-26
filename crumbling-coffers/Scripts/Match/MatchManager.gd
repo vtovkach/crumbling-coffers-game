@@ -3,14 +3,21 @@ extends Node
 # Match Manager will handle timer logic for SINGLEPLAYER ONLY (currently). For multiplayer logic, the server will 
 # be keeping track of the timer globally. This is the first iteration of the MatchManager autoload.
 
-# The timer logic that is in HUD will be moved out, so it only handles UI updates.
+# IMPLEMENTING STATES FOR MATCH AND IF SINGLEPLAYER OR MULTIPLAYER (remove comment later).
+enum MatchState {WAITING, COUNTDOWN, RUNNING, ENDED} # May add more states later on.
+enum MatchMode {SINGLEPLAYER, MULTIPLAYER}
+# Set the current state to waiting by default.
+var current_state: MatchState = MatchState.WAITING
+# Set the mode to singleplayer by default.
+var mode: MatchMode = MatchMode.SINGLEPLAYER
+
 var time_left: int = 60
-# Timer should be independent from any other scenes/scripts.
 @onready var timer: Timer
 
-# Will need to have these signals in HUD for them to be caught by HUD to update UI.
-signal time_updated(time: int) # Have it send out integer numbers, like initialized above.
-signal match_ended() # Signal will be used to tell HUD that match is over and update accordingly.
+# Signals that will be called out whenever emitted to notify other functions.
+signal time_updated(time: int) 
+signal match_ended() 
+signal state_changed(new_state: MatchState)
 
 func _ready() -> void:
 	# Initializing MatchManager's timer when ran.
@@ -19,15 +26,33 @@ func _ready() -> void:
 	timer.one_shot = false # Set to false in order to have timer reset and be used again.
 	timer.autostart = false # Manually start the timer.
 	add_child(timer)
-	# Connect to timeout from Timer class, which will be sent out 
+	
 	timer.timeout.connect(_on_game_timer_timeout)
+
+# Set the state to change.
+# will set current_state to the state passed into set_state and signal to state_changed
+func set_state(new_state: MatchState) -> void:
+	pass
+
+# When called, will assign the new time and emmit signal to have HUD update UI.
+func set_time(new_time: int) -> void:
+	pass
+	
+# Will set the state to COUNTDOWN when called.
+func start_countdown() -> void:
+	pass
 
 func start_match(match_duration: int) -> void:
 	time_left = match_duration
 	timer.start()
 	time_updated.emit(time_left)
 
-# Function that was being handled in HUD moved here:
+# New end_match function that will change the match state to ENDED wehen the timer runs out.
+func end_match() -> void:
+	pass
+
+
+# Decrementing timer functionality. Will need to change so calls set_time instead of decrementing timer itself.
 func _on_game_timer_timeout() -> void:
 	if time_left > 0:
 		time_left -= 1
