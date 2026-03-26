@@ -10,7 +10,26 @@ class_name TwoPointItemIndicator
 
 var source: Player
 var target: PickupBase
-# var bounds: This thing needs to be aware of its bounds
+
+var dir: Vector2
+
+var camera_node: Camera2D
+var bounds: Vector2
+var margin: float = 4
+
+
+func _ready() -> void:
+	camera_node = get_viewport().get_camera_2d()
+	bounds = get_viewport_rect().size
+
+func _process(delta: float) -> void:
+	if not target or not source:	# safety
+		return
+
+	dir = target.global_position - source.global_position
+	_update_rotation()
+	_update_position()
+
 
 func spawn(player: Player, item: PickupBase) -> void:
 	source = player
@@ -22,12 +41,10 @@ func destroy() -> void:
 	target = null
 	# Remove this from the group of indicators
 	
-func update() -> void:
-	# Set angle from source to target
-	# Set position between source and target but within bounds
+func _update_rotation() -> void:
+	# Rotate to face target
+	rotation = atan2(dir.y, dir.x)
 	
-	
-	pass
-
-
+func _update_position() -> void:
+	# Place at screen edge between source and target
 	
