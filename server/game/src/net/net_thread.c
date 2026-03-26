@@ -19,8 +19,6 @@
 
 #define EPOLL_WAIT_TIMEOUT 100      // time in milliseconds
 
-static uint8_t player_index = 0;
-
 static void net_receive_packets(FILE *log_file, 
                                int fd, 
                                uint8_t *game_id, 
@@ -56,25 +54,19 @@ static void net_receive_packets(FILE *log_file,
         {   
             // I first need to verify if the player belongs to this game
             // TODO 
-
-            int ret = players_registry_add(
+            int ret = players_registry_add_next(
                 players_reg, 
                 header.player_id, 
-                player_index, 
                 incoming_addr
             );
-
-            if(ret < 0)
+            if(ret != 0)
             {
                 log_message(
-                    log_file, 
-                    "[net_receive_packets] failed to add \
-                    player to the players registry"
-                )
+                    log_file, "[net_receive_packets] failed \
+                    to insert a new player to the registry.\n"
+                );
                 continue;
             }
-
-            player_index++;
         }
 
         uint8_t idx;
@@ -131,7 +123,10 @@ void *run_net_t(void *t_args)
     atomic_bool *net_stop = ((struct NetArgs *) t_args)->net_stop_flag;
 
     // Local structure 
-    struct PlayersRegistry *players_reg = players_registry_create(players_num);
+    struct PlayersRegistry *players_reg = players_registry_create(
+        players_num, 
+        players_ids
+    );
     if(!players_reg) 
     {
         log_error(log_file, "[run_net_t] epoll_create1 failed.", errno);
