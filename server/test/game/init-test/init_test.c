@@ -96,7 +96,7 @@ int main(void)
         /*
          * Replace "./bin/game" with the real path to your game executable.
          */
-        execl("../../bin/game", "../../bin/game", fd_arg, (char *)NULL);
+        execl("../../../bin/game", "../../../bin/game", fd_arg, (char *)NULL);
 
         perror("execl");
         close(pipefds[0]);
