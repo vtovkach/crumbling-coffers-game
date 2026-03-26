@@ -40,8 +40,8 @@ func start_training() -> void:
 	start_game_clock()
 	
 func start_game_clock() -> void:
-	# Start the 60s timer in HUD
-	hud.start_game_timer()
+	# The "start_game_timer" is now "start_match" in MatchManager.
+	MatchManager.start_match(60)
 
 func _input(event:InputEvent) -> void:
 	# Check for the escape key
