@@ -15,7 +15,9 @@ struct PlayersRegistry
 {
     HashTable *id_to_entry; // maps player_id -> PlayerEntry
     uint32_t *seqnums;      // indexed by player index
-    size_t players_count;
+    size_t players_count;   // max players
+    uint8_t next_index;     // next auto-assigned internal index
+    uint8_t *allowed_player_ids;   // flat array: players_count * PLAYER_ID_SIZE
 };
 
 static unsigned int hash_function(const void *data, unsigned int table_size)
@@ -33,36 +35,56 @@ static unsigned int hash_function(const void *data, unsigned int table_size)
     return hash % table_size;
 }
 
-struct PlayersRegistry *players_registry_create(size_t max_players)
+struct PlayersRegistry *players_registry_create(size_t max_players,
+                                                const uint8_t *player_ids)
 {
     struct PlayersRegistry *pr = calloc(1, sizeof(*pr));
     if (!pr)
         return NULL;
 
-    pr->seqnums = calloc(max_players, sizeof(*pr->seqnums));
-    if (!pr->seqnums) 
+    if (!player_ids || max_players == 0)
     {
         free(pr);
         return NULL;
     }
 
-    pr->players_count = max_players;
+    pr->seqnums = calloc(max_players, sizeof(*pr->seqnums));
+    if (!pr->seqnums)
+    {
+        free(pr);
+        return NULL;
+    }
 
-    pr->id_to_entry = ht_create(PLAYER_ID_SIZE, 
-        1, 
-        sizeof(struct PlayerEntry), 
-        1, 
-        hash_function, 
-        pr->players_count * 2
-    );
-
-    if (!pr->id_to_entry) 
+    pr->allowed_player_ids = malloc(max_players * PLAYER_ID_SIZE);
+    if (!pr->allowed_player_ids)
     {
         free(pr->seqnums);
         free(pr);
         return NULL;
     }
-    
+
+    memcpy(pr->allowed_player_ids, player_ids, max_players * PLAYER_ID_SIZE);
+
+    pr->players_count = max_players;
+    pr->next_index = 0;
+
+    pr->id_to_entry = ht_create(
+        PLAYER_ID_SIZE,
+        1,
+        sizeof(struct PlayerEntry),
+        1,
+        hash_function,
+        pr->players_count * 2
+    );
+
+    if (!pr->id_to_entry)
+    {
+        free(pr->allowed_player_ids);
+        free(pr->seqnums);
+        free(pr);
+        return NULL;
+    }
+
     return pr;
 }
 
@@ -70,8 +92,10 @@ void players_registry_destroy(struct PlayersRegistry *pr)
 {
     if (!pr) return;
 
-    if (pr->id_to_entry) ht_destroy(pr->id_to_entry);
+    if (pr->id_to_entry)
+        ht_destroy(pr->id_to_entry);
 
+    free(pr->allowed_player_ids);
     free(pr->seqnums);
     free(pr);
 }
@@ -182,4 +206,52 @@ uint32_t *players_registry_seq_get_by_index(struct PlayersRegistry *pr,
         return NULL;
 
     return &pr->seqnums[player_index];
+}
+
+static int player_id_is_allowed(const struct PlayersRegistry *pr,
+                                const uint8_t *player_id)
+{
+    size_t i;
+
+    if (!pr || !player_id || !pr->allowed_player_ids)
+        return 0;
+
+    for (i = 0; i < pr->players_count; i++)
+    {
+        const uint8_t *cur = pr->allowed_player_ids + (i * PLAYER_ID_SIZE);
+
+        if (memcmp(cur, player_id, PLAYER_ID_SIZE) == 0)
+            return 1;
+    }
+
+    return 0;
+}
+
+int players_registry_add_next(struct PlayersRegistry *pr,
+                              const uint8_t *player_id,
+                              struct sockaddr_in addr)
+{
+    int ret;
+
+    if (!pr || !player_id)
+        return -1;
+
+    if (pr->next_index >= pr->players_count)
+        return -1;
+
+    if (!player_id_is_allowed(pr, player_id))
+        return -1;
+
+    ret = players_registry_add(
+        pr,
+        player_id,
+        pr->next_index,
+        addr
+    );
+
+    if (ret != 0)
+        return -1;
+
+    pr->next_index++;
+    return 0;
 }
