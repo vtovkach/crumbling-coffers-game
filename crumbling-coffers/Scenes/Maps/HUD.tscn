@@ -55,3 +55,7 @@ anchor_right = 0.5
 grow_vertical = 0
 scale = Vector2(0.15, 0.15)
 pivot_offset = Vector2(-380, -100)
+
+[node name="VisualIndicators" type="Node" parent="." unique_id=1078054235]
+
+[node name="ItemIndicators" type="Node" parent="VisualIndicators" unique_id=6862422]
