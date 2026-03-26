@@ -1,8 +1,75 @@
 [gd_scene format=3 uid="uid://xeo6je45suoa"]
 
-[node name="ScorePage" type="Node2D" unique_id=1535050298]
+[ext_resource type="Texture2D" uid="uid://b662g1htkpbv6" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00000.png" id="1_lat4l"]
 
-[node name="MatchResults" type="Label" parent="." unique_id=1200502218]
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Score: ..."
+[node name="ScorePage" type="Control" unique_id=1373813404]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=925084998]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.16862746, 0.32156864, 0.19607843, 1)
+
+[node name="PlayersContainer" type="HBoxContainer" parent="." unique_id=911442728]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -104.5
+offset_right = 137.0
+offset_bottom = 104.5
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PlayersContainer" unique_id=918444375]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+
+[node name="Player1Block" type="VBoxContainer" parent="PlayersContainer/MarginContainer" unique_id=1912560277]
+layout_mode = 2
+alignment = 1
+
+[node name="AvatarDisplay" type="TextureRect" parent="PlayersContainer/MarginContainer/Player1Block" unique_id=1733445602]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("1_lat4l")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PlayerName" type="Label" parent="PlayersContainer/MarginContainer/Player1Block" unique_id=920759309]
+layout_mode = 2
+text = "Blue Wizard"
+
+[node name="ScoreValue" type="Label" parent="PlayersContainer/MarginContainer/Player1Block" unique_id=1200502218]
+layout_mode = 2
+text = "Score: 0"
+
+[node name="ItemsValue" type="Label" parent="PlayersContainer/MarginContainer/Player1Block" unique_id=331565168]
+layout_mode = 2
+text = "Items Collected: 0"
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1666543899]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -86.5
+offset_top = -40.0
+offset_right = 86.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_bottom = 32
+
+[node name="MainMenuButton" type="Button" parent="MarginContainer" unique_id=446329724]
+layout_mode = 2
+text = "Return to Main Menu"
