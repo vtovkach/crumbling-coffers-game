@@ -8,8 +8,8 @@
 extends Node2D
 class_name TwoPointItemIndicator
 
-var source: Player
-var target: PickupBase
+@export var source: Player
+@export var target: PickupBase
 
 var dir: Vector2
 
@@ -47,4 +47,4 @@ func _update_rotation() -> void:
 	
 func _update_position() -> void:
 	# Place at screen edge between source and target
-	
+	pass
