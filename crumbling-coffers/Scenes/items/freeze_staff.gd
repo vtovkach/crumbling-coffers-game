@@ -3,15 +3,15 @@ extends "res://Scripts/pickup_base.gd"
 
 @export var freeze_duration: float = 5.0
 
-func _on_body_entered(body: Node) -> void:
-	for target in get_tree().get_nodes_in_group("freezable"):
-# For Testing against yourself - commment out chunk below.
-		if target == body:
-			continue
+@export var hotbar_itemRes: HotbarItem
+func _ready() -> void:
+	super()
+	points = 0
 
-	
-
-		if target.has_method("apply_freeze"):
-			target.apply_freeze(freeze_duration)
-
-	queue_free()
+func on_collected(body: Node) -> void:
+	if body.has_method("add_score"):
+		body.add_score(points)
+	# When player (assigned to body) walks over item, it will also call the collect item in player.gd,
+	# which will insert the item into the inventory UI.
+	if body.has_method("consumable_collect"):
+		body.consumable_collect(hotbar_itemRes)
