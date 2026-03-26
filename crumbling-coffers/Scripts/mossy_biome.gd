@@ -39,13 +39,9 @@ func start_training() -> void:
 	# Unpause player
 	player.set_physics_process(true)
 	
-	# Start game timer
-	# start_game_clock()
-	
-# func start_game_clock() -> void:
-	# The "start_game_timer" is now "start_match" in MatchManager.
-	# MatchManager.start_match(total_time)
+	# REMOVED: start_game_clock bc doesn't need to know time info
 	# Instead of calling a function, we emit the handshake
+	# Signal based handoff ensures timer is synced among peers
 	MatchManager.match_ready.emit()
 
 func _input(event:InputEvent) -> void:
