@@ -8,7 +8,6 @@ signal item_used(index)
 
 # Same insertion functionality as inventory.gd. Using different name conventions.
 @export var hotbar_slots: Array[HotbarSlot]
-var EMPTY_SLOT = null
 
 # When initialized, connect the signal "item_used" to the function "_on_item_used".
 func _init():
