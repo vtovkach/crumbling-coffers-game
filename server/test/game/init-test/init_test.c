@@ -13,6 +13,11 @@
  */
 #define GAME_ID_SIZE   16
 #define PLAYER_ID_SIZE 16
+#define PLAYERS_NUM    6
+
+#define CTRL_REL_PACKET   0x01
+#define CTRL_REG_PACKET   0x02
+#define CTRL_INIT_PACKET  0x04
 
 static int write_full(int fd, const void *buf, size_t count)
 {
@@ -50,20 +55,22 @@ int main(void)
 
     uint16_t port = 5000;
     uint8_t game_id[GAME_ID_SIZE];
-    uint32_t players_num = 3;
-    uint8_t player_ids[PLAYER_ID_SIZE * 3];
+    uint32_t players_num = PLAYERS_NUM;
+    uint8_t player_ids[PLAYER_ID_SIZE * PLAYERS_NUM];
+
+    fill_demo_bytes(game_id, GAME_ID_SIZE, 0x10);
 
     /*
-     * Example data:
-     * game_id  = 0x10, 0x11, 0x12, ...
-     * player 1 = 0x20, 0x21, ...
-     * player 2 = 0x30, 0x31, ...
-     * player 3 = 0x40, 0x41, ...
+     * Generate 10 different player IDs:
+     * player 0 = 0x20, 0x21, ...
+     * player 1 = 0x30, 0x31, ...
+     * ...
+     * player 9 = 0xb0, 0xb1, ...
      */
-    fill_demo_bytes(game_id, GAME_ID_SIZE, 0x10);
-    fill_demo_bytes(player_ids + 0 * PLAYER_ID_SIZE, PLAYER_ID_SIZE, 0x20);
-    fill_demo_bytes(player_ids + 1 * PLAYER_ID_SIZE, PLAYER_ID_SIZE, 0x30);
-    fill_demo_bytes(player_ids + 2 * PLAYER_ID_SIZE, PLAYER_ID_SIZE, 0x40);
+    for (uint32_t i = 0; i < PLAYERS_NUM; i++)
+        fill_demo_bytes(player_ids + (i * PLAYER_ID_SIZE),
+                        PLAYER_ID_SIZE,
+                        (uint8_t)(0x20 + (i * 0x10)));
 
     if (pipe(pipefds) < 0)
     {
@@ -84,18 +91,10 @@ int main(void)
     {
         char fd_arg[32];
 
-        /*
-         * Child:
-         * - closes write end
-         * - execs the game binary, passing read-end fd as argv[1]
-         */
         close(pipefds[1]);
 
         snprintf(fd_arg, sizeof(fd_arg), "%d", pipefds[0]);
 
-        /*
-         * Replace "./bin/game" with the real path to your game executable.
-         */
         execl("../../../bin/game", "../../../bin/game", fd_arg, (char *)NULL);
 
         perror("execl");
@@ -103,11 +102,6 @@ int main(void)
         _exit(1);
     }
 
-    /*
-     * Parent:
-     * - closes read end
-     * - writes data in the exact order expected by game main()
-     */
     close(pipefds[0]);
 
     if (write_full(pipefds[1], &port, sizeof(port)) < 0)
