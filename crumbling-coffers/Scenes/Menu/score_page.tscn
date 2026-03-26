@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://xeo6je45suoa"]
 
+[ext_resource type="Script" uid="uid://cmeh8ve7tc78u" path="res://Scripts/MainMenu/score_page.gd" id="1_gwkl0"]
 [ext_resource type="Texture2D" uid="uid://b662g1htkpbv6" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00000.png" id="1_lat4l"]
 
 [node name="ScorePage" type="Control" unique_id=1373813404]
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_gwkl0")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=925084998]
 layout_mode = 1
@@ -52,10 +54,6 @@ text = "Blue Wizard"
 layout_mode = 2
 text = "Score: 0"
 
-[node name="ItemsValue" type="Label" parent="PlayersContainer/MarginContainer/Player1Block" unique_id=331565168]
-layout_mode = 2
-text = "Items Collected: 0"
-
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1666543899]
 layout_mode = 1
 anchors_preset = 7
@@ -73,3 +71,5 @@ theme_override_constants/margin_bottom = 32
 [node name="MainMenuButton" type="Button" parent="MarginContainer" unique_id=446329724]
 layout_mode = 2
 text = "Return to Main Menu"
+
+[connection signal="pressed" from="MarginContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]

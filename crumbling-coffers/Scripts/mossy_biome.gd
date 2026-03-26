@@ -67,9 +67,12 @@ func _on_match_ended() -> void:
 	if player:
 		player.set_physics_process(false) # Disables movement
 		
-		# Wait 2 seconds for player to read text
-		await get_tree().create_timer(2.0).timeout
+		# Get data from HUD/Player before moving on
+		MatchManager.final_score = int(hud.score_label.text)
 		
-		# Redirect to score page
-		get_tree().change_scene_to_file("res://Scenes/Menu/score_page.tscn")
-		print("Redirecting to Score Page...")
+	# Wait 2 seconds for player to read text
+	await get_tree().create_timer(2.0).timeout
+		
+	# Redirect to score page
+	get_tree().change_scene_to_file("res://Scenes/Menu/score_page.tscn")
+	print("Redirecting to Score Page...")

@@ -10,6 +10,10 @@ var current_state: MatchState = MatchState.WAITING
 # Set the mode to singleplayer by default.
 var mode: MatchMode = MatchMode.SINGLEPLAYER
 
+# Variables for score page to hold results of last match
+var final_score: int = 0
+var final_items: int = 0
+
 var time_left: int = 60
 @onready var timer: Timer
 
