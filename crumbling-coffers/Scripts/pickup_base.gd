@@ -12,6 +12,8 @@ func _ready() -> void:
 	initial_y = position.y
 	random_offset = randf_range(0.0, PI * 2)
 	body_entered.connect(_on_body_entered)
+	add_to_group("pickups")	# THIS IS ONLY IN PICKUP_BASE BECAUSE all pickups should be in a group including those NOT spawned by item_spawner_manager
+							# i.e. item spawner manager's internal list doesn't store items that it doesn't spawn (aka items existing originally)
 
 func _process(delta: float) -> void:
 	var time = (Time.get_ticks_msec() / 1000.0) * float_speed
@@ -20,6 +22,7 @@ func _process(delta: float) -> void:
 
 func _on_body_entered(body: Node) -> void:
 	on_collected(body)
+	remove_from_group("pickups") # remove this item from that group of pickups. this is technically "on_collected" behavior but it may not be worth it to place this there
 	queue_free()
 
 func on_collected(body: Node) -> void:
