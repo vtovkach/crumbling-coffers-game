@@ -15,11 +15,19 @@
 #include "herald.h"
 #include "packet.h"
 
+static void sleep_ms(long ms)
+{
+    struct timespec ts;
+    ts.tv_sec = ms / 1000;
+    ts.tv_nsec = (ms % 1000) * 1000000L;
+    nanosleep(&ts, NULL);
+}
+
 void *run_game_t(void *t_args)
 {   
     uint8_t *game_id = ((struct GameArgs *) t_args)->game_id; 
     uint8_t *players_ids = ((struct GameArgs *) t_args)->players_ids;
-    size_t players_nun = ((struct GameArgs *) t_args)->players_num;
+    size_t players_num = ((struct GameArgs *) t_args)->players_num;
 
     struct PostOffice *post_office = ((struct GameArgs *) t_args)->post_office;
     struct Herald *herald = ((struct GameArgs *) t_args)->herald;
@@ -31,7 +39,7 @@ void *run_game_t(void *t_args)
 
     while(!atomic_load(game_stop) && !atomic_load(net_stop))
     {   
-        for (size_t i = 0; i < PLAYERS_PER_MATCH; i++)
+        for (size_t i = 0; i < players_num; i++)
         {
             uint8_t udp_packet[UDP_DATAGRAM_SIZE];
 
@@ -62,7 +70,7 @@ void *run_game_t(void *t_args)
 
             printf("--------\n");
         }
-        sleep(1);
+        sleep_ms(10);
     }
 
     return 0;
