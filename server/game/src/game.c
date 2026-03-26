@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdatomic.h>
@@ -12,6 +13,7 @@
 #include "game.h"
 #include "post_office.h"
 #include "herald.h"
+#include "packet.h"
 
 void *run_game_t(void *t_args)
 {   
