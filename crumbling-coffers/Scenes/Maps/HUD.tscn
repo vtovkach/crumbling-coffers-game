@@ -43,8 +43,6 @@ theme_override_constants/margin_top = 10
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 
-[node name="GameTimer" type="Timer" parent="." unique_id=1535482286]
-
 [node name="Inv_UI" parent="." unique_id=664736319 instance=ExtResource("2_7iq3s")]
 scale = Vector2(0.2, 0.2)
 pivot_offset_ratio = Vector2(0.5, 0.5)
@@ -57,5 +55,3 @@ anchor_right = 0.5
 grow_vertical = 0
 scale = Vector2(0.15, 0.15)
 pivot_offset = Vector2(-380, -100)
-
-[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
