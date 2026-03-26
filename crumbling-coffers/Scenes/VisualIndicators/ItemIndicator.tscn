@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://ykxrcbwmujwi"]
+
+[ext_resource type="Texture2D" uid="uid://ctls814eliq1j" path="res://Assets/Icons/right-arrow.png" id="1_cdp7h"]
+
+[node name="ItemIndicator" type="Node2D" unique_id=310205956]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=132691703]
+texture = ExtResource("1_cdp7h")
