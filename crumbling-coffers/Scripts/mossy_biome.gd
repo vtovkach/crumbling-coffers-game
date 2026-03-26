@@ -12,6 +12,9 @@ func _ready() -> void:
 	MusicManager.stop_music()
 	hud.bind_to_player(player)
 	
+	# Listen for global match manager to signal end of game
+	MatchManager.match_ended.connect(_on_match_ended)
+	
 	# Start training ground
 	start_training()
 	
@@ -58,3 +61,8 @@ func _on_quit_confirmation_confirmed() -> void:
 # Connect from 'canceled' signal
 func _on_quit_confirmation_canceled() -> void:
 	get_tree().paused = false
+
+# Function runs when end game signal is heard
+func _on_match_ended() -> void:
+	if player:
+		player.set_physics_process(false) # Disables movement
