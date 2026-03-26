@@ -53,18 +53,27 @@ static void net_receive_packets(FILE *log_file,
         }
 
         if(header.control & CTRL_INIT_PACKET)
-        {
-            // It is the initiation packet
-            
+        {   
             // I first need to verify if the player belongs to this game
             // TODO 
 
-            if(players_registry_add(players_reg, header.player_id, player_index, incoming_addr) < 0)
+            int ret = players_registry_add(
+                players_reg, 
+                header.player_id, 
+                player_index, 
+                incoming_addr
+            );
+
+            if(ret < 0)
             {
-                // Error adding 
-                // Log error 
+                log_message(
+                    log_file, 
+                    "[net_receive_packets] failed to add \
+                    player to the players registry"
+                )
                 continue;
             }
+
             player_index++;
         }
 
@@ -73,7 +82,6 @@ static void net_receive_packets(FILE *log_file,
         {
             // User id does not belong to this game process 
             // DROP PACKET 
-            
             continue;
         }
 
@@ -94,10 +102,13 @@ static void net_receive_packets(FILE *log_file,
     }
 }
 
-static int net_broadcast_state(FILE *log_file, 
+static void net_broadcast_state(FILE *log_file, 
                             struct PlayersRegistry *players_reg)
 {
     // TODO 
+
+    (void) log_file;
+    (void) players_reg;
 }
 
 void *run_net_t(void *t_args)
@@ -160,6 +171,10 @@ void *run_net_t(void *t_args)
         if(herald_read(herald, &server_packet, UDP_DATAGRAM_SIZE) == 0)
         {
             // Broadcast packet to all clients 
+            net_broadcast_state(
+                log_file, 
+                players_reg
+            );
         }
 
         int e_ret = epoll_wait(
@@ -185,10 +200,6 @@ void *run_net_t(void *t_args)
 
         if(e_ret > 0)
         {
-            // TODO 
-            // There are incoming UDP datagrams
-            // Invoke correct routine   
-
             net_receive_packets(
                 log_file, 
                 udp_fd, 
