@@ -11,7 +11,8 @@
 struct PlayerEntry;
 struct PlayersRegistry;
 
-struct PlayersRegistry *players_registry_create(size_t max_players);
+struct PlayersRegistry *players_registry_create(size_t max_players,
+                                                const uint8_t *player_ids);
 
 void players_registry_destroy(struct PlayersRegistry *pr);
 
@@ -40,5 +41,9 @@ uint32_t *players_registry_seq_get_by_id(struct PlayersRegistry *pr,
 
 uint32_t *players_registry_seq_get_by_index(struct PlayersRegistry *pr,
                                            uint8_t player_index);
+
+int players_registry_add_next(struct PlayersRegistry *pr,
+                              const uint8_t *player_id,
+                              struct sockaddr_in addr);
 
 #endif 
