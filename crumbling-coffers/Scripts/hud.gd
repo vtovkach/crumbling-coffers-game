@@ -39,7 +39,7 @@ func update_game_timer(seconds: int) -> void:
 # Check for signal that match is over. Then, will redirect and pause/disable game 
 # controls later.
 func _on_match_ended() -> void:
-	print("Game Over!")
+	update_countdown_text("MATCH OVER") # Visual indication for match ending
 	
 	
 # Match start will be handled in MatchManager.gd.
