@@ -2,6 +2,9 @@
 // Sends packets for multiple players.
 // For each player: send reliable INIT and wait for ACK,
 // then after 100 ms send REGULAR.
+// After all client packets are sent, wait for packets from the server
+// and display them. If packet has authoritative control flag,
+// interpret seq_num as server tick.
 // Each packet is exactly 200 bytes.
 // No network byte order conversion is performed.
 
@@ -22,7 +25,10 @@
 #define TARGET_PORT 5000
 
 #define UDP_DATAGRAM_SIZE 200
-#define UDP_ACK_TIMEOUT_MS 1000
+#define UDP_ACK_TIMEOUT_MS 300
+#define SERVER_WAIT_TIMEOUT_MS 3000
+
+#define SERVER_WAIT_SECONDS 1
 
 #define GAME_ID_SIZE      16
 #define PLAYER_ID_SIZE    16
@@ -31,6 +37,7 @@
 #define CTRL_FLAG_RELIABLE  (1u << 0)
 #define CTRL_FLAG_INIT      (1u << 1)
 #define CTRL_FLAG_ACK       (1u << 2)
+#define CTRL_FLAG_AUTH      (1u << 3)
 
 #define SEND_REGULAR_PACKETS 1
 
@@ -55,6 +62,43 @@ static void sleep_ms(long ms)
     ts.tv_sec = ms / 1000;
     ts.tv_nsec = (ms % 1000) * 1000000L;
     nanosleep(&ts, NULL);
+}
+
+static void print_hex_bytes(const char *label, const uint8_t *buf, size_t size)
+{
+    printf("%s: ", label);
+    for (size_t i = 0; i < size; i++)
+        printf("%02x ", buf[i]);
+    printf("\n");
+}
+
+static void display_server_packet(const uint8_t *udp_packet)
+{
+    struct Header header;
+    const char *payload;
+
+    memcpy(&header, udp_packet, sizeof(header));
+    payload = (const char *)(udp_packet + sizeof(header));
+
+    printf("======== SERVER PACKET ========\n");
+    print_hex_bytes("Game ID", header.game_id, GAME_ID_SIZE);
+    print_hex_bytes("Player ID", header.player_id, PLAYER_ID_SIZE);
+    printf("Control: 0x%04x\n", header.control);
+    printf("Payload Size: %u\n", header.payload_size);
+
+    if (header.control & CTRL_FLAG_AUTH)
+    {
+        printf("Packet Type: GAME STATE AUTHORITATIVE PACKET\n");
+        printf("Server Game Tick: %u\n", header.seq_num);
+    }
+    else
+    {
+        printf("Packet Type: NON-AUTHORITATIVE SERVER PACKET\n");
+        printf("Sequence Number: %u\n", header.seq_num);
+    }
+
+    printf("Payload: %.*s\n", header.payload_size, payload);
+    printf("===============================\n");
 }
 
 static int send_player_packet(int sockfd,
@@ -190,6 +234,74 @@ static int wait_for_ack(int sockfd,
     }
 }
 
+static void wait_for_server_packets(int sockfd, int seconds)
+{
+    fd_set readfds;
+    struct timeval tv;
+
+    time_t start = time(NULL);
+
+    while (1)
+    {
+        time_t now = time(NULL);
+        if ((now - start) >= seconds)
+        {
+            printf("Server wait time expired (%d seconds).\n", seconds);
+            return;
+        }
+
+        FD_ZERO(&readfds);
+        FD_SET(sockfd, &readfds);
+
+        tv.tv_sec = 1;   // check every 1 second
+        tv.tv_usec = 0;
+
+        int sel = select(sockfd + 1, &readfds, NULL, NULL, &tv);
+        if (sel < 0)
+        {
+            if (errno == EINTR)
+                continue;
+
+            perror("select");
+            return;
+        }
+
+        if (sel == 0)
+            continue;
+
+        if (FD_ISSET(sockfd, &readfds))
+        {
+            uint8_t recv_buf[UDP_DATAGRAM_SIZE];
+            struct sockaddr_in from_addr;
+            socklen_t from_len = sizeof(from_addr);
+
+            ssize_t recvd = recvfrom(sockfd,
+                                     recv_buf,
+                                     sizeof(recv_buf),
+                                     0,
+                                     (struct sockaddr *)&from_addr,
+                                     &from_len);
+
+            if (recvd < 0)
+            {
+                if (errno == EINTR)
+                    continue;
+
+                perror("recvfrom");
+                return;
+            }
+
+            if (recvd != UDP_DATAGRAM_SIZE)
+            {
+                fprintf(stderr, "Received unexpected datagram size: %zd\n", recvd);
+                continue;
+            }
+
+            display_server_packet(recv_buf);
+        }
+    }
+}
+
 int main(void)
 {
     int sockfd;
@@ -292,6 +404,9 @@ int main(void)
 
         sleep_ms(100);
     }
+
+    printf("\nWaiting for server packets...\n\n");
+    wait_for_server_packets(sockfd, SERVER_WAIT_SECONDS);
 
     close(sockfd);
     return 0;
