@@ -69,6 +69,7 @@ func _ready() -> void:
 	add_to_group("freezable")
 	add_to_group("player")
 	add_to_group("disorientable")
+	add_to_group("slowable")
 
 func add_score(amount: int) -> void:
 	score += amount
