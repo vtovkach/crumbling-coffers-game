@@ -6,9 +6,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define CTRL_REL_PACKET   0x01
-#define CTRL_REG_PACKET   0x02
-#define CTRL_INIT_PACKET  0x04 
+#define CTRL_FLAG_RELIABLE  (1 << 0)
+#define CTRL_FLAG_INIT      (1 << 1)
+#define CTRL_FLAG_ACK       (1 << 2)  
 
 /*
     Packet Header Layout (40 bytes)
