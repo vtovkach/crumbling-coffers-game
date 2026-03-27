@@ -121,21 +121,12 @@ static void net_receive_packets(FILE *log_file,
 static void net_broadcast_state(FILE *log_file, 
                                 int fd,
                                 struct PlayersRegistry *players_reg,
-                                struct Herald *herald,
                                 size_t players_num,
-                                const uint8_t *players_ids)
+                                const uint8_t *players_ids,
+                                uint8_t *packet,
+                                size_t packet_size)
 {
-    uint8_t packet[UDP_DATAGRAM_SIZE];
-    
-    int ret = herald_read(herald, packet, UDP_DATAGRAM_SIZE);
-    if(ret != 0)
-    {
-        log_message(
-            log_file, 
-            "[net_broadcast_state] could not read packet from herald."
-        );
-        return;
-    }   
+    (void) log_file; // Silence compiler warning 
 
     for(size_t i = 0; i < players_num; i++)
     {
