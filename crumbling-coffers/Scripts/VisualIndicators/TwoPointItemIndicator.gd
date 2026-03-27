@@ -15,7 +15,7 @@ var dir: Vector2
 
 var camera_node: Camera2D
 var bounds: Vector2
-var margin: float = 4
+var margin: float = 16
 
 
 func _ready() -> void:
