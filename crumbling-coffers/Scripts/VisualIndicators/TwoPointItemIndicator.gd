@@ -38,6 +38,7 @@ func _process(delta: float) -> void:
 func init(player: Player, item: PickupBase) -> void:
 	source = player
 	target = item
+	_quick_set_position()
 	recolor(item.color)
 
 func _update_rotation() -> void:
@@ -45,6 +46,17 @@ func _update_rotation() -> void:
 	rotation = atan2(dir.y, dir.x)
 	
 func _update_position(delta: float) -> void:
+	var new_position: Vector2 = _calculate_screen_position()
+	
+	# Below code will make the movement of indicator slightly more clunky. Which I think is good. Clunkiness can be adjusted with new speed variable
+	position.x = move_toward(position.x, new_position.x, indicator_speed * delta)
+	position.y = move_toward(position.y, new_position.y, indicator_speed * delta)
+
+func _quick_set_position() -> void:
+	dir = target.global_position - source.global_position
+	position = _calculate_screen_position()
+
+func _calculate_screen_position() -> Vector2:
 	# Place at screen edge between source and target
 
 	# Imagine a "ray" from the center of screen to the item. Place item along the "ray" at the border of screen (with margin included)
@@ -61,10 +73,7 @@ func _update_position(delta: float) -> void:
 	# this is calculated position as screen coordinates. Buuut the point of reference isn't the screen, this should be fixed later. 
 	var new_position: Vector2 = center + dir.normalized() * min(ray_scale.x, ray_scale.y) 
 	
-	# Below code will make the movement of indicator slightly more clunky. Which I think is good. Clunkiness can be adjusted with new speed variable
-	position.x = move_toward(position.x, new_position.x, indicator_speed * delta)
-	position.y = move_toward(position.y, new_position.y, indicator_speed * delta)
-	
-	
+	return new_position
+
 func recolor(color: Color):
 	sprite.modulate = color
