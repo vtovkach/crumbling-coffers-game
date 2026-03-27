@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="HotbarItem" format=3 uid="uid://bntaf0y77q85d"]
+
+[ext_resource type="Script" uid="uid://dfwywy614rur6" path="res://Inventory/Sub_Inventory/hotbar_item.gd" id="1_dwocu"]
+[ext_resource type="Texture2D" uid="uid://t3ktdq4wlc0l" path="res://Assets/Items/PNG/staffsAndWeapons/PNG/Staves_5/5.png" id="2_dwocu"]
+
+[resource]
+script = ExtResource("1_dwocu")
+name = "Slow Staff"
+texture = ExtResource("2_dwocu")
+metadata/_custom_type_script = "uid://dfwywy614rur6"
