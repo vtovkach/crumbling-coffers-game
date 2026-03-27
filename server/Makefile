@@ -47,7 +47,10 @@ clean:
 	$(MAKE) -C game clean
 	$(MAKE) -C orchestrator clean
 	$(MAKE) -C supervisor clean
-	$(MAKE) -C $(TEST_DIR) clean
+	$(MAKE) -C $(TEST_DIR_MATCHMAKER) clean 
+	$(MAKE) -C $(TEST_DIR_GAME) clean
+	$(MAKE) -C $(TEST_DIR_NET_T) clean
+
 	rm -rf bin
 
 # Tests
