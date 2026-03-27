@@ -111,12 +111,35 @@ static void net_receive_packets(FILE *log_file,
 }
 
 static void net_broadcast_state(FILE *log_file, 
-                            struct PlayersRegistry *players_reg)
+                                int fd,
+                                struct PlayersRegistry *players_reg,
+                                struct Herald *herald,
+                                size_t players_num,
+                                const uint8_t *players_ids)
 {
-    // TODO 
+    uint8_t packet[UDP_DATAGRAM_SIZE];
+    
+    int ret = herald_read(herald, packet, UDP_DATAGRAM_SIZE);
+    if(ret != 0)
+    {
+        log_message(
+            log_file, 
+            "[net_broadcast_state] could not read packet from herald."
+        );
+        return;
+    }   
 
-    (void) log_file;
-    (void) players_reg;
+    for(size_t i = 0; i < players_num; i++)
+    {
+        struct sockaddr_in *cur_addr = players_registry_get_addr(
+            players_reg, 
+            players_ids + (i * PLAYER_ID_SIZE)
+        );
+
+        if(!cur_addr) continue;
+
+        udp_write(fd, cur_addr, packet, UDP_DATAGRAM_SIZE);
+    }
 }
 
 void *run_net_t(void *t_args)
@@ -181,10 +204,14 @@ void *run_net_t(void *t_args)
         uint8_t server_packet[UDP_DATAGRAM_SIZE];
         if(herald_read(herald, &server_packet, UDP_DATAGRAM_SIZE) == 0)
         {
-            // Broadcast packet to all clients 
+            // Broadcast packet to all clients
             net_broadcast_state(
                 log_file, 
-                players_reg
+                udp_fd, 
+                players_reg, 
+                herald, 
+                players_num, 
+                players_ids
             );
         }
 
