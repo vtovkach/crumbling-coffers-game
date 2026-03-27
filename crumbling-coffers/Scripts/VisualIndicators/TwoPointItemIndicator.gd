@@ -20,6 +20,7 @@ var margin: float = 24
 @onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
+	z_index = -1
 	camera_node = get_viewport().get_camera_2d()
 	bounds = get_viewport_rect().size
 
