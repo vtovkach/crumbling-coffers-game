@@ -106,6 +106,25 @@ func use_active_item():
 			if target.has_method("apply_disorientation"):
 				print("Applying disorientation to: ", target.name)
 				target.apply_disorientation(5.0)
+				
+	#Slow Staff USED:
+	if item.resource_path.ends_with("slow_staff.tres"):
+		print("Matched Slow staff")
+
+		var targets = get_tree().get_nodes_in_group("slowable")
+		print("Found Slowable targets: ", targets.size())
+
+		for target in targets:
+			print("Target: ", target.name)
+			
+			#FOR TESTING AGAINST SELF COMMENT OUT CHUNK BELOW
+			if target.is_in_group("player"):
+				print("Skipping player: ", target.name)
+				continue
+
+			if target.has_method("apply_slow"):
+				print("Applying Slowness to: ", target.name)
+				target.apply_slow(3.0, .4)
 	
 
 	hotbar.item_used.emit(active_item_slot)
