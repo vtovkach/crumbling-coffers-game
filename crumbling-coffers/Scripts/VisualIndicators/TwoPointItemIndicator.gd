@@ -17,7 +17,7 @@ var camera_node: Camera2D
 var bounds: Vector2
 var margin: float = 24
 
-var indicator_speed = 500
+var indicator_speed = 384	# This value is sort of placeholder. Decreasing makes indicator change positions slower
 
 @onready var sprite: Sprite2D = $Sprite2D
 
