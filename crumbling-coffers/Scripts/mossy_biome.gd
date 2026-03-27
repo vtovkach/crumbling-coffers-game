@@ -11,6 +11,7 @@ var total_time: int = 60
 func _ready() -> void:
 	MusicManager.stop_music()
 	hud.bind_to_player(player)
+	hud.set_player_to_indicators(player)
 	
 	# Listen for global match manager to signal end of game
 	MatchManager.match_ended.connect(_on_match_ended)

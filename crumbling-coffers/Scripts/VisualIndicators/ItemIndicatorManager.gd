@@ -16,7 +16,7 @@ func _process(delta: float) -> void:
 	# Yes... every frame get all the pickups. I am aware that this MIGHT NOT be a great idea. 
 	# This system integrates a lot of moving and misplaced parts so I'm willing to make a convenient inefficiency
 	var items = get_tree().get_nodes_in_group("pickups")
-	_update_indicators_list
+	_update_indicators_list(items)
 
 func _update_indicators_list(items: Array) -> void:
 	var valid_items: Dictionary[PickupBase, bool] = {}
@@ -29,7 +29,7 @@ func _update_indicators_list(items: Array) -> void:
 				_spawn_indicator(item)
 	
 	# Remove
-	for item: PickupBase in indicators.keys():
+	for item: PickupBase in indicators.keys().duplicate():
 		if not valid_items.has(item):
 			_remove_indicator(item)
 
