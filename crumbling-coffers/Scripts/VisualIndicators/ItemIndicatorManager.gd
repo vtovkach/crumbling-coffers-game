@@ -6,6 +6,9 @@ var player: Player
 
 var indicators: Dictionary[int, TwoPointItemIndicator] = {}	# int: id of pickup
 
+# Multiplying the viewport size by this scale factor produces the region where items spawn indicators 
+@export var indicator_region_scale_factor: float = 1.25 
+
 func _ready() -> void:
 	pass
 	
