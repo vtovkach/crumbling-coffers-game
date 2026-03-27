@@ -1,8 +1,11 @@
 #include "post_office.h"
 #include "server-config.h"
+#include "ds/spsc_queue.h"
 
 #include <stdlib.h>
 #include <string.h>
+
+#define MAIL_DROP_SIZE 100
 
 struct Mailbox 
 {
@@ -15,6 +18,7 @@ struct Mailbox
 struct PostOffice
 {
     struct Mailbox *mailboxes;
+    SPSCQueue *mail_drop;
     size_t players;
 };
 
@@ -39,16 +43,25 @@ struct PostOffice *post_office_init(size_t mailbox_count)
         return NULL;
     }
 
+    post_office->mail_drop = spscq_create(MAIL_DROP_SIZE, UDP_DATAGRAM_SIZE);
+    if(!post_office->mail_drop)
+    {
+        free(post_office->mailboxes);
+        free(post_office);
+        return NULL;
+    }
+
     post_office->players = mailbox_count;
 
-    // Initialize Mailboxes 
     for(size_t i = 0; i < mailbox_count; i++)
     {
         struct Mailbox *cur_mailbox = &post_office->mailboxes[i];
+
         cur_mailbox->packet_buf = calloc(1, UDP_DATAGRAM_SIZE);
         if(!cur_mailbox->packet_buf)
         {
             clean_mailboxes(post_office->mailboxes, i);
+            spscq_destroy(post_office->mail_drop);
             free(post_office->mailboxes);
             free(post_office);
             return NULL;
@@ -65,7 +78,9 @@ struct PostOffice *post_office_init(size_t mailbox_count)
 void post_office_destroy(struct PostOffice *post_office)
 {
     if(!post_office) return;
+
     clean_mailboxes(post_office->mailboxes, post_office->players);
+    spscq_destroy(post_office->mail_drop);
     free(post_office->mailboxes);
     free(post_office);
 }
@@ -127,4 +142,23 @@ int post_office_read(struct PostOffice *post_office,
 
     pthread_mutex_unlock(&target_mailbox->lock);
     return 0;
+}
+
+int post_office_mail_drop_push(struct PostOffice *po, const void *packet)
+{
+    if(!po || !po->mail_drop || !packet)
+        return -1;
+
+    return spscq_push(po->mail_drop, packet);
+}
+
+int post_office_mail_drop_pop(struct PostOffice *po, void *out_packet, size_t out_size)
+{
+    if(!po || !po->mail_drop || !out_packet)
+        return -1;
+
+    if(out_size < UDP_DATAGRAM_SIZE)
+        return -1;
+
+    return spscq_pop(po->mail_drop, out_packet);
 }
