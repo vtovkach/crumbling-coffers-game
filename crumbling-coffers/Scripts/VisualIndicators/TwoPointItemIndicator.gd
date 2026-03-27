@@ -17,6 +17,7 @@ var camera_node: Camera2D
 var bounds: Vector2
 var margin: float = 24
 
+@onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
 	camera_node = get_viewport().get_camera_2d()
@@ -34,6 +35,7 @@ func _process(delta: float) -> void:
 func init(player: Player, item: PickupBase) -> void:
 	source = player
 	target = item
+#	recolor(item.color)
 
 func _update_rotation() -> void:
 	# Rotate to face target
@@ -55,3 +57,6 @@ func _update_position() -> void:
 
 	# this is calculated position as screen coordinates. Buuut the point of reference isn't the screen, this should be fixed later. 
 	position = center + dir.normalized() * min(ray_scale.x, ray_scale.y) 
+	
+func recolor(color: Color):
+	sprite.modulate = color
