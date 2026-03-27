@@ -41,6 +41,7 @@ const BASE_FROZEN_DECEL: float = 1000.0
 
 @export var is_slowed: bool = false
 @export var slow_time_left: float = 0.0
+@export var slow_multiplier: float = 1.0
  
 
 
@@ -83,7 +84,12 @@ func _physics_process(delta: float) -> void:
 	if is_disoriented:
 		disorientation_time_left -= delta
 		if disorientation_time_left <= 0:
-			clear_disorientation()			
+			clear_disorientation()
+			
+	if is_slowed:
+		slow_time_left -= delta
+		if slow_time_left <= 0.0:
+			clear_slow()
 			
 			
 	if not is_frozen:
@@ -177,15 +183,29 @@ func clear_disorientation() -> void:
 	disorientation_time_left = 0.0
 	set_inverted(false)
 	
-func apply_slow(duration: float) -> void:
+func apply_slow(duration: float, multiplier: float) -> void:
 	is_slowed = true
 	slow_time_left = duration
+	slow_multiplier = multiplier
+	update_slow_stats()
 	
 func clear_slow() -> void:
 	is_slowed = false
 	slow_time_left = 0.0
-		
+	slow_multiplier = 1.0
+	update_slow_stats()	
 
+func update_slow_stats() -> void:
+	if is_slowed:
+		max_runspeed = BASE_MAX_RUNSPEED * slow_multiplier
+		accel = BASE_ACCEL * slow_multiplier
+		decel = BASE_DECEL
+		dash_strength = BASE_DASH_STRENGTH * slow_multiplier
+	else:
+		max_runspeed = BASE_MAX_RUNSPEED
+		accel = BASE_ACCEL
+		decel = BASE_DECEL
+		dash_strength = BASE_DASH_STRENGTH
 
 
 # Function "collect": When player comes across an item, it will call func  "insert" from "inventory_slot.gd"
