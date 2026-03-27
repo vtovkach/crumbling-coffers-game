@@ -9,6 +9,7 @@
 #define CTRL_FLAG_RELIABLE  (1 << 0)
 #define CTRL_FLAG_INIT      (1 << 1)
 #define CTRL_FLAG_ACK       (1 << 2)  
+#define CTRL_FLAG_AUTH      (1 << 3)
 
 /*
     Packet Header Layout (40 bytes)
