@@ -37,6 +37,12 @@ void *run_game_t(void *t_args)
 
     FILE *log_file = ((struct GameArgs *) t_args)->log_file;
 
+    // Silence the compiler warnings for now 
+    (void)log_file;
+    (void)herald; 
+    (void)players_ids;
+    (void)game_id;
+
     while(!atomic_load(game_stop) && !atomic_load(net_stop))
     {   
         for (size_t i = 0; i < players_num; i++)
