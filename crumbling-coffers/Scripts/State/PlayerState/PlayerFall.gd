@@ -7,5 +7,5 @@ func physics_update(delta: float) -> void:
 	player.move(player.direction, delta)	# could be slower but this refactor aims to to preserve behavior
 	player.apply_gravity(2 if player.down_pressed else 1, delta)
 	if player.is_on_floor():
-		transitioned.emit(self, "PlayerRun" if player.direction == 0 else "PlayerIdle")
+		transitioned.emit(self, "PlayerRun" if player.direction != 0 else "PlayerIdle")
 		return
