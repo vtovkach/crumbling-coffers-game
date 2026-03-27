@@ -9,7 +9,7 @@ var indicators: Dictionary[int, TwoPointItemIndicator] = {}	# int: id of pickup
 func _ready() -> void:
 	pass
 	
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not player: 
 		return
 
@@ -60,5 +60,5 @@ func _should_have_indicator(item: PickupBase) -> bool:
 	return true # FOR NOW it will be true. 
 	
 
-func setPlayer(p: Player) -> void:
+func set_player(p: Player) -> void:
 	player = p

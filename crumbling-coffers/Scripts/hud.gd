@@ -67,4 +67,4 @@ func _input(event):
 			hotbar.set_active_slot(i)
 
 func set_player_to_indicators(p: Player) -> void:
-	item_indicator_manager.setPlayer(p)
+	item_indicator_manager.set_player(p)
