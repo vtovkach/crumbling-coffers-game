@@ -67,7 +67,7 @@ static void net_receive_packets(FILE *log_file,
                 continue;
             }
         }
-        
+
         if(header.control & CTRL_FLAG_RELIABLE)
         {
             // Reliable packet  
@@ -102,8 +102,16 @@ static void net_receive_packets(FILE *log_file,
             continue;
         }
 
-        // Place packet inside mailbox  
-        post_office_write(po, (size_t)idx, &recv_data, UDP_DATAGRAM_SIZE);
+        if(header.control & CTRL_FLAG_RELIABLE)
+        {
+            // Place packet inside dropbox 
+            post_office_mail_drop_push(po, recv_data);
+        }
+        else
+        {
+            // Place packet inside mailbox  
+            post_office_write(po, (size_t)idx, &recv_data, UDP_DATAGRAM_SIZE);
+        }
 
         // Update seq number      
         *seq_num = header.seq_num;        
