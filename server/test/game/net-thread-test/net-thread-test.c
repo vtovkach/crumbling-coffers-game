@@ -23,9 +23,9 @@
 #define PLAYER_ID_SIZE    16
 #define PLAYERS_NUM       6
 
-#define CTRL_REL_PACKET   0x01
-#define CTRL_REG_PACKET   0x02
-#define CTRL_INIT_PACKET  0x04
+#define CTRL_FLAG_RELIABLE  (1u << 0)
+#define CTRL_FLAG_INIT      (1u << 1)
+#define CTRL_FLAG_ACK       (1u << 2)
 
 #define SEND_REGULAR_PACKETS 1
 
@@ -62,7 +62,7 @@ static int send_player_packet(int sockfd,
 {
     uint8_t packet[UDP_DATAGRAM_SIZE];
     struct Header header;
-    int payload_len;
+    size_t payload_len;
     ssize_t sent;
 
     memset(packet, 0, sizeof(packet));
@@ -72,8 +72,8 @@ static int send_player_packet(int sockfd,
     memcpy(header.player_id, player_id, PLAYER_ID_SIZE);
     header.control = control;
 
-    payload_len = (int)strlen(text);
-    if ((size_t)payload_len > UDP_DATAGRAM_SIZE - sizeof(header))
+    payload_len = strlen(text);
+    if (payload_len > UDP_DATAGRAM_SIZE - sizeof(header))
     {
         fprintf(stderr, "payload too large\n");
         return -1;
@@ -83,7 +83,7 @@ static int send_player_packet(int sockfd,
     header.seq_num = seq_num;
 
     memcpy(packet, &header, sizeof(header));
-    memcpy(packet + sizeof(header), text, (size_t)payload_len);
+    memcpy(packet + sizeof(header), text, payload_len);
 
     sent = sendto(sockfd,
                   packet,
@@ -158,7 +158,7 @@ int main(void)
                                &dest_addr,
                                game_id,
                                player_ids[i],
-                               CTRL_INIT_PACKET,
+                               CTRL_FLAG_INIT,
                                (i * 2) + 1,
                                init_payload) != 0)
         {
@@ -175,7 +175,7 @@ int main(void)
                                &dest_addr,
                                game_id,
                                player_ids[i],
-                               CTRL_REG_PACKET,
+                               0,
                                (i * 2) + 2,
                                reg_payload) != 0)
         {
