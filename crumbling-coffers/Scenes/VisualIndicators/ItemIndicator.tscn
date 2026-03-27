@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://ykxrcbwmujwi"]
 
 [ext_resource type="Script" uid="uid://dee04fuipk4dd" path="res://Scripts/VisualIndicators/TwoPointItemIndicator.gd" id="1_630gy"]
-[ext_resource type="Texture2D" uid="uid://ctls814eliq1j" path="res://Assets/Icons/right-arrow.png" id="1_cdp7h"]
+[ext_resource type="Texture2D" uid="uid://ccxurkk7bleea" path="res://Assets/Icons/right-arrow-bordered.png" id="2_630gy"]
 
 [node name="ItemIndicator" type="Node2D" unique_id=310205956]
 script = ExtResource("1_630gy")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=132691703]
-scale = Vector2(0.063, 0.063)
-texture = ExtResource("1_cdp7h")
+scale = Vector2(0.047, 0.047)
+texture = ExtResource("2_630gy")

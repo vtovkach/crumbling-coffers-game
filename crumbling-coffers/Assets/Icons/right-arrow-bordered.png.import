@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4us222cnillu"
-path="res://.godot/imported/right-arrow.png-fb683552dad92f92bf2ce1e78d3c7b24.ctex"
+uid="uid://ccxurkk7bleea"
+path="res://.godot/imported/right-arrow-bordered.png-702a82110405c527307257aa6ea30f18.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Icons/right-arrow.png"
-dest_files=["res://.godot/imported/right-arrow.png-fb683552dad92f92bf2ce1e78d3c7b24.ctex"]
+source_file="res://Assets/Icons/right-arrow-bordered.png"
+dest_files=["res://.godot/imported/right-arrow-bordered.png-702a82110405c527307257aa6ea30f18.ctex"]
 
 [params]
 
