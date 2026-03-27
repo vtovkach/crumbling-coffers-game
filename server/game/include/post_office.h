@@ -25,4 +25,11 @@ int post_office_read(struct PostOffice *post_office,
                      void *dest,
                      size_t dest_capacity);
 
+int post_office_mail_drop_push(struct PostOffice *po, 
+                               const void *packet);
+
+int post_office_mail_drop_pop(struct PostOffice *po, 
+                              void *out_packet, 
+                              size_t out_size);
+
 #endif
