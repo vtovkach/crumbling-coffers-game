@@ -15,6 +15,33 @@
 #include "herald.h"
 #include "packet.h"
 
+static void display_udp_packet(const uint8_t *udp_packet)
+{
+    struct Header header;
+    memcpy(&header, udp_packet, sizeof(header));
+
+    // ---- Print Game ID ----
+    printf("Game ID: ");
+    for (size_t j = 0; j < GAME_ID_SIZE; j++)
+        printf("%02x ", header.game_id[j]);
+    printf("\n");
+
+    // ---- Print Player ID ----
+    printf("Player ID: ");
+    for (size_t j = 0; j < PLAYER_ID_SIZE; j++)
+        printf("%02x ", header.player_id[j]);
+    printf("\n");
+
+    // ---- Print Payload ----
+    const char *payload = (const char *)(udp_packet + sizeof(header));
+
+    printf("Payload: %.*s\n",
+           header.payload_size,
+           payload);
+
+    printf("--------\n");
+}
+
 static void sleep_ms(long ms)
 {
     struct timespec ts;
@@ -39,43 +66,69 @@ void *run_game_t(void *t_args)
 
     // Silence the compiler warnings for now 
     (void)log_file;
-    (void)herald; 
     (void)players_ids;
-    (void)game_id;
+
+    uint32_t server_tick = 0;
 
     while(!atomic_load(game_stop) && !atomic_load(net_stop))
     {   
+        // Process all reliable packets 
+        //      -- retrieve all packets from the mail drop 
+
+        // Process all regular packets
+        //      - retrieve valid packets from each mailbox 
+
+        // Form Authoritive Packet 
+        //      - place into herald  
+
+        for (;;)
+        {
+            uint8_t udp_packet[UDP_DATAGRAM_SIZE];
+            int ret = post_office_mail_drop_pop(
+                post_office, 
+                udp_packet, 
+                UDP_DATAGRAM_SIZE
+            );
+
+            if(ret < 0) break; // no more packets 
+
+            display_udp_packet(udp_packet);
+        }
+
         for (size_t i = 0; i < players_num; i++)
         {
             uint8_t udp_packet[UDP_DATAGRAM_SIZE];
 
-            if (post_office_read(post_office, i, udp_packet, UDP_DATAGRAM_SIZE) != 0)
-                continue;
+            int ret = post_office_read(
+                post_office, 
+                i, 
+                udp_packet, 
+                UDP_DATAGRAM_SIZE
+            );
 
-            struct Header header;
-            memcpy(&header, udp_packet, sizeof(header));
+            if (ret != 0) continue;
 
-            // ---- Print Game ID ----
-            printf("Game ID: ");
-            for (size_t j = 0; j < GAME_ID_SIZE; j++)
-                printf("%02x ", header.game_id[j]);
-            printf("\n");
-
-            // ---- Print Player ID ----
-            printf("Player ID: ");
-            for (size_t j = 0; j < PLAYER_ID_SIZE; j++)
-                printf("%02x ", header.player_id[j]);
-            printf("\n");
-
-            // ---- Print Payload ----
-            const char *payload = (char *)(udp_packet + sizeof(header));
-
-            printf("Payload: %.*s\n",
-                header.payload_size,
-                payload);
-
-            printf("--------\n");
+            display_udp_packet(udp_packet);
         }
+
+        /*
+            Prepare and send authoritative
+            packet to all clients 
+        */
+       
+        uint8_t packet[UDP_DATAGRAM_SIZE];
+        struct Header *outgoing_header = (struct Header *)packet;
+
+        memset(packet, 0, UDP_DATAGRAM_SIZE);
+        memcpy(outgoing_header->game_id, game_id, GAME_ID_SIZE);
+        memset(outgoing_header->player_id, 1, PLAYER_ID_SIZE);
+        outgoing_header->control = CTRL_FLAG_AUTH;
+        outgoing_header->seq_num = server_tick; 
+        outgoing_header->payload_size = 0;
+
+        herald_write(herald, packet, UDP_DATAGRAM_SIZE);
+
+        server_tick++;
         sleep_ms(10);
     }
 
