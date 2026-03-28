@@ -255,6 +255,9 @@ sources/1 = SubResource("TileSetAtlasSource_i7qvg")
 [node name="Mossy Biome" type="Node2D" unique_id=1101971687]
 script = ExtResource("1_cvff3")
 
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1923338439]
+color = Color(0.737193, 0.7371929, 0.7371929, 1)
+
 [node name="Tilemaps" type="Node" parent="." unique_id=566056298]
 
 [node name="Background" type="TileMapLayer" parent="Tilemaps" unique_id=535367229]
