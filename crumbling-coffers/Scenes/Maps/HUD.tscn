@@ -11,7 +11,7 @@ script = ExtResource("1_s1siy")
 
 [node name="ScoreLabel" type="Label" parent="." unique_id=1960863938]
 custom_minimum_size = Vector2(10, 10)
-offset_right = 275.0
+offset_right = 470.0
 offset_bottom = 118.0
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=823944240]
@@ -29,7 +29,7 @@ grow_vertical = 2
 
 [node name="CountdownLabel" type="Label" parent="CenterContainer" unique_id=1976958921]
 layout_mode = 2
-theme_override_font_sizes/font_size = 100
+theme_override_font_sizes/font_size = 120
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=531782437]
 anchors_preset = 5
@@ -43,7 +43,7 @@ theme_override_constants/margin_top = 10
 
 [node name="GameTimerLabel" type="Label" parent="MarginContainer" unique_id=288034157]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 48
 
 [node name="Inv_UI" parent="." unique_id=664736319 instance=ExtResource("2_7iq3s")]
 scale = Vector2(0.2, 0.2)

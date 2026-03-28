@@ -39,9 +39,11 @@ layout_mode = 2
 [node name="amount" type="Label" parent="CenterContainer/Panel" unique_id=824832181]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 0
-offset_right = 200.0
-offset_bottom = 467.0
-theme_override_font_sizes/font_size = 170
+offset_left = -9.0
+offset_top = 37.0
+offset_right = 202.0
+offset_bottom = 504.0
+theme_override_font_sizes/font_size = 145
 text = "99
 "
 horizontal_alignment = 2
