@@ -71,6 +71,7 @@ script = ExtResource("4_xd437")
 indicator_scene = ExtResource("5_kef2x")
 
 [node name="InfoPanel" parent="." unique_id=233183977 instance=ExtResource("6_7h7ji")]
+visible = false
 offset_left = 256.0
 offset_top = 536.0
 offset_right = -806.0
