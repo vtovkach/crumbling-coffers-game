@@ -256,7 +256,7 @@ sources/1 = SubResource("TileSetAtlasSource_i7qvg")
 script = ExtResource("1_cvff3")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1923338439]
-color = Color(0.737193, 0.7371929, 0.7371929, 1)
+color = Color(0.87329835, 0.87329847, 0.87329817, 1)
 
 [node name="Tilemaps" type="Node" parent="." unique_id=566056298]
 
