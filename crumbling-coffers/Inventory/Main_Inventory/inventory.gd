@@ -21,3 +21,11 @@ func insert(item: InventoryItem):
 			emptySlots[0].amount = 1
 	
 	update.emit()
+
+# Reset the inventory to hold empty slots. Items from previous matches should not be carried over.
+func reset_inv() -> void:
+	# Ensure that match is not running.
+	if MatchManager.current_state == MatchManager.MatchState.WAITING:
+		for i in range(slots.size()):
+			slots[i] = null
+			update.emit()

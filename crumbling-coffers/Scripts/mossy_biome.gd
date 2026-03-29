@@ -59,6 +59,8 @@ func _on_quit_confirmation_confirmed() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
 	MatchManager.set_state(MatchManager.MatchState.WAITING)
+	# Reset player inventory to have no items from previous matches.
+	player.inventory.reset_inv()
 	
 # Connect from 'canceled' signal
 func _on_quit_confirmation_canceled() -> void:
@@ -81,3 +83,6 @@ func _on_match_ended() -> void:
 	# Redirect to score page
 	get_tree().change_scene_to_file("res://Scenes/Menu/score_page.tscn")
 	print("Redirecting to Score Page...")
+	
+	# Reset player inventory.
+	player.inventory.reset_inv()

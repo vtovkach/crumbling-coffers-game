@@ -1,6 +1,7 @@
 extends Control
 
-@onready var inventory: Inventory = preload("res://Inventory/Main_Inventory/playerInventory.tres")
+# MAKE SURE TO MAKE A COPY OF THE INVENTORY RESOURCE so the global data is not shared/persists outside of a match.
+@onready var inventory: Inventory = preload("res://Inventory/Main_Inventory/playerInventory.tres")#.duplicate(true)
 @onready var slots: Array = $NinePatchRect/GridContainer.get_children()
 var is_open: bool = false
 
