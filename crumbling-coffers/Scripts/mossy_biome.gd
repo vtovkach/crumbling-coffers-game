@@ -58,10 +58,14 @@ func _input(event:InputEvent) -> void:
 func _on_quit_confirmation_confirmed() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
-
+	MatchManager.set_state(MatchManager.MatchState.WAITING)
+	
 # Connect from 'canceled' signal
 func _on_quit_confirmation_canceled() -> void:
-	get_tree().paused = false
+	# Signal to match manager that the game is paused.
+	if MatchManager.mode == MatchManager.MatchMode.SINGLEPLAYER:
+		MatchManager.set_state(MatchManager.MatchState.PAUSED)
+		get_tree().paused = false
 
 # Function runs when end game signal is heard
 func _on_match_ended() -> void:
