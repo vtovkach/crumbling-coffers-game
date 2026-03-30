@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="InventoryItem" format=3 uid="uid://cw3fxhea5uqf1"]
+
+[ext_resource type="Script" uid="uid://f6j08xi4a6wt" path="res://Inventory/Main_Inventory/inventory_item.gd" id="1_6gpep"]
+[ext_resource type="Texture2D" uid="uid://bmbxy8kdalfcy" path="res://Assets/Items/PNG/shiny/16.png" id="2_peyn3"]
+
+[resource]
+script = ExtResource("1_6gpep")
+name = "new_gem2"
+texture = ExtResource("2_peyn3")
+metadata/_custom_type_script = "uid://f6j08xi4a6wt"
