@@ -1,0 +1,136 @@
+<svg width="960" height="820" viewBox="0 0 960 820" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, -apple-system, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-teal" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-gray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#5F5E5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="960" height="820" fill="#FAFAF9"/>
+
+  <!-- ══ TITLE ══ -->
+  <text x="480" y="40" text-anchor="middle" font-size="18" font-weight="700" fill="#2C2C2A" letter-spacing="3">ORCHESTRATOR ARCHITECTURE</text>
+  <line x1="30" y1="52" x2="930" y2="52" stroke="#D3D1C7" stroke-width="0.75"/>
+
+  <!-- ══ MAIN THREAD (left) ══ -->
+  <rect x="30" y="78" width="300" height="470" rx="16" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+  <text x="180" y="110" text-anchor="middle" font-size="15" font-weight="500" fill="#3C3489">Main thread</text>
+
+  <rect x="60" y="130" width="240" height="68" rx="10" fill="#CECBF6" stroke="#534AB7" stroke-width="0.75"/>
+  <text x="180" y="158" text-anchor="middle" font-size="14" font-weight="500" fill="#26215C">TCP connection</text>
+  <text x="180" y="179" text-anchor="middle" font-size="12" fill="#3C3489">Maintains client connections</text>
+
+  <rect x="60" y="258" width="240" height="68" rx="10" fill="#CECBF6" stroke="#534AB7" stroke-width="0.75"/>
+  <text x="180" y="286" text-anchor="middle" font-size="14" font-weight="500" fill="#26215C">Event routines</text>
+  <text x="180" y="307" text-anchor="middle" font-size="12" fill="#3C3489">Triggers non-blocking handlers</text>
+
+  <rect x="60" y="396" width="240" height="68" rx="10" fill="#CECBF6" stroke="#534AB7" stroke-width="0.75"/>
+  <text x="180" y="424" text-anchor="middle" font-size="14" font-weight="500" fill="#26215C">Queue interface</text>
+  <text x="180" y="445" text-anchor="middle" font-size="12" fill="#3C3489">Reads &amp; writes jobs queue</text>
+
+  <!-- ══ JOBS QUEUE (center) ══ -->
+  <rect x="415" y="280" width="130" height="144" rx="14" fill="#FAC775" stroke="#BA7517" stroke-width="1.2"/>
+  <text x="480" y="338" text-anchor="middle" font-size="14" font-weight="500" fill="#412402">Jobs</text>
+  <text x="480" y="358" text-anchor="middle" font-size="14" font-weight="500" fill="#412402">queue</text>
+
+  <!-- ══ HORIZONTAL ARROWS: Main Thread ↔ Jobs Queue ══ -->
+  <line x1="300" y1="312" x2="415" y2="312" stroke="#BA7517" stroke-width="1.6" marker-end="url(#arrow-amber)"/>
+  <text x="357" y="303" text-anchor="middle" font-size="11" font-weight="500" fill="#633806">join queue</text>
+  <text x="357" y="316" text-anchor="middle" font-size="11" fill="#854F0B">leave queue</text>
+
+  <line x1="415" y1="400" x2="300" y2="400" stroke="#BA7517" stroke-width="1.6" marker-end="url(#arrow-amber)"/>
+  <text x="357" y="391" text-anchor="middle" font-size="11" font-weight="500" fill="#633806">session created</text>
+  <text x="357" y="404" text-anchor="middle" font-size="11" fill="#854F0B">ip + port</text>
+
+  <!-- ══ SESSION MANAGER THREAD (right) ══ -->
+  <rect x="630" y="78" width="300" height="470" rx="16" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+  <text x="780" y="110" text-anchor="middle" font-size="15" font-weight="500" fill="#085041">Session manager thread</text>
+
+  <rect x="660" y="130" width="240" height="68" rx="10" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.75"/>
+  <text x="780" y="158" text-anchor="middle" font-size="14" font-weight="500" fill="#04342C">Game queue</text>
+  <text x="780" y="179" text-anchor="middle" font-size="12" fill="#085041">Tracks players · notifies when full</text>
+
+  <rect x="660" y="258" width="240" height="68" rx="10" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.75"/>
+  <text x="780" y="286" text-anchor="middle" font-size="14" font-weight="500" fill="#04342C">Port manager</text>
+  <text x="780" y="307" text-anchor="middle" font-size="12" fill="#085041">Allocates ports for sessions</text>
+
+  <rect x="660" y="396" width="240" height="68" rx="10" fill="#B4B2A9" stroke="#5F5E5A" stroke-width="0.75"/>
+  <text x="780" y="424" text-anchor="middle" font-size="14" font-weight="500" fill="#2C2C2A">Session monitor</text>
+  <text x="780" y="445" text-anchor="middle" font-size="12" fill="#444441">Child thread · reclaims ports</text>
+
+  <!-- Internal session manager arrows -->
+  <line x1="780" y1="198" x2="780" y2="258" stroke="#0F6E56" stroke-width="1" marker-end="url(#arrow-teal)"/>
+  <line x1="780" y1="326" x2="780" y2="396" stroke="#0F6E56" stroke-width="1" marker-end="url(#arrow-teal)"/>
+
+  <!-- Session Monitor reclaim loop -->
+  <path d="M900 430 Q928 430 928 292 Q928 258 900 258" fill="none" stroke="#5F5E5A" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow-gray)"/>
+  <text x="934" y="352" text-anchor="middle" font-size="11" fill="#5F5E5A" transform="rotate(90,934,352)">reclaim port</text>
+
+  <!-- ══ HORIZONTAL ARROWS: Jobs Queue ↔ Session Manager ══ -->
+  <line x1="545" y1="312" x2="630" y2="312" stroke="#0F6E56" stroke-width="1.6" marker-end="url(#arrow-teal)"/>
+  <text x="587" y="303" text-anchor="middle" font-size="11" font-weight="500" fill="#085041">player joined</text>
+  <text x="587" y="316" text-anchor="middle" font-size="11" fill="#0F6E56">player left</text>
+
+  <line x1="630" y1="400" x2="545" y2="400" stroke="#0F6E56" stroke-width="1.6" marker-end="url(#arrow-teal)"/>
+  <text x="587" y="391" text-anchor="middle" font-size="11" font-weight="500" fill="#085041">session ready</text>
+  <text x="587" y="404" text-anchor="middle" font-size="11" fill="#0F6E56">ip + port</text>
+
+  <!-- ══ OUTPUT path (purple dashed)
+       Exits main thread at x=230, y=548
+       Drops to broadcast bar at y=604
+       Fans down to each client top at y=642
+  ══ -->
+  <line x1="230" y1="548" x2="230" y2="604" stroke="#534AB7" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <line x1="80" y1="604" x2="820" y2="604" stroke="#534AB7" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text x="858" y="600" text-anchor="start" font-size="11" fill="#534AB7">output</text>
+  <line x1="80"  y1="604" x2="80"  y2="642" stroke="#534AB7" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow-purple)"/>
+  <line x1="480" y1="604" x2="480" y2="642" stroke="#534AB7" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow-purple)"/>
+  <line x1="820" y1="604" x2="820" y2="642" stroke="#534AB7" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow-purple)"/>
+
+  <!-- ══ CLIENT BOXES ══ -->
+  <rect x="30"  y="642" width="100" height="40" rx="10" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1"/>
+  <text x="80"  y="667" text-anchor="middle" font-size="13" font-weight="500" fill="#2C2C2A">Client A</text>
+
+  <rect x="430" y="642" width="100" height="40" rx="10" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1"/>
+  <text x="480" y="667" text-anchor="middle" font-size="13" font-weight="500" fill="#2C2C2A">Client B</text>
+
+  <rect x="770" y="642" width="100" height="40" rx="10" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="1"/>
+  <text x="820" y="667" text-anchor="middle" font-size="13" font-weight="500" fill="#2C2C2A">Client C</text>
+
+  <!-- ══ INPUT path (gray dashed)
+       Up-arrows from each client box bottom to converge bar at y=694
+       Horizontal converge bar at y=694
+       Single arrow up from x=130 into main thread bottom at y=548
+  ══ -->
+  <line x1="80"  y1="682" x2="80"  y2="694" stroke="#5F5E5A" stroke-width="1.2" marker-end="url(#arrow-gray)"/>
+  <line x1="480" y1="682" x2="480" y2="694" stroke="#5F5E5A" stroke-width="1.2" marker-end="url(#arrow-gray)"/>
+  <line x1="820" y1="682" x2="820" y2="694" stroke="#5F5E5A" stroke-width="1.2" marker-end="url(#arrow-gray)"/>
+
+  <line x1="80" y1="694" x2="820" y2="694" stroke="#5F5E5A" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="858" y="698" text-anchor="start" font-size="11" fill="#5F5E5A">input</text>
+
+  <line x1="130" y1="694" x2="130" y2="548" stroke="#5F5E5A" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrow-gray)"/>
+
+  <!-- ══ LEGEND ══ -->
+  <rect x="30" y="730" width="560" height="36" rx="10" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.75"/>
+  <line x1="50"  y1="748" x2="80"  y2="748" stroke="#BA7517" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+  <text x="88"  y="752" font-size="11" fill="#5F5E5A">Jobs queue msg</text>
+  <line x1="200" y1="748" x2="230" y2="748" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+  <text x="238" y="752" font-size="11" fill="#5F5E5A">Session manager flow</text>
+  <line x1="380" y1="748" x2="410" y2="748" stroke="#534AB7" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow-purple)"/>
+  <text x="418" y="752" font-size="11" fill="#5F5E5A">TCP output</text>
+  <line x1="510" y1="748" x2="540" y2="748" stroke="#5F5E5A" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#arrow-gray)"/>
+  <text x="548" y="752" font-size="11" fill="#5F5E5A">Client input</text>
+
+</svg>
