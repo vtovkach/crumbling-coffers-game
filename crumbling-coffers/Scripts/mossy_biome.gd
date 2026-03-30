@@ -65,9 +65,6 @@ func _on_quit_confirmation_confirmed() -> void:
 	
 # Connect from 'canceled' signal
 func _on_quit_confirmation_canceled() -> void:
-	# Signal to match manager that the game is paused.
-	if MatchManager.mode == MatchManager.MatchMode.SINGLEPLAYER:
-		MatchManager.set_state(MatchManager.MatchState.PAUSED)
 		get_tree().paused = false
 
 # Function runs when end game signal is heard

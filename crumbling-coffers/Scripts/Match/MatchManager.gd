@@ -3,7 +3,7 @@ extends Node
 # Match Manager will handle timer logic for SINGLEPLAYER ONLY (currently). For multiplayer logic, the server will 
 # be keeping track of the timer globally. This is the first iteration of the MatchManager autoload.
 
-enum MatchState {WAITING, COUNTDOWN, RUNNING, ENDED, PAUSED} # May add more states later on.
+enum MatchState {WAITING, COUNTDOWN, RUNNING, ENDED} # May add more states later on.
 enum MatchMode {SINGLEPLAYER, MULTIPLAYER}
 # Set the current state to waiting by default.
 var current_state: MatchState = MatchState.WAITING
