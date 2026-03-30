@@ -1,0 +1,251 @@
+<svg width="1300" height="1000" viewBox="0 0 1300 1000" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="1300" height="1000" fill="#ffffff"/>
+
+  <!-- TITLE -->
+  <text x="650" y="42" text-anchor="middle" font-size="18" font-weight="600" fill="#1a1a1a">Game Server — Process Architecture</text>
+
+  <!--
+    ═══════════════════════════════════════════════════════════
+    LAYOUT
+      Canvas: 1300 × 980
+
+      Game thread:     x=30..300    w=270
+      Left gap:        300..380     80px
+      Center col:      x=380..920   w=540  center=650
+      Right gap:       920..1000    80px
+      Network thread:  x=1000..1270 w=270
+
+      Herald:          x=380, y=62, w=540, h=230  → bottom y=292
+      Gap center:      y=292..372   80px
+      Post office:     x=380, y=372, w=540, h=340 → bottom y=712
+
+      Game thread:     x=30,  y=62, w=270, h=650  → bottom y=712
+      Network thread:  x=1000,y=62, w=270, h=650  → bottom y=712
+
+      Clients:         y=780..828
+      Legend:          y=848..880
+
+    ARROW LANES (each arrow gets its own exclusive horizontal lane)
+      Lane A y=724  — broadcast fan trunk (NT → clients)
+      Lane B y=740  — clients send pkts (clients → NT)
+      Lane C y=756  — read mailboxes (GT → PO)
+      Lane D y=772  — pop reliable pkts (PO → GT)
+    ═══════════════════════════════════════════════════════════
+  -->
+
+  <!-- ══ GAME THREAD  x=30 y=62 w=270 h=650 ══ -->
+  <rect x="30" y="62" width="270" height="650" rx="14" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.2"/>
+  <text x="165" y="94" text-anchor="middle" font-size="15" font-weight="600" fill="#3C3489">Game thread</text>
+
+  <rect x="50" y="114" width="230" height="40" rx="7" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5"/>
+  <text x="165" y="138" text-anchor="middle" font-size="13" fill="#3C3489">Maintain game state</text>
+
+  <rect x="50" y="166" width="230" height="40" rx="7" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5"/>
+  <text x="165" y="190" text-anchor="middle" font-size="13" fill="#3C3489">Positions · inventory · data</text>
+
+  <rect x="50" y="218" width="230" height="40" rx="7" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5"/>
+  <text x="165" y="242" text-anchor="middle" font-size="13" fill="#3C3489">Form authoritative packet</text>
+
+  <rect x="50" y="270" width="230" height="40" rx="7" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5"/>
+  <text x="165" y="294" text-anchor="middle" font-size="13" fill="#3C3489">Apply game state updates</text>
+
+  <rect x="50" y="322" width="230" height="40" rx="7" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5"/>
+  <text x="165" y="346" text-anchor="middle" font-size="13" fill="#3C3489">Read player mailboxes</text>
+
+  <rect x="50" y="374" width="230" height="40" rx="7" fill="#CECBF6" stroke="#7F77DD" stroke-width="0.5"/>
+  <text x="165" y="398" text-anchor="middle" font-size="13" fill="#3C3489">Pop SPSC reliable queue</text>
+
+  <!-- ══ NETWORK THREAD  x=1000 y=62 w=270 h=650 ══ -->
+  <rect x="1000" y="62" width="270" height="650" rx="14" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.2"/>
+  <text x="1135" y="94" text-anchor="middle" font-size="15" font-weight="600" fill="#085041">Network thread</text>
+
+  <rect x="1020" y="114" width="230" height="40" rx="7" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="1135" y="138" text-anchor="middle" font-size="13" fill="#085041">Receive &amp; validate packets</text>
+
+  <rect x="1020" y="166" width="230" height="40" rx="7" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="1135" y="190" text-anchor="middle" font-size="13" fill="#085041">Broadcast auth. packet</text>
+
+  <rect x="1020" y="218" width="230" height="62" rx="7" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="1135" y="242" text-anchor="middle" font-size="13" fill="#085041">Game registry</text>
+  <text x="1135" y="260" text-anchor="middle" font-size="11" fill="#0F6E56">seq nos · net data</text>
+  <text x="1135" y="274" text-anchor="middle" font-size="11" fill="#0F6E56">mailbox idx · player IDs</text>
+
+  <rect x="1020" y="294" width="230" height="40" rx="7" fill="#9FE1CB" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="1135" y="318" text-anchor="middle" font-size="13" fill="#085041">Push to player mailbox</text>
+
+  <!-- ══ HERALD  x=380 y=62 w=540 h=230 ══ -->
+  <rect x="380" y="62" width="540" height="230" rx="14" fill="#FAEEDA" stroke="#854F0B" stroke-width="1.2"/>
+  <text x="650" y="94" text-anchor="middle" font-size="15" font-weight="600" fill="#633806">Herald</text>
+  <text x="650" y="114" text-anchor="middle" font-size="12" fill="#854F0B">synchronized · single authoritative packet</text>
+
+  <rect x="400" y="130" width="210" height="62" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="505" y="156" text-anchor="middle" font-size="12" font-weight="600" fill="#633806">Producer</text>
+  <text x="505" y="177" text-anchor="middle" font-size="12" fill="#854F0B">Game thread</text>
+
+  <rect x="690" y="130" width="210" height="62" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="795" y="156" text-anchor="middle" font-size="12" font-weight="600" fill="#633806">Consumer</text>
+  <text x="795" y="177" text-anchor="middle" font-size="12" fill="#854F0B">Network thread</text>
+
+  <text x="650" y="264" text-anchor="middle" font-size="11.5" fill="#854F0B">Game thread pushes → Network thread pops &amp; broadcasts to all clients</text>
+
+  <!-- ══ POST OFFICE  x=380 y=372 w=540 h=340 ══
+       Bottom edge = 712. SPSC at y=560 h=56 → bottom=616. Notes at 638,656. Padding to 712 = 56px. Fits.
+  ══ -->
+  <rect x="380" y="372" width="540" height="340" rx="14" fill="#FAECE7" stroke="#993C1D" stroke-width="1.2"/>
+  <text x="650" y="404" text-anchor="middle" font-size="15" font-weight="600" fill="#712B13">Post office</text>
+  <text x="650" y="424" text-anchor="middle" font-size="12" fill="#993C1D">synchronized · per-player mailboxes</text>
+
+  <!-- Producer / Consumer badges -->
+  <rect x="400" y="440" width="196" height="46" rx="7" fill="#F5C4B3" stroke="#D85A30" stroke-width="0.5"/>
+  <text x="498" y="460" text-anchor="middle" font-size="12" font-weight="600" fill="#712B13">Producer</text>
+  <text x="498" y="478" text-anchor="middle" font-size="12" fill="#993C1D">Network thread</text>
+
+  <rect x="704" y="440" width="196" height="46" rx="7" fill="#F5C4B3" stroke="#D85A30" stroke-width="0.5"/>
+  <text x="802" y="460" text-anchor="middle" font-size="12" font-weight="600" fill="#712B13">Consumer</text>
+  <text x="802" y="478" text-anchor="middle" font-size="12" fill="#993C1D">Game thread</text>
+
+  <!-- Mailboxes -->
+  <rect x="400" y="502" width="112" height="58" rx="7" fill="#F0997B" stroke="#D85A30" stroke-width="0.5"/>
+  <text x="456" y="526" text-anchor="middle" font-size="12" font-weight="600" fill="#712B13">Mailbox</text>
+  <text x="456" y="546" text-anchor="middle" font-size="12" fill="#712B13">Player 1</text>
+
+  <rect x="524" y="502" width="112" height="58" rx="7" fill="#F0997B" stroke="#D85A30" stroke-width="0.5"/>
+  <text x="580" y="526" text-anchor="middle" font-size="12" font-weight="600" fill="#712B13">Mailbox</text>
+  <text x="580" y="546" text-anchor="middle" font-size="12" fill="#712B13">Player 2</text>
+
+  <rect x="648" y="502" width="112" height="58" rx="7" fill="#F0997B" stroke="#D85A30" stroke-width="0.5"/>
+  <text x="704" y="523" text-anchor="middle" font-size="12" font-weight="600" fill="#712B13">Mailbox</text>
+  <text x="704" y="541" text-anchor="middle" font-size="12" fill="#712B13">Player N</text>
+  <text x="704" y="556" text-anchor="middle" font-size="10" fill="#993C1D">···</text>
+
+  <!-- SPSC Queue — fully inside: x=772 y=502 w=128 h=58 → right=900 < 920(PO right=920) ✓ bottom=560 < 712 ✓ -->
+  <rect x="772" y="502" width="128" height="58" rx="7" fill="#F5C4B3" stroke="#993C1D" stroke-width="1.2"/>
+  <text x="836" y="526" text-anchor="middle" font-size="12" font-weight="600" fill="#712B13">SPSC queue</text>
+  <text x="836" y="544" text-anchor="middle" font-size="11" fill="#993C1D">Reliable pkts</text>
+
+  <!-- Post office notes — y=638 and y=656, well inside bottom=712 -->
+  <text x="650" y="620" text-anchor="middle" font-size="11" fill="#993C1D">Network thread validates &amp; routes pkts to per-player mailbox</text>
+  <text x="650" y="640" text-anchor="middle" font-size="11" fill="#993C1D">Game thread pops SPSC each tick → applies reliable packets to game state</text>
+
+  <!-- ══ CLIENTS  y=780..828 ══ -->
+  <rect x="120" y="780" width="120" height="46" rx="9" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+  <text x="180" y="807" text-anchor="middle" font-size="13" fill="#444441">Client A</text>
+
+  <rect x="590" y="780" width="120" height="46" rx="9" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+  <text x="650" y="807" text-anchor="middle" font-size="13" fill="#444441">Client B</text>
+
+  <rect x="1060" y="780" width="120" height="46" rx="9" fill="#F1EFE8" stroke="#888780" stroke-width="1"/>
+  <text x="1120" y="807" text-anchor="middle" font-size="13" fill="#444441">Client C</text>
+
+  <!-- ══════════════════════════════════════════════════════════
+       ARROWS
+       Each arrow gets its own dedicated lane — no two share a y-level.
+
+       Horizontal lanes between boxes bottom (y=712) and clients top (y=780):
+         Lane A  y=724  broadcast trunk
+         Lane B  y=740  clients → NT (send pkts)
+         Lane C  y=756  GT → PO (read mailboxes)
+         Lane D  y=770  PO → GT (pop reliable pkts)
+
+       Vertical gaps between center col and threads (80px each side):
+         Left gap:  x=300..380    use x=330 for GT↔center paths
+         Right gap: x=920..1000   use x=960 for NT↔center paths
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- ① Game thread → Herald: push auth packet
+       Straight horizontal from GT right (300) to Herald left (380) at y=177 -->
+  <line x1="300" y1="177" x2="375" y2="177" stroke="#854F0B" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="337" y="169" text-anchor="middle" font-size="11" font-weight="600" fill="#854F0B">push</text>
+
+  <!-- ② Herald → Network thread: pop auth packet
+       Straight horizontal from Herald right (920) to NT left (1000) at y=177 -->
+  <line x1="925" y1="177" x2="995" y2="177" stroke="#854F0B" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="960" y="169" text-anchor="middle" font-size="11" font-weight="600" fill="#854F0B">pop</text>
+
+  <!-- ③ Network thread → Post office: push validated pkts
+       From NT left (1000) at y=138 → across right gap to x=960 → down to y=350 → left to x=650 → into PO top (650, 372)
+       Uses right-gap lane x=960, clear of all boxes -->
+  <path d="M 1000 138 L 960 138 L 960 350 L 650 350 L 650 372" fill="none" stroke="#993C1D" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="805" y="342" text-anchor="middle" font-size="11" font-weight="600" fill="#712B13">validated pkts → mailboxes</text>
+
+  <!-- ④ Broadcast: NT → all clients
+       Trunk: down NT right outer edge (x=1285) → fan down to clients.
+       Stays entirely in the far-right margin, no overlap with anything. -->
+  <path d="M 1135 712 L 1135 760 L 180 760 L 180 780"  fill="none" stroke="#0F6E56" stroke-width="1.4" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <path d="M 1135 760 L 650 760 L 650 780"             fill="none" stroke="#0F6E56" stroke-width="1.4" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <path d="M 1135 760 L 1120 760 L 1120 780"           fill="none" stroke="#0F6E56" stroke-width="1.4" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <text x="1175" y="748" text-anchor="start" font-size="11" font-weight="600" fill="#0F6E56">broadcast</text>
+  <text x="1175" y="762" text-anchor="start" font-size="11" fill="#0F6E56">auth. packet</text>
+
+  <!-- ⑤ Clients → Network thread: send pkts
+       Each client has an arrow from its bottom down to a shared trunk at y=848,
+       then the trunk runs right and up into NT. Clear, separate from broadcast. -->
+  <!-- Client A bottom → arrowhead down into trunk at y=836 -->
+  <line x1="180" y1="826" x2="180" y2="834" stroke="#5F5E5A" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <!-- Client B bottom → arrowhead down into trunk -->
+  <line x1="650" y1="826" x2="650" y2="834" stroke="#5F5E5A" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <!-- Client C bottom → arrowhead down into trunk -->
+  <line x1="1120" y1="826" x2="1120" y2="834" stroke="#5F5E5A" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <!-- horizontal trunk at y=836 + turn up into NT right side -->
+  <path d="M 180 836 L 1285 836 L 1285 230 L 1270 230" fill="none" stroke="#5F5E5A" stroke-width="1.4" marker-end="url(#arrow)"/>
+
+  <!-- ⑥ Game thread → Post office: read mailboxes
+       Routes through the LEFT corridor (x=300..380).
+       From GT right (300) at y=338 → right-gap lane x=340 → down to PO mid y=502 → into PO left (380, 502) -->
+  <path d="M 300 338 L 340 338 L 340 502 L 380 502" fill="none" stroke="#7F77DD" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+
+
+  <!-- ⑦ Post office → Game thread: pop reliable pkts
+       Routes through the LEFT corridor on a separate lane (x=320).
+       From PO left (380) at y=540 → left to x=320 → up to GT right (300) at y=390 -->
+  <path d="M 380 540 L 320 540 L 320 390 L 300 390" fill="none" stroke="#534AB7" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+
+
+  <!-- ══ LEGEND ══ -->
+  <rect x="30" y="870" width="1240" height="110" rx="8" fill="#F1EFE8" stroke="#D3D1C7" stroke-width="0.5"/>
+
+  <!-- Row 1: components -->
+  <text x="50" y="890" font-size="11" font-weight="600" fill="#3d3d3a">Components</text>
+
+  <rect x="50" y="898" width="20" height="10" rx="2" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="76" y="907" font-size="10.5" fill="#3d3d3a">Game thread</text>
+
+  <rect x="180" y="898" width="20" height="10" rx="2" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="206" y="907" font-size="10.5" fill="#3d3d3a">Network thread</text>
+
+  <rect x="330" y="898" width="20" height="10" rx="2" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="356" y="907" font-size="10.5" fill="#3d3d3a">Herald (sync)</text>
+
+  <rect x="460" y="898" width="20" height="10" rx="2" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+  <text x="486" y="907" font-size="10.5" fill="#3d3d3a">Post office (sync)</text>
+
+  <rect x="620" y="898" width="20" height="10" rx="2" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="646" y="907" font-size="10.5" fill="#3d3d3a">Clients</text>
+
+  <!-- Row 2: arrow types -->
+  <text x="50" y="932" font-size="11" font-weight="600" fill="#3d3d3a">Interactions</text>
+
+  <line x1="140" y1="928" x2="168" y2="928" stroke="#854F0B" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="175" y="932" font-size="10.5" fill="#3d3d3a">① Herald push / pop</text>
+
+  <line x1="330" y1="928" x2="358" y2="928" stroke="#993C1D" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <text x="365" y="932" font-size="10.5" fill="#3d3d3a">③ Validated pkts → mailbox</text>
+
+  <line x1="540" y1="928" x2="568" y2="928" stroke="#0F6E56" stroke-width="1.4" stroke-dasharray="6 3" marker-end="url(#arrow)"/>
+  <text x="575" y="932" font-size="10.5" fill="#3d3d3a">④ Broadcast auth. pkt</text>
+
+  <line x1="720" y1="928" x2="748" y2="928" stroke="#5F5E5A" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <text x="755" y="932" font-size="10.5" fill="#3d3d3a">⑤ Clients send pkts</text>
+
+  <line x1="880" y1="928" x2="908" y2="928" stroke="#7F77DD" stroke-width="1.4" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="915" y="932" font-size="10.5" fill="#3d3d3a">⑥ Read mailboxes</text>
+
+  <line x1="1050" y1="928" x2="1078" y2="928" stroke="#534AB7" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="1085" y="932" font-size="10.5" fill="#3d3d3a">⑦ Pop SPSC reliable pkts</text>
+</svg>
