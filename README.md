@@ -167,7 +167,9 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 - Map Design & Interactivity  
 - Large vertically and horizontally explorable map   
 - Item system with rarity tiers and score values  
-  
+
+---
+
 ### Sprint 2
 
 ### Contributions
