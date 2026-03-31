@@ -11,7 +11,7 @@
 
 struct Client
 {
-    uint64_t client_id;
+    uint8_t *client_id;
 
     int fd;
     struct sockaddr_in addr;
@@ -23,8 +23,8 @@ struct Client
 
     /* Output buffer */
     uint8_t *send_buf;
-    size_t   send_len;     // total bytes to send
-    size_t   send_offset;  // bytes already sent
+    size_t   send_len;     // total bytes in buffer
+    size_t   send_capacity;  // bytes already sent
 
     struct timespec ts;
 }
