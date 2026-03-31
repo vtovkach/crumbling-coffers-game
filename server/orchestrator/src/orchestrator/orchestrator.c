@@ -22,8 +22,6 @@
 
 static uint64_t id_counter = 0;
 
-uint16_t port_counter = 0;
-
 static void shutdownServer(int listen_fd, 
                            int epoll_fd, 
                            struct HashTable *clients, 
@@ -195,22 +193,14 @@ int orchestrator_run(pid_t parent_pid)
 
             if(cur_event.events & EPOLLIN)
             {
-                // Read data sent by the client 
-                if(receiveData(orch.epoll_fd, cur_event.data.fd, orch.clients, orch.gq, orch.log_file) < 0)
-                {
-                    printf("[orchestrator] receiveData failed.\n");
-                    goto fail;  
-                }
+                // Later will replace NULL with actual buffer
+                tcp_read(orch.log_file, cur_event.data.fd, NULL, 0);
             }
 
             if(cur_event.events & EPOLLOUT)
             {
-                // Socket is writable 
-                if(sendData(orch.log_file, orch.epoll_fd, cur_event.data.fd, orch.clients, orch.gq) < 0)
-                {
-                    printf("[orchestrator] sendData failed.\n");
-                    goto fail;
-                }
+                // Later will replace NULL with actual buffer
+                tcp_send(orch.log_file, cur_event.data.fd, NULL, 0);
             }
         }
     }
