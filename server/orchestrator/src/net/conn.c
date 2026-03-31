@@ -12,10 +12,10 @@
 
 #include "ds/hashmap.h"
 #include "util.h"
+#include "random.h"
 #include "log_system.h"
 #include "server-config.h" 
 #include "orchestrator/state/client.h"
-#include "orchestrator/matchmaker/game_queue.h"
 #include "random.h"
 
 int closeConnection(FILE *const log_file, 
