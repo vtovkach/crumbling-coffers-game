@@ -7,8 +7,8 @@
 #include "server-config.h" 
 #include "orchestrator/matchmaker/game_queue.h"
 
-int closeConnection(FILE *log_file, int epoll_fd, int target_fd, struct HashTable *active_clients, struct GameQueue *gq);
+int closeConnection(FILE *log_file, int epoll_fd, int target_fd, struct HashTable *active_clients);
 
-int acceptConnections(FILE *log_file, int listen_fd, int epoll_fd, uint64_t new_id, struct HashTable *active_clients);
+int acceptConnections(FILE *log_file, int listen_fd, int epoll_fd, struct HashTable *active_clients);
 
 #endif
