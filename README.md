@@ -174,18 +174,22 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 ### Contributions
 
-**Aurora**: "Added assets for player and level scenes as well as laid out the level, added collision to interactable ground, and added a player camera."  
+**Aurora**: "Implemented the end-to-end gameplay flow, including scene transitions for single-player mode, match-end triggers, and score page redirection. Also developed the first custom map assets and performed a visual polish pass on the environment and interactive elements."  
 
-- `Jira Task: Learn TileMap and create a basic map level`  
-    - [PROJ-28](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-28), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-28-Learn-Tilemap)  
-- `Jira Task: Agree on Base Game`  
-    - [PROJ-68](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-68). [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-68-BASE-GAME)  
-- `Jira Task: Level Architecture & Collision Design`  
-    - [PROJ-33](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-33), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/feature/PROJ-33-collision)  
-- `Jira Task: Player Spawning & Camera Integration`  
-    - [PROJ-35](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-35), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-35-player-camera)  
 - `Jira Task: Interactive Item & Platform Placement`  
     - [PROJ-36](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-36), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-36-item-platforms)  
+- `Jira Task: Visual Contrast & Accessibility Pass`  
+    - [PROJ-37](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-37). [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-37-visual-accessibility)  
+- `Jira Task: Navigation & Interaction Unit Testing`  
+    - [PROJ-38](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-38), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-38-navigation-test)  
+- `Jira Task: Transition Logic: Menu to Match Start`  
+    - [PROJ-44](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-44), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-44-mm-2-match-start)  
+- `Jira Task: End-of-Match Trigger & Score Page Redirection`  
+    - [PROJ-45](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-45), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-45-end-score-transition)  
+- `Jira Task: Create 1st Custom Map Design Aspects`  
+    - [PROJ-53](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-53), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-53-1st-map-aspects)  
+- `Jira Task: Main Menu to Single-Player Scene Transition`  
+    - [PROJ-90](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-90), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-90-mm-2-training-ground)  
 
 **Andrea**: "incorporated an unrefined inheritance framework for how item classes will be created, and wrote tests testing initial character movment collisions." 
 
@@ -270,9 +274,10 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 **Aurora:**
 
-- Finish fully spanning first map design
-- Test map against player mechanics to ensure playability
-- Order foreground/background layers for non/interactive parts of scene
+- Add variety in map designs with new assets and expand map   
+- Add variety in player characters with new assets   
+- Polish levels and ensure compatibility with player characters   
+- Playtesting   
 
 **Andrea:**
 
