@@ -27,6 +27,6 @@ struct Client
     size_t   send_capacity;  // bytes already sent
 
     struct timespec ts;
-}
+};
 
 #endif
