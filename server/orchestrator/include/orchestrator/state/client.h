@@ -11,25 +11,22 @@
 
 struct Client
 {
-    uint64_t client_id; 
+    uint64_t client_id;
 
     int fd;
     struct sockaddr_in addr;
 
-    uint8_t buffer[TCP_SEGMENT_SIZE];
-    size_t buf_size;
-    size_t cur_size;
+    /* Input buffer */
+    uint8_t *recv_buf;
+    size_t   recv_len;
+    size_t   recv_capacity;
 
-    uint8_t game_queue_info[TCP_SEGMENT_SIZE];
-    size_t game_q_size;
-    size_t game_q_cur_size;
-
-    bool game_q_ready;   // Indicates whether the buffer containing game connection information is ready to be sent
-    bool is_received;    // Indicates whether the client has sent all initialization data
-    bool ACK_sent;       // Indicates whether the acknowledgment message was sent to the client 
-    bool game_info_sent; // Indicates whether game information was sent to the client
+    /* Output buffer */
+    uint8_t *send_buf;
+    size_t   send_len;     // total bytes to send
+    size_t   send_offset;  // bytes already sent
 
     struct timespec ts;
-};
+}
 
 #endif
