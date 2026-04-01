@@ -320,10 +320,8 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 
 ### Upcoming
-- Temporary boost items affecting player abilities 
-- Timed competitive matches  
-- End-of-match scoreboard with score calculation  
 - Multiplayer support (planned: 4 players per match)
+- Player animation changes
 
 &nbsp;
 ---
