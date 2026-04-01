@@ -298,9 +298,10 @@ The game also includes temporary **boost items (spells)** that enhance abilities
  
 **Nicholas:**
 
-- Make player-character movement feel more satisfying with multiple iterations of refinement.
-- Add visual hints at the edge of the player's screen to inform them of items barely out of view.
-- Refine some of my older code for scalability, IF we decide it's needed for certain features to exist.
+- Tuning for new movement features, finer tuning for old movement features with new states
+- Consider item indicator refinements (indicator in corner? transparency? variable size?)
+- Character animation improvements. AT LEAST horizontally flip character when changing directions. POSSIBLY play existing player animations based on state (...if desired)
+- Add minor common platformer movement mechanics (notably "coyote time") 
 
 **Vadym:**
 
