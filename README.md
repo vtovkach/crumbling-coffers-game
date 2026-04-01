@@ -245,28 +245,28 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 **Vadym**: implemented core networking, matchmaking, and process management systems for the game server, enabling scalable session creation and reliable communication between components. Contributed to both client and server-side functionality, including testing, bug fixes, and integration of gameplay features.
 
-- `Jira Task: PROJ-4`
-    - PROJ-4
+- `Jira Task: PROJ-4` 
+    - PROJ-4, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-4-initialize-networking-module-on-c)
 - `Jira Task: PROJ-77`
-    - PROJ-77
+    - PROJ-77, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-77-complete-udp-write-routine-and-r)
 - `Jira Task: PROJ-91`
-    - PROJ-91
+    - PROJ-91, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-91-create-and-manage-the-matchmaking)
 - `Jira Task: PROJ-92`
-    - PROJ-92
+    - PROJ-92, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-92-form-sessions-and-notify-clients)
 - `Jira Task: PROJ-93`
-    - PROJ-93
+    - PROJ-93, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-93-build-the-port-pool-manager)
 - `Jira Task: PROJ-94`
-    - PROJ-94
+    - PROJ-94, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-94-handle-process-communication)
 - `Jira Task: PROJ-95`
-    - PROJ-95
+    - PROJ-95, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-95-reclaim-ports-and-handle-failure)
 - `Jira Task: PROJ-96`
-    - PROJ-96
+    - PROJ-96, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/feature%2FPROJ-96-implement-multiplayer-game-search-menu)
 - `Jira Task: PROJ-114`
-    - PROJ-114
+    - PROJ-114, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-114-create-test-for-matchmaker)
 - `Jira Task: PROJ-115`
-    - PROJ-115
+    - PROJ-115, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/bugfix%2FPROJ-115-fix-matchmaker-bug)
 - `Jira Task: PROJ-130`
-    - PROJ-130
+    - PROJ-130, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-130-integrate-server-requests-into-lobby-menu)
 
 - `Sprint Work`
     - Contributed 200+ commits during Sprint 1.
