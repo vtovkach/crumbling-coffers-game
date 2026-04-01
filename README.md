@@ -272,7 +272,7 @@ The game also includes temporary **boost items (spells)** that enhance abilities
     
 ### Reports
 
-![Sprint 1 Burnup Chart](docs/screenshots/Sprint1-burnup-chart.png)
+![Sprint 2 Burnup Chart](docs/screenshots/Sprint2-burnup-chart.png)
 
 ### Next Steps
 
