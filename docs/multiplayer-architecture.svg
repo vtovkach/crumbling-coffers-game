@@ -1,0 +1,256 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1980" font-family="monospace" font-size="13">
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#555"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#ff7070"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#70ff70"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7070ff"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="2800" fill="#0f0f0f"/>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 1: PHASES                                              -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <text x="50" y="55" fill="#555" font-size="11" letter-spacing="3">01  PHASE OVERVIEW</text>
+  <line x1="50" y1="62" x2="1350" y2="62" stroke="#222" stroke-width="1"/>
+
+  <rect x="50" y="85" width="360" height="110" rx="5" fill="#1a1a2e" stroke="#4a4aaa" stroke-width="1.5"/>
+  <text x="230" y="115" fill="#7070ff" font-size="14" font-weight="bold" text-anchor="middle">MATCHMAKING</text>
+  <text x="230" y="138" fill="#aaa" font-size="12" text-anchor="middle">TCP — supervisor</text>
+  <text x="230" y="160" fill="#666" font-size="11" text-anchor="middle">players connect, form lobby,</text>
+  <text x="230" y="178" fill="#666" font-size="11" text-anchor="middle">matchmaker groups them into a match</text>
+
+  <line x1="410" y1="140" x2="490" y2="140" stroke="#444" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="450" y="130" fill="#555" font-size="11" text-anchor="middle">spawn</text>
+
+  <rect x="490" y="85" width="360" height="110" rx="5" fill="#1a2e1a" stroke="#4aaa4a" stroke-width="1.5"/>
+  <text x="670" y="115" fill="#70ff70" font-size="14" font-weight="bold" text-anchor="middle">GAME</text>
+  <text x="670" y="138" fill="#aaa" font-size="12" text-anchor="middle">UDP — game process</text>
+  <text x="670" y="160" fill="#666" font-size="11" text-anchor="middle">fixed 4 players, 3 minutes,</text>
+  <text x="670" y="178" fill="#666" font-size="11" text-anchor="middle">no join / no leave</text>
+
+  <line x1="850" y1="140" x2="930" y2="140" stroke="#444" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="890" y="130" fill="#555" font-size="11" text-anchor="middle">end</text>
+
+  <rect x="930" y="85" width="360" height="110" rx="5" fill="#1a1a2e" stroke="#4a4aaa" stroke-width="1.5"/>
+  <text x="1110" y="115" fill="#7070ff" font-size="14" font-weight="bold" text-anchor="middle">POST-GAME</text>
+  <text x="1110" y="138" fill="#aaa" font-size="12" text-anchor="middle">TCP — supervisor</text>
+  <text x="1110" y="160" fill="#666" font-size="11" text-anchor="middle">return to lobby,</text>
+  <text x="1110" y="178" fill="#666" font-size="11" text-anchor="middle">ready for next match</text>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 2: PROCESS ARCHITECTURE                                -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <text x="50" y="255" fill="#555" font-size="11" letter-spacing="3">02  PROCESS ARCHITECTURE</text>
+  <line x1="50" y1="262" x2="1350" y2="262" stroke="#222" stroke-width="1"/>
+
+  <!-- Client panel -->
+  <rect x="50" y="285" width="1300" height="210" rx="5" fill="#111" stroke="#333" stroke-width="1"/>
+  <text x="75" y="313" fill="#666" font-size="11" letter-spacing="2">CLIENT  (Godot)</text>
+
+  <rect x="395" y="328" width="280" height="75" rx="4" fill="#1a1a2e" stroke="#4a4aaa" stroke-width="1.5"/>
+  <text x="535" y="353" fill="#7070ff" font-size="13" font-weight="bold" text-anchor="middle">lobby scene</text>
+  <text x="535" y="373" fill="#aaa" font-size="11" text-anchor="middle">TCP · talks to supervisor</text>
+  <text x="535" y="391" fill="#666" font-size="10" text-anchor="middle">matchmaking UI</text>
+
+  <line x1="675" y1="365" x2="725" y2="365" stroke="#444" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="700" y="355" fill="#555" font-size="10" text-anchor="middle">switch</text>
+
+  <rect x="725" y="328" width="280" height="75" rx="4" fill="#1a2e1a" stroke="#4aaa4a" stroke-width="1.5"/>
+  <text x="865" y="353" fill="#70ff70" font-size="13" font-weight="bold" text-anchor="middle">game scene</text>
+  <text x="865" y="373" fill="#aaa" font-size="11" text-anchor="middle">UDP · talks to game process</text>
+  <text x="865" y="391" fill="#666" font-size="10" text-anchor="middle">torn down on END_MATCH</text>
+
+  <text x="700" y="430" fill="#444" font-size="11" text-anchor="middle">·  local_player: Player           — input, physics, state machine</text>
+  <text x="700" y="452" fill="#444" font-size="11" text-anchor="middle">·  remote_players: Dictionary     — client_id → RemotePlayer</text>
+  <text x="700" y="474" fill="#444" font-size="11" text-anchor="middle">·  RemotePlayer extends Player    — inherits collision + status effects</text>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 3: PACKET TYPES                                        -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <text x="50" y="555" fill="#555" font-size="11" letter-spacing="3">03  PACKET TYPES  (client → server)</text>
+  <line x1="50" y1="562" x2="1350" y2="562" stroke="#222" stroke-width="1"/>
+
+  <!-- Normal -->
+  <rect x="50" y="585" width="620" height="120" rx="5" fill="#111" stroke="#333" stroke-width="1"/>
+  <rect x="50" y="585" width="5" height="120" rx="3" fill="#aa8800"/>
+  <text x="75" y="617" fill="#ffcc44" font-size="14" font-weight="bold">NORMAL</text>
+  <text x="240" y="617" fill="#555" font-size="12">unreliable · fire and forget · UDP</text>
+  <text x="75" y="648" fill="#aaa" font-size="12">{ pos: Vector2,  vel: Vector2,  state: String }</text>
+  <text x="75" y="676" fill="#555" font-size="11">·  server keeps only the latest per client — older ones discarded</text>
+  <text x="75" y="696" fill="#555" font-size="11">·  if client sends faster than server tick rate, extras are dropped</text>
+
+  <!-- Reliable -->
+  <rect x="730" y="585" width="620" height="135" rx="5" fill="#111" stroke="#333" stroke-width="1"/>
+  <rect x="730" y="585" width="5" height="135" rx="3" fill="#aa4444"/>
+  <text x="755" y="617" fill="#ff7070" font-size="14" font-weight="bold">RELIABLE</text>
+  <text x="920" y="617" fill="#555" font-size="12">ack / retry · guaranteed delivery</text>
+  <text x="755" y="645" fill="#aaa" font-size="12">{ type: HIT,  sender_id: u8[16],  target_id: u8[16],  client_tick: int }</text>
+  <text x="755" y="665" fill="#aaa" font-size="12">{ type: ITEM_PICKED_UP,  player_id: u8[16],  item_id: u8,  client_tick: int }</text>
+  <text x="755" y="690" fill="#555" font-size="11">·  all reliable packets processed every tick — none dropped</text>
+  <text x="755" y="708" fill="#555" font-size="11">·  HIT conflict: if A hits B and B hits A, server picks the smaller client_tick</text>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 4: SERVER GAME LOOP                                    -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <text x="50" y="775" fill="#555" font-size="11" letter-spacing="3">04  SERVER GAME LOOP  (fixed tick rate)</text>
+  <line x1="50" y1="782" x2="1350" y2="782" stroke="#222" stroke-width="1"/>
+
+  <rect x="50" y="805" width="1300" height="230" rx="5" fill="#111" stroke="#333" stroke-width="1"/>
+
+  <!-- Step 1 -->
+  <rect x="80" y="835" width="210" height="85" rx="4" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
+  <text x="185" y="864" fill="#aaa" font-size="13" font-weight="bold" text-anchor="middle">1. collect inputs</text>
+  <text x="185" y="885" fill="#666" font-size="11" text-anchor="middle">grab latest NORMAL</text>
+  <text x="185" y="903" fill="#666" font-size="11" text-anchor="middle">packet per client</text>
+
+  <line x1="290" y1="877" x2="335" y2="877" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step 2 -->
+  <rect x="335" y="835" width="210" height="85" rx="4" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
+  <text x="440" y="864" fill="#aaa" font-size="13" font-weight="bold" text-anchor="middle">2. drain events</text>
+  <text x="440" y="885" fill="#666" font-size="11" text-anchor="middle">process ALL pending</text>
+  <text x="440" y="903" fill="#666" font-size="11" text-anchor="middle">RELIABLE packets</text>
+
+  <line x1="545" y1="877" x2="590" y2="877" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step 3 -->
+  <rect x="590" y="835" width="210" height="85" rx="4" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
+  <text x="695" y="864" fill="#aaa" font-size="13" font-weight="bold" text-anchor="middle">3. apply events</text>
+  <text x="695" y="885" fill="#666" font-size="11" text-anchor="middle">HIT → is_frozen=true</text>
+  <text x="695" y="903" fill="#666" font-size="11" text-anchor="middle">on target player</text>
+
+  <line x1="800" y1="877" x2="845" y2="877" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step 4 -->
+  <rect x="845" y="835" width="210" height="85" rx="4" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
+  <text x="950" y="864" fill="#aaa" font-size="13" font-weight="bold" text-anchor="middle">4. build snapshot</text>
+  <text x="950" y="885" fill="#666" font-size="11" text-anchor="middle">merge latest states</text>
+  <text x="950" y="903" fill="#666" font-size="11" text-anchor="middle">+ applied game state</text>
+
+  <line x1="1055" y1="877" x2="1100" y2="877" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step 5 -->
+  <rect x="1100" y="835" width="220" height="85" rx="4" fill="#1a2e1a" stroke="#4aaa4a" stroke-width="1.5"/>
+  <text x="1210" y="864" fill="#70ff70" font-size="13" font-weight="bold" text-anchor="middle">5. broadcast</text>
+  <text x="1210" y="885" fill="#aaa" font-size="11" text-anchor="middle">SNAPSHOT to</text>
+  <text x="1210" y="903" fill="#aaa" font-size="11" text-anchor="middle">all 4 clients</text>
+
+  <!-- Notes -->
+  <text x="80" y="958" fill="#555" font-size="11">notes:</text>
+  <text x="80" y="978" fill="#444" font-size="11">·  conflict resolution: A hits B and B hits A same tick → both frozen (FIFO)</text>
+  <text x="80" y="998" fill="#444" font-size="11">·  server is sole authority — no client can override</text>
+  <text x="80" y="1018" fill="#444" font-size="11">·  after 3 minutes → END_MATCH flag in snapshot, game process exits</text>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 5: CLIENT RECEIVE LOGIC                                -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <text x="50" y="1195" fill="#555" font-size="11" letter-spacing="3">05  CLIENT — ON SNAPSHOT RECEIVED</text>
+  <line x1="50" y1="1202" x2="1350" y2="1202" stroke="#222" stroke-width="1"/>
+
+  <rect x="50" y="1225" width="1300" height="310" rx="5" fill="#111" stroke="#333" stroke-width="1"/>
+
+  <!-- Step: stale check -->
+  <rect x="80" y="1260" width="200" height="70" rx="4" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+  <text x="180" y="1285" fill="#aaa" font-size="13" text-anchor="middle">tick ≤ last_tick?</text>
+  <text x="180" y="1305" fill="#666" font-size="11" text-anchor="middle">stale UDP packet</text>
+
+  <!-- discard up -->
+  <line x1="180" y1="1260" x2="180" y2="1230" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="200" y="1248" fill="#ff4444" font-size="11">yes → discard</text>
+
+  <!-- no arrow right -->
+  <line x1="280" y1="1295" x2="330" y2="1295" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="305" y="1285" fill="#555" font-size="11" text-anchor="middle">no</text>
+
+  <!-- Step: for each -->
+  <rect x="330" y="1260" width="200" height="70" rx="4" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+  <text x="430" y="1285" fill="#aaa" font-size="13" text-anchor="middle">for each player</text>
+  <text x="430" y="1305" fill="#666" font-size="11" text-anchor="middle">entry in snapshot</text>
+
+  <line x1="530" y1="1295" x2="580" y2="1295" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Step: is me? -->
+  <rect x="580" y="1260" width="200" height="70" rx="4" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+  <text x="680" y="1285" fill="#aaa" font-size="13" text-anchor="middle">client_id == me?</text>
+
+  <!-- yes up: reconcile -->
+  <line x1="680" y1="1260" x2="680" y2="1230" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="700" y="1248" fill="#7070ff" font-size="11">yes</text>
+  <rect x="580" y="1195" width="200" height="35" rx="4" fill="#1a1a2e" stroke="#4a4aaa" stroke-width="1"/>
+  <text x="680" y="1218" fill="#7070ff" font-size="12" text-anchor="middle">reconcile local_player</text>
+
+  <!-- no right: remote -->
+  <line x1="780" y1="1295" x2="830" y2="1295" stroke="#555" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="805" y="1285" fill="#555" font-size="11" text-anchor="middle">no</text>
+
+  <rect x="830" y="1260" width="260" height="70" rx="4" fill="#1a2e1a" stroke="#4aaa4a" stroke-width="1.5"/>
+  <text x="960" y="1285" fill="#70ff70" font-size="13" text-anchor="middle">remote_players[id]</text>
+  <text x="960" y="1308" fill="#70ff70" font-size="13" text-anchor="middle">.apply_snapshot(...)</text>
+
+  <!-- detail notes -->
+  <text x="80" y="1370" fill="#555" font-size="11">reconcile local_player:</text>
+  <text x="80" y="1392" fill="#444" font-size="11">    if server says is_frozen → apply_freeze(freeze_time_left)</text>
+  <text x="80" y="1412" fill="#444" font-size="11">    server tick is authoritative — override local prediction if diverged</text>
+
+  <text x="80" y="1440" fill="#555" font-size="11">apply_snapshot:</text>
+  <text x="80" y="1460" fill="#444" font-size="11">    append { pos, vel, state, tick } to RemotePlayer snapshot buffer</text>
+  <text x="80" y="1480" fill="#444" font-size="11">    interpolation runs in _process(delta) each frame independently</text>
+
+  <text x="700" y="1370" fill="#555" font-size="11">on END_MATCH flag in snapshot:</text>
+  <text x="700" y="1392" fill="#444" font-size="11">    tear down game scene entirely</text>
+  <text x="700" y="1412" fill="#444" font-size="11">    reconnect TCP to supervisor → return to lobby</text>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- SECTION 6: CLASS HIERARCHY                                     -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <text x="50" y="1595" fill="#555" font-size="11" letter-spacing="3">06  CLIENT CLASS HIERARCHY</text>
+  <line x1="50" y1="1602" x2="1350" y2="1602" stroke="#222" stroke-width="1"/>
+
+  <rect x="50" y="1625" width="1300" height="300" rx="5" fill="#111" stroke="#333" stroke-width="1"/>
+
+  <!-- CharacterBody2D -->
+  <rect x="520" y="1660" width="310" height="65" rx="4" fill="#1a1a1a" stroke="#555" stroke-width="1"/>
+  <text x="675" y="1688" fill="#888" font-size="14" text-anchor="middle">CharacterBody2D</text>
+  <text x="675" y="1710" fill="#555" font-size="11" text-anchor="middle">position · velocity · move_and_slide · collision</text>
+
+  <!-- Lines to children -->
+  <line x1="600" y1="1725" x2="370" y2="1785" stroke="#444" stroke-width="1.5"/>
+  <line x1="750" y1="1725" x2="980" y2="1785" stroke="#444" stroke-width="1.5"/>
+
+  <!-- Player -->
+  <rect x="120" y="1785" width="500" height="100" rx="4" fill="#1a1a2e" stroke="#4a4aaa" stroke-width="1.5"/>
+  <text x="370" y="1815" fill="#7070ff" font-size="14" font-weight="bold" text-anchor="middle">Player</text>
+  <text x="370" y="1838" fill="#aaa" font-size="11" text-anchor="middle">input collection · state machine · camera</text>
+  <text x="370" y="1858" fill="#aaa" font-size="11" text-anchor="middle">freeze / slow / push / disorientation system</text>
+  <text x="370" y="1876" fill="#666" font-size="11" text-anchor="middle">local_player only</text>
+
+  <!-- RemotePlayer -->
+  <rect x="730" y="1785" width="560" height="100" rx="4" fill="#1a2e1a" stroke="#4aaa4a" stroke-width="1.5"/>
+  <text x="1010" y="1815" fill="#70ff70" font-size="14" font-weight="bold" text-anchor="middle">RemotePlayer  extends Player</text>
+  <text x="1010" y="1838" fill="#aaa" font-size="11" text-anchor="middle">overrides _physics_process — no input, no state machine physics</text>
+  <text x="1010" y="1858" fill="#aaa" font-size="11" text-anchor="middle">snapshot buffer · interpolation in _process</text>
+  <text x="1010" y="1876" fill="#666" font-size="11" text-anchor="middle">inherits all collision + status effects from Player</text>
+
+</svg>
