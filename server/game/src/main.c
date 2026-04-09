@@ -11,7 +11,7 @@
 #include "net/net_thread.h"
 #include "signals.h"
 
-#define LOG_PATH "../../../log/game"
+#define LOG_PATH "log/game"
 
 atomic_bool net_stop = false;
 atomic_bool game_stop = false;
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
         goto failure; 
     }
 
-    sleep(21);
+    sleep(5);
 
     atomic_store(&game_stop, true);
     atomic_store(&net_stop, true);
