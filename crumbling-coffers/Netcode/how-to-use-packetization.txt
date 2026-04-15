@@ -1,0 +1,167 @@
+PacketizationManager — How to Use
+==================================
+
+PacketizationManager is a global autoload that builds and parses the raw
+byte packets exchanged with the game server.  You never instantiate it —
+just call its functions directly:
+
+    PacketizationManager.form_tcp_packet(...)
+    PacketizationManager.interpret_tcp_packet(...)
+    PacketizationManager.form_udp_init_packet(...)
+    PacketizationManager.form_udp_reg_packet(...)
+    PacketizationManager.interpret_udp_packet(...)
+
+
+──────────────────────────────────────────────────────────────────────────
+STRUCTURES
+──────────────────────────────────────────────────────────────────────────
+
+TCP_Response
+    Returned by interpret_tcp_packet().
+
+    response_type : int     TYPE_GAME_FOUND or TYPE_GAME_NOT_FOUND
+    game_id       : String  32-char uppercase hex (only on GAME_FOUND)
+    player_id     : String  32-char uppercase hex (only on GAME_FOUND)
+    server_ip     : String  e.g. "129.146.77.151"  (only on GAME_FOUND)
+    port          : int     UDP port to connect to  (only on GAME_FOUND)
+
+    if game is not found you don't care about other fields  
+
+
+UDP_Response
+    Returned by interpret_udp_packet().
+
+    status          : int   UDPStatus.NORMAL or UDPStatus.ERROR (if UDPStatus == error: packet should be discarded)
+    packet_type     : int   UDPPacketType.SERVER_INIT or SERVER_AUTH
+    num_players     : int
+    server_cur_tick : int   server's current game tick 
+
+    -- Populated for SERVER_INIT only --
+    start_tick              : int
+    stop_tick               : int
+    player_init_positions   : Dictionary  { player_id_hex -> PlayerInitPos }
+
+    -- Populated for SERVER_AUTH only --
+    players : Dictionary  { player_id_hex -> PlayerInfo }
+
+
+PlayerInitPos
+    x : int
+    y : int
+
+
+PlayerInfo
+    pos_x : int
+    pos_y : int
+    vel_x : int
+    vel_y : int
+    score : int
+
+
+──────────────────────────────────────────────────────────────────────────
+ENUMS
+──────────────────────────────────────────────────────────────────────────
+
+UDPStatus
+    NORMAL = 0
+    ERROR  = 1
+
+UDPPacketType
+    SERVER_INIT = 0
+    SERVER_AUTH = 1
+
+Access via:
+    PacketizationManager.UDPStatus.NORMAL
+    PacketizationManager.UDPPacketType.SERVER_AUTH
+
+
+──────────────────────────────────────────────────────────────────────────
+TCP — SENDING
+──────────────────────────────────────────────────────────────────────────
+
+Build a packet and hand it to NetworkManager:
+
+    var pkt := PacketizationManager.form_tcp_packet(
+        PacketizationManager.TYPE_SEARCH_GAME,  # or TYPE_STOP_SEARCH
+        0                                        # map_id (pass 0 for now)
+    )
+    NetworkManager.send_tcp(pkt)
+
+
+──────────────────────────────────────────────────────────────────────────
+TCP — RECEIVING
+──────────────────────────────────────────────────────────────────────────
+
+    var raw := NetworkManager.receive_tcp()
+    if raw.is_empty():
+        return
+
+    var resp := PacketizationManager.interpret_tcp_packet(raw)
+
+    if resp.response_type == PacketizationManager.TYPE_GAME_FOUND:
+        print("game_id:   ", resp.game_id)
+        print("player_id: ", resp.player_id)
+        print("server:    ", resp.server_ip, ":", resp.port)
+    elif resp.response_type == PacketizationManager.TYPE_GAME_NOT_FOUND:
+        print("No game found.")
+
+
+──────────────────────────────────────────────────────────────────────────
+UDP — SENDING (INIT)
+──────────────────────────────────────────────────────────────────────────
+
+Send this once when a match starts, to register with the game server.
+Use the game_id, player_id, and port received from the TCP GAME_FOUND response.
+
+    var udp_pkt := PacketizationManager.form_udp_init_packet(
+        resp.game_id,
+        resp.player_id,
+        resp.port
+    )
+    NetworkManager.send_udp(udp_pkt)
+
+
+──────────────────────────────────────────────────────────────────────────
+UDP — SENDING (REGULAR / PER TICK)
+──────────────────────────────────────────────────────────────────────────
+
+Send this every game tick to report the local player's state.
+
+    var udp_pkt := PacketizationManager.form_udp_reg_packet(
+        game_id,           # String — 32-char hex
+        player_id,         # String — 32-char hex
+        port,              # int
+        current_tick,      # int — used as sequence number
+        player.position,   # Vector2
+        player.velocity,   # Vector2
+        player.score       # int
+    )
+    NetworkManager.send_udp(udp_pkt)
+
+
+──────────────────────────────────────────────────────────────────────────
+UDP — RECEIVING
+──────────────────────────────────────────────────────────────────────────
+
+    var raw := NetworkManager.receive_udp()
+    if raw.is_empty():
+        return
+
+    var resp := PacketizationManager.interpret_udp_packet(raw)
+
+    if resp.status == PacketizationManager.UDPStatus.ERROR:
+        return
+
+    if resp.packet_type == PacketizationManager.UDPPacketType.SERVER_INIT:
+        print("Game runs from tick ", resp.start_tick, " to ", resp.stop_tick)
+        for pid in resp.player_init_positions:
+            var pos: PacketizationManager.PlayerInitPos = resp.player_init_positions[pid]
+            print("Player ", pid, " starts at (", pos.x, ", ", pos.y, ")")
+
+    elif resp.packet_type == PacketizationManager.UDPPacketType.SERVER_AUTH:
+        print("Tick: ", resp.server_cur_tick)
+        for pid in resp.players:
+            var info: PacketizationManager.PlayerInfo = resp.players[pid]
+            print("Player ", pid, " pos=(", info.pos_x, ",", info.pos_y,
+                  ") vel=(", info.vel_x, ",", info.vel_y,
+                  ") score=", info.score)
