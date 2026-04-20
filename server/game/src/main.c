@@ -13,8 +13,8 @@
 
 #define LOG_PATH "log/game"
 
-atomic_bool net_stop = false;
-atomic_bool game_stop = false;
+static atomic_bool net_stop = false;
+static atomic_bool game_stop = false;
 
 static ssize_t read_full(int fd, void *buf, size_t size)
 {
@@ -174,11 +174,6 @@ int main(int argc, char *argv[])
         pthread_join(game_t, NULL);
         goto failure; 
     }
-
-    sleep(5);
-
-    atomic_store(&game_stop, true);
-    atomic_store(&net_stop, true);
 
     pthread_join(game_t, NULL);
     pthread_join(network_t, NULL);
