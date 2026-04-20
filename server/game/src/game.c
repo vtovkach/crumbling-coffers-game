@@ -1,136 +1,67 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <pthread.h>
-#include <stdbool.h>
-#include <stdatomic.h>
-#include <unistd.h>
-#include <errno.h>
-#include <sys/epoll.h>
-#include <sys/types.h>
-
-#include "server-config.h"
 #include "game.h"
-#include "post_office.h"
-#include "herald.h"
-#include "packet.h"
 
-static void display_udp_packet(const uint8_t *udp_packet)
+#include <string.h>
+
+struct Game *create_game(uint8_t *game_id, uint16_t map_id, size_t players_num, FILE *log_file)
 {
-    struct Header header;
-    memcpy(&header, udp_packet, sizeof(header));
-
-    // ---- Print Game ID ----
-    printf("Game ID: ");
-    for (size_t j = 0; j < GAME_ID_SIZE; j++)
-        printf("%02x ", header.game_id[j]);
-    printf("\n");
-
-    // ---- Print Player ID ----
-    printf("Player ID: ");
-    for (size_t j = 0; j < PLAYER_ID_SIZE; j++)
-        printf("%02x ", header.player_id[j]);
-    printf("\n");
-
-    // ---- Print Payload ----
-    const char *payload = (const char *)(udp_packet + sizeof(header));
-
-    printf("Payload: %.*s\n",
-           header.payload_size,
-           payload);
-
-    printf("--------\n");
+    return NULL;
 }
 
-static void sleep_ms(long ms)
+void destroy_game(struct Game *game, FILE *log_file)
 {
-    struct timespec ts;
-    ts.tv_sec = ms / 1000;
-    ts.tv_nsec = (ms % 1000) * 1000000L;
-    nanosleep(&ts, NULL);
 }
 
-void *run_game_t(void *t_args)
-{   
-    uint8_t *game_id = ((struct GameArgs *) t_args)->game_id; 
-    uint8_t *players_ids = ((struct GameArgs *) t_args)->players_ids;
-    size_t players_num = ((struct GameArgs *) t_args)->players_num;
+void add_player(struct Game *game, struct Player *player)
+{
+}
 
-    struct PostOffice *post_office = ((struct GameArgs *) t_args)->post_office;
-    struct Herald *herald = ((struct GameArgs *) t_args)->herald;
+void update_game(struct Game *game)
+{
+}
 
-    atomic_bool *game_stop = ((struct GameArgs *) t_args)->game_stop_flag;
-    atomic_bool *net_stop = ((struct GameArgs *) t_args)->net_stop_flag;
+void form_auth_packet(struct Game *game, uint32_t start_tick, uint32_t stop_tick, struct AuthPacket *dst)
+{
+    memset(dst, 0, UDP_DATAGRAM_SIZE);
 
-    FILE *log_file = ((struct GameArgs *) t_args)->log_file;
+    memcpy(dst->header.game_id, game->game_id, GAME_ID_SIZE);
+    dst->header.control      = CTRL_FLAG_AUTH;
+    dst->header.payload_size = UDP_DATAGRAM_PAYLOAD_SIZE;
+    dst->header.seq_num      = game->game_tick;
 
-    // Silence the compiler warnings for now 
-    (void)log_file;
-    (void)players_ids;
+    dst->start_tick = start_tick;
+    dst->stop_tick  = stop_tick;
+    dst->n          = (uint8_t)game->players_num;
 
-    uint32_t server_tick = 0;
-
-    while(!atomic_load(game_stop) && !atomic_load(net_stop))
-    {   
-        // Process all reliable packets 
-        //      -- retrieve all packets from the mail drop 
-
-        // Process all regular packets
-        //      - retrieve valid packets from each mailbox 
-
-        // Form Authoritive Packet 
-        //      - place into herald  
-
-        for (;;)
-        {
-            uint8_t udp_packet[UDP_DATAGRAM_SIZE];
-            int ret = post_office_mail_drop_pop(
-                post_office, 
-                udp_packet, 
-                UDP_DATAGRAM_SIZE
-            );
-
-            if(ret < 0) break; // no more packets 
-
-            display_udp_packet(udp_packet);
-        }
-
-        for (size_t i = 0; i < players_num; i++)
-        {
-            uint8_t udp_packet[UDP_DATAGRAM_SIZE];
-
-            int ret = post_office_read(
-                post_office, 
-                i, 
-                udp_packet, 
-                UDP_DATAGRAM_SIZE
-            );
-
-            if (ret != 0) continue;
-
-            display_udp_packet(udp_packet);
-        }
-
-        /*
-            Prepare and send authoritative
-            packet to all clients 
-        */
-       
-        uint8_t packet[UDP_DATAGRAM_SIZE];
-        struct Header *outgoing_header = (struct Header *)packet;
-
-        memset(packet, 0, UDP_DATAGRAM_SIZE);
-        memcpy(outgoing_header->game_id, game_id, GAME_ID_SIZE);
-        memset(outgoing_header->player_id, 1, PLAYER_ID_SIZE);
-        outgoing_header->control = CTRL_FLAG_AUTH;
-        outgoing_header->seq_num = server_tick; 
-        outgoing_header->payload_size = 0;
-
-        herald_write(herald, packet, UDP_DATAGRAM_SIZE);
-
-        server_tick++;
-        sleep_ms(10);
+    for (size_t i = 0; i < game->players_num; i++)
+    {
+        struct Player *p = &game->players[i];
+        memcpy(dst->players[i].player_id, p->player_id, PLAYER_ID_SIZE);
+        dst->players[i].pos_x = (int32_t)p->pos_x;
+        dst->players[i].pos_y = (int32_t)p->pos_y;
+        dst->players[i].vel_x = (int32_t)p->vel_x;
+        dst->players[i].vel_y = (int32_t)p->vel_y;
+        dst->players[i].score = p->score;
     }
+}
 
-    return 0;
+void form_init_packet(struct Game *game, uint32_t start_tick, uint32_t stop_tick, struct InitPacket *dst)
+{
+    memset(dst, 0, UDP_DATAGRAM_SIZE);
+
+    memcpy(dst->header.game_id, game->game_id, GAME_ID_SIZE);
+    dst->header.control      = CTRL_FLAG_INIT;
+    dst->header.payload_size = UDP_DATAGRAM_PAYLOAD_SIZE;
+    dst->header.seq_num      = game->game_tick;
+
+    dst->start_tick = start_tick;
+    dst->stop_tick  = stop_tick;
+    dst->n          = (uint8_t)game->players_num;
+
+    for (size_t i = 0; i < game->players_num; i++)
+    {
+        struct Player *p = &game->players[i];
+        memcpy(dst->players[i].player_id, p->player_id, PLAYER_ID_SIZE);
+        dst->players[i].x = (int32_t)p->pos_x;
+        dst->players[i].y = (int32_t)p->pos_y;
+    }
 }
