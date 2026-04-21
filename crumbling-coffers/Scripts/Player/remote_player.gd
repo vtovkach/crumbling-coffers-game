@@ -1,39 +1,44 @@
 extends Player
 class_name RemotePlayer
 
+class PlayerPacket:
+	var x:         int
+	var y:         int
+	var vx:        int
+	var vy:        int
+	var score:     int
+	var timestamp: int  # timestamp is obtained by Time.get_ticks_msec() when packet was received in Game 
+
+	func _init(px: int, py: int, pvx: int, pvy: int, pscore: int, ts: int) -> void:
+		x         = px
+		y         = py
+		vx        = pvx
+		vy        = pvy
+		score     = pscore
+		timestamp = ts
+
 var score: int = 0
-var player_id: String	# This value should be populated by another class/function (Game class?) at this player's creation in online play
+var player_id: String
+var packet_queue: Array[PlayerPacket] = []
 
 func _ready() -> void:
 	add_to_group("remote")
 
 func init(id: String, init_x: int, init_y: int) -> void:
 	player_id = id
-	server_update(init_x, init_y, 0, 0, 0)
+	position.x = init_x
+	position.y = init_y 
+	velocity.x = 0
+	velocity.y = 0
+	score = 0
 
-# Populate with fields from PlayerInfo
-func server_update(x: int, y: int, vx: int, vy: int, points: int) -> void:
-	position.x = x
-	position.y = y
-	velocity.x = vx
-	velocity.y = vy
-	score = points
-	_internal_update()
+# Called in Game's _process() to push new player data
+# Note for Nicholas — it is a rough draft, feel free to change (Array to heap/queue if needed)
+# I know you might not like class PlayerPacket inside this script but feel free to change it as you want, but don't break other code
+func push_data_packet(packet: PlayerPacket) -> void:
+	packet_queue.push_back(packet)
 
-# update based on latest server values
-# may include interpolation / extrapolation (Future Task)
-# or animation (Future Task)
-func _internal_update() -> void:
-	direction = sign(velocity.x)
-#	state = _infer_state()
-
-# dont mind this, when animation is added this will be possible to complete
-#func _infer_state() -> AnimationState:
-	#if velocity.y > 0:
-		#state = jump
-	#elif velocity.y < 0:
-		#state = fall
-	#elif velocity.x == 0:
-		#state = idle
-	#else:
-		#state = run
+# Called inside Game's _process(), gets render time
+# Do interpolation/extrapolation using packet_queue and all other player's updates like score animations etc... 
+func render_remote_player(render_time: float) -> void:
+	pass
