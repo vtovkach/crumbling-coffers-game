@@ -1,6 +1,9 @@
 extends PlayerState
 class_name PlayerFall
 
+func enter() -> void:
+	player.set_animation("fall")
+
 func physics_update(delta: float) -> void:
 	player.move(player.direction, delta, player.midair_slowdown)	# could be slower but this refactor aims to to preserve behavior
 	if player.midairjump_window and player.autojump_window:
@@ -13,3 +16,6 @@ func physics_update(delta: float) -> void:
 	if player.is_on_floor():
 		transitioned.emit(self, "PlayerRun" if player.direction != 0 else "PlayerIdle")
 		return
+		
+	if player.is_animation_concluded("fall"):
+		player.set_animation("fallLoop")

@@ -4,6 +4,7 @@ class_name PlayerIdle
 func enter() -> void:
 	super()
 	player.midairjump_window = player.BASE_MIDAIRJUMP_WINDOW
+	player.set_animation("idle")
 
 func physics_update(delta: float) -> void:
 	player.move(0, delta)

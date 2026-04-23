@@ -1,6 +1,9 @@
 extends Player
 class_name RemotePlayer
 
+const DASH_INFERENCE_BREAKPOINT: float = 3600.0
+const AIR_MOVEMENT_INFERENCE_BREAKPOINT: float = 5.0
+
 class PlayerPacket:
 	var x:         float
 	var y:         float
@@ -49,7 +52,39 @@ func render_remote_player(render_time: float) -> void:
 		var to:   PlayerPacket = packet_queue[1]
 		var alpha: float = clamp((render_time - from.timestamp) / (to.timestamp - from.timestamp), 0.0, 1.0)
 		position = lerp(Vector2(from.x, from.y), Vector2(to.x, to.y), alpha)
+		velocity = lerp(Vector2(from.vx, from.vy), Vector2(to.vx, to.vy), alpha)
 		score = from.score
 	elif packet_queue.size() == 1:
 		position = Vector2(packet_queue[0].x, packet_queue[0].y)
+		velocity = Vector2(packet_queue[0].vx, packet_queue[0].vy)
 		score = packet_queue[0].score
+		
+	infer_animation()
+
+
+func infer_animation() -> void:
+	update_facing()
+	
+	if is_animation("dash") and !is_animation_concluded("dash"):
+		return		
+
+	if abs(velocity.x) > DASH_INFERENCE_BREAKPOINT:
+		set_animation("dash")
+
+	elif abs(velocity.y) < AIR_MOVEMENT_INFERENCE_BREAKPOINT:
+		if velocity.x == 0:
+			set_animation("idle")
+		else:
+			set_animation("run")
+	else:
+		if is_animation_concluded("jump"):
+			set_animation("fall")
+		elif is_animation_concluded("fall"):
+			set_animation("fallLoop")
+		elif velocity.y < 0:    # aka going up
+			if is_animation("idle") or is_animation("run"): 
+				set_animation("jump")
+			else:
+				set_animation("fallLoop") # this is a fallback 
+		else:
+			set_animation("fall")

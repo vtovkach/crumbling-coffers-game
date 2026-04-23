@@ -3,6 +3,7 @@ class_name PlayerRun
 
 func enter() -> void:
 	super()	
+	player.set_animation("run")
 	player.midairjump_window = player.BASE_MIDAIRJUMP_WINDOW
 
 func physics_update(delta: float) -> void:

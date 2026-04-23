@@ -36,6 +36,7 @@ const BASE_MIDAIRJUMP_WINDOW: float = 0.05 # seconds
 @export var autojump_window: float = 0 # seconds
 @export var midairjump_window: float = 0 # seconds
 
+var scheduled_animation: String = "idle"
 var dashing = false		# Maybe this will help with animation control too.
 
 @export var is_frozen: bool = false
@@ -145,14 +146,20 @@ func dash() -> void:
 
 	# dash will handle its own decel instead of being a force applied to player
 	velocity.x += direction * dash_strength	
-	dashing = true	
 	
+	# lock the animation
+	scheduled_animation = sprite.animation
+	set_animation("dash")
+	dashing = true
+		
 func dash_decel(delta) -> void:
 	var vx: float = clamp(velocity.x, -max_runspeed, max_runspeed)
 	velocity.x = move_toward(velocity.x, vx, decel * delta)
 	if vx == velocity.x:
+		# release the lock
 		dashing = false
-	
+		set_animation(scheduled_animation)
+		
 # When acceleration direction is against current velocity
 # May prefer a state to handle this, especially if custom animation
 func brake(direction:float, delta: float, multiplier: float = 1) -> void:
@@ -212,3 +219,10 @@ func update_slow_stats() -> void:
 		accel = BASE_ACCEL
 		decel = BASE_DECEL
 		dash_strength = BASE_DASH_STRENGTH
+		
+func set_animation(anim: String) -> void:
+	# check locks. currently dash is the only lock
+	if dashing:
+		scheduled_animation = anim
+	else:
+		super(anim)

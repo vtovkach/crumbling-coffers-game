@@ -7,6 +7,7 @@ const jump_slowdown_multiplier: float = 0.5
 func enter() -> void:
 	super()
 	player.jump()
+	player.set_animation("jump")
 	jump_released = false
 
 func physics_update(delta: float) -> void:
