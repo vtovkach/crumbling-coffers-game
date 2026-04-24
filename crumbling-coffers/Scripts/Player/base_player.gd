@@ -3,13 +3,13 @@
 extends CharacterBody2D
 class_name Player
 
-@onready var sprite: AnimatedSprite2D = $PlayerSprite 
+@onready var sprite: AnimatedSprite2D = get_node_or_null("PlayerSprite") 
 
 # Position, velocity already given by GODOT parent classes. Position is especially important
 
 # Player should also own some variables for rendering, i.e. direction and state.
 # Technically this is better as interface, but ALL players will be renderable. So this is appropriate.
-@export var camera: Camera2D	# All players have a camera, making it exist in code allows selecting specific camera (feature enabling) 
+@onready var camera: Camera2D = get_node_or_null("Camera2D")	# All players have a camera, making it exist in code allows selecting specific camera (feature enabling) 
 @export var direction: float = 0
 var last_direction: float = 0
 

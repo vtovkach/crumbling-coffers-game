@@ -23,7 +23,8 @@ var player_id: String	# This value should be populated by another class/function
 func _ready() -> void:
 	# Connect signal to func reset_inv_hotbar so is called when the signal is emitted.
 	MatchManager.match_ended.connect(reset_inv_hotbar)
-	camera.make_current()
+	if camera:
+		camera.make_current()
 	add_to_group("freezable")
 	add_to_group("player")
 	add_to_group("disorientable")
