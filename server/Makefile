@@ -12,19 +12,19 @@ GAME_BIN  := bin/game
 GAME_OBJS  = $(wildcard common/obj/*.o) $(wildcard game/obj/*.o)
 
 TEST_BIN         := bin/test_orch_input
-TEST_OBJS        := test/supervisor/orchestrator/obj/test_input.o
+TEST_OBJS        := test/integration/supervisor/orchestrator/obj/test_input.o
 
 TEST_CHUNKS_BIN  := bin/test_orch_input_chunks
-TEST_CHUNKS_OBJS := test/supervisor/orchestrator/obj/test_input_chunks.o
+TEST_CHUNKS_OBJS := test/integration/supervisor/orchestrator/obj/test_input_chunks.o
 
 TEST_MATCHMAKING_BIN  := bin/test_matchmaking
-TEST_MATCHMAKING_OBJS := test/supervisor/matchmaker/obj/test_matchmaking.o
+TEST_MATCHMAKING_OBJS := test/integration/supervisor/matchmaker/obj/test_matchmaking.o
 
 TEST_MATCHMAKING_QUEUE_BIN  := bin/test_matchmaking_queue
-TEST_MATCHMAKING_QUEUE_OBJS := test/supervisor/matchmaker/obj/test_matchmaking_queue.o
+TEST_MATCHMAKING_QUEUE_OBJS := test/integration/supervisor/matchmaker/obj/test_matchmaking_queue.o
 
 TEST_PORT_REAPER_BIN  := bin/test_port_reaper
-TEST_PORT_REAPER_OBJS := test/supervisor/matchmaker/obj/test_port_reaper.o \
+TEST_PORT_REAPER_OBJS := test/unit/port_reaper/obj/test_port_reaper.o \
                          supervisor/obj/port_manager.o \
                          common/obj/hashmap.o \
                          common/obj/spsc_queue.o \
@@ -32,7 +32,14 @@ TEST_PORT_REAPER_OBJS := test/supervisor/matchmaker/obj/test_port_reaper.o \
                          common/obj/util.o
 
 TEST_GAME_BIN  := bin/test_game
-TEST_GAME_OBJS := test/game/obj/test_game.o
+TEST_GAME_OBJS := test/integration/game/obj/test_game.o
+
+TEST_GAME_UNIT_BIN  := bin/test_game_unit
+TEST_GAME_UNIT_OBJS := test/unit/game/obj/test_game_unit.o \
+                       game/obj/game.o \
+                       game/obj/player.o \
+                       common/obj/log_system.o \
+                       common/obj/util.o
 
 all: common supervisor game link link-game
 
@@ -61,16 +68,19 @@ test: all test-build link-test
 test-build: test-build-orchestrator test-build-matchmaker test-build-port-reaper test-build-game
 
 test-build-orchestrator:
-	$(MAKE) -C test/supervisor/orchestrator
+	$(MAKE) -C test/integration/supervisor/orchestrator
 
 test-build-matchmaker:
-	$(MAKE) -C test/supervisor/matchmaker
+	$(MAKE) -C test/integration/supervisor/matchmaker
 
 test-build-port-reaper:
-	$(MAKE) -C test/supervisor/matchmaker
+	$(MAKE) -C test/unit/port_reaper
 
 test-build-game:
-	$(MAKE) -C test/game
+	$(MAKE) -C test/integration/game
+
+test-build-game-unit:
+	$(MAKE) -C test/unit/game
 
 link-test: link-test-orchestrator link-test-matchmaker link-test-port-reaper link-test-game
 
@@ -94,6 +104,10 @@ link-test-port-reaper: test-build-port-reaper
 link-test-game: test-build-game
 	mkdir -p bin
 	$(CC) $(CFLAGS) $(TEST_GAME_OBJS) -o $(TEST_GAME_BIN)
+
+link-test-game-unit: test-build-game-unit
+	mkdir -p bin
+	$(CC) $(CFLAGS) $(TEST_GAME_UNIT_OBJS) -o $(TEST_GAME_UNIT_BIN)
 
 test-orchestrator: test
 	@FIFO=$$(mktemp -u /tmp/sv_stdin_XXXXXX); \
@@ -131,8 +145,15 @@ test-matchmaker-remote: link-test-matchmaker
 test-matchmaking-queue-remote: link-test-matchmaking-queue
 	@./$(TEST_MATCHMAKING_QUEUE_BIN)
 
+test-unit: all test-build-port-reaper link-test-port-reaper test-build-game-unit link-test-game-unit
+	@./$(TEST_PORT_REAPER_BIN)
+	@./$(TEST_GAME_UNIT_BIN)
+
 test-port-reaper: all test-build-port-reaper link-test-port-reaper
 	@./$(TEST_PORT_REAPER_BIN)
+
+test-game-unit: all test-build-game-unit link-test-game-unit
+	@./$(TEST_GAME_UNIT_BIN)
 
 test-game: all test-build-game link-test-game
 	@./$(TEST_GAME_BIN)
@@ -141,10 +162,13 @@ clean:
 	$(MAKE) -C common clean
 	$(MAKE) -C supervisor clean
 	$(MAKE) -C game clean
-	$(MAKE) -C test/supervisor/orchestrator clean
-	$(MAKE) -C test/supervisor/matchmaker clean
-	$(MAKE) -C test/game clean
+	$(MAKE) -C test/integration/supervisor/orchestrator clean
+	$(MAKE) -C test/integration/supervisor/matchmaker clean
+	$(MAKE) -C test/integration/game clean
+	$(MAKE) -C test/unit/port_reaper clean
+	$(MAKE) -C test/unit/game clean
 	rm -f $(TEST_PORT_REAPER_BIN)
+	rm -f $(TEST_GAME_UNIT_BIN)
 	rm -rf bin
 
 .PHONY: all common supervisor game link link-game run test \
@@ -153,4 +177,7 @@ clean:
         test-orchestrator test-orchestrator-remote \
         test-matchmaker test-matchmaker-remote \
         link-test-matchmaking-queue test-matchmaking-queue-remote \
-        test-port-reaper test-game test-build-game link-test-game clean
+        test-unit test-port-reaper test-game-unit \
+        test-game test-build-game link-test-game \
+        test-build-game-unit link-test-game-unit \
+        clean

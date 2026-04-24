@@ -1,5 +1,6 @@
 CC     := gcc
-CFLAGS := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE -I../../../common/include -I..
+CFLAGS := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE \
+          -I../../../supervisor/include
 
 SRC := $(wildcard *.c)
 OBJ := $(addprefix obj/, $(notdir $(SRC:.c=.o)))
@@ -9,7 +10,7 @@ all: dirs $(OBJ)
 dirs:
 	mkdir -p obj
 
-obj/%.o: %.c ../test-config.h
+obj/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

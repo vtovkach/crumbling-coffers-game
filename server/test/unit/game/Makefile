@@ -1,8 +1,7 @@
 CC     := gcc
-CFLAGS := -Wall -Wextra -Wfloat-equal -O2 -D_GNU_SOURCE \
-          -I../../../common/include \
-          -I../../../supervisor/include \
-          -I..
+CFLAGS := -std=c17 -Wall -Wextra -Wfloat-equal -Wno-float-equal -O2 -D_GNU_SOURCE \
+          -I../../../game/include \
+          -I../../../common/include
 
 SRC := $(wildcard *.c)
 OBJ := $(addprefix obj/, $(notdir $(SRC:.c=.o)))
@@ -12,7 +11,7 @@ all: dirs $(OBJ)
 dirs:
 	mkdir -p obj
 
-obj/%.o: %.c ../test-config.h
+obj/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
