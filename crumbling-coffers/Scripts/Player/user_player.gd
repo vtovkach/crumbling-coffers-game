@@ -58,7 +58,6 @@ func receive_inventory_item(item: InventoryItem) -> bool:
 	inventory.insert(item)
 	return true
 
-
 func consumable_collect(hotbar_itemRes):
 	receive_hotbar_item(hotbar_itemRes)
 
@@ -66,6 +65,30 @@ func receive_hotbar_item(item: HotbarItem) -> bool:
 	if hotbar == null or item == null:
 		return false
 	return hotbar.hotbar_insert(item)
+	
+func can_receive_inventory_item(item: InventoryItem) -> bool:
+	if inventory == null or item == null:
+		return false
+
+	for slot in inventory.slots:
+		if slot.item == item:
+			return true
+		if slot.item == null:
+			return true
+
+	return false
+
+func can_receive_hotbar_item(item: HotbarItem) -> bool:
+	if hotbar == null or item == null:
+		return false
+
+	for slot in hotbar.hotbar_slots:
+		if slot.hotbar_item == item:
+			return true
+		if slot.hotbar_item == null:
+			return true
+
+	return false
 
 func use_hotbar_item(index: int) -> bool:
 	if hotbar == null:
