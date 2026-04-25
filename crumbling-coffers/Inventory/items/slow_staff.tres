@@ -7,4 +7,10 @@
 script = ExtResource("1_dwocu")
 name = "Slow Staff"
 texture = ExtResource("2_dwocu")
+item_id = "slow_staff"
+effect_method = &"apply_slow"
+target_group = &"slowable"
+target_mode = 1
+duration = 3.0
+multiplier = 0.4
 metadata/_custom_type_script = "uid://dfwywy614rur6"

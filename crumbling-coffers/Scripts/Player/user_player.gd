@@ -23,6 +23,7 @@ var player_id: String	# This value should be populated by another class/function
 func _ready() -> void:
 	# Connect signal to func reset_inv_hotbar so is called when the signal is emitted.
 	MatchManager.match_ended.connect(reset_inv_hotbar)
+	reset_inv_hotbar()
 	if camera:
 		camera.make_current()
 	add_to_group("freezable")
@@ -48,16 +49,28 @@ func _physics_process(delta: float) -> void:
 
 ###
 
-# Function "collect": When player comes across an item, it will call func  "insert" from "inventory_slot.gd"
-# to add the item to the inventory resource (data container). This will update main inventory view to display
-# the collected item.
 func collect(itemRes):
-	inventory.insert(itemRes)
+	receive_inventory_item(itemRes)
 
-# Consumables will call for this function when Player walks over and collides with the hit/collision box. 
-# This functionality is the same as inventory's.
+func receive_inventory_item(item: InventoryItem) -> bool:
+	if inventory == null or item == null:
+		return false
+	inventory.insert(item)
+	return true
+
+
 func consumable_collect(hotbar_itemRes):
-	hotbar.hotbar_insert(hotbar_itemRes)
+	receive_hotbar_item(hotbar_itemRes)
+
+func receive_hotbar_item(item: HotbarItem) -> bool:
+	if hotbar == null or item == null:
+		return false
+	return hotbar.hotbar_insert(item)
+
+func use_hotbar_item(index: int) -> bool:
+	if hotbar == null:
+		return false
+	return hotbar.use_item(index, get_tree(), self)
 	
 func receive_pickup(pickup: ItemPickup) -> bool:
 	return pickup.apply_to_player(self)

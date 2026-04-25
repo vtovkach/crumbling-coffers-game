@@ -6,14 +6,16 @@ signal update
 # Signal used to send out when an item is used.
 signal item_used(index)
 
+signal item_use_requested(index: int, request: Dictionary)
+
 # Same insertion functionality as inventory.gd. Using different name conventions.
 @export var hotbar_slots: Array[HotbarSlot]
 
-# When initialized, connect the signal "item_used" to the function "_on_item_used".
-func _init():
-	item_used.connect(self._on_item_used)
 
-func hotbar_insert(item: HotbarItem):
+func hotbar_insert(item: HotbarItem) -> bool:
+	if item == null:
+		return false
+
 	var itemSlots = hotbar_slots.filter(func(slot): return slot.hotbar_item == item) 
 	if !itemSlots.is_empty():
 		itemSlots[0].amount += 1
@@ -24,7 +26,7 @@ func hotbar_insert(item: HotbarItem):
 			emptySlots[0].amount = 1
 	# Emit hotbar's update signal.
 	update.emit()
-
+	return true
 # Reset the hotbar to have no items when a new match is started. Similar behavior to inventory's reset_inv().
 func reset_hotbar() -> void:
 	for hotbar_slot in hotbar_slots:
@@ -33,7 +35,36 @@ func reset_hotbar() -> void:
 	update.emit()
 	
 	
-func use_item(index: int, scene_tree: SceneTree) -> void:
+func use_item(index: int, scene_tree: SceneTree = null, user: Node = null, apply_locally: bool = true) -> bool:
+	if index < 0 or index >= hotbar_slots.size():
+		return false
+
+	var slot = hotbar_slots[index]
+	if slot == null or slot.hotbar_item == null:
+		return false
+
+	var item: HotbarItem = slot.hotbar_item
+	if not item.can_use():
+		return false
+
+	var request := item.build_use_request(user)
+	item_use_requested.emit(index, request)
+
+	# Current single-player/local behavior. In multiplayer this can be disabled and the
+	# server can validate/broadcast the request instead.
+	if apply_locally and scene_tree != null:
+		_apply_use_request_locally(request, scene_tree, user)
+
+	if item.consumed_on_use:
+		_consume_slot(index)
+		item_used.emit(index)
+	else:
+		update.emit()
+
+	return true
+
+
+func _consume_slot(index: int) -> void:
 	if index < 0 or index >= hotbar_slots.size():
 		return
 
@@ -41,55 +72,57 @@ func use_item(index: int, scene_tree: SceneTree) -> void:
 	if slot == null or slot.hotbar_item == null:
 		return
 
-	var item = slot.hotbar_item
+	slot.amount -= 1
 
-	if item.resource_path.ends_with("freeze_staff.tres"):
-		apply_freeze(scene_tree)
-	elif item.resource_path.ends_with("disorientation_staff.tres"):
-		apply_disorientation(scene_tree)
-	elif item.resource_path.ends_with("slow_staff.tres"):
-		apply_slow(scene_tree)
-	else:
-		return
-
-	item_used.emit(index)
-
-
-func _on_item_used(index):
-	var slot = hotbar_slots[index]
-	# check if the slot's hotbar_item is null, then just return (DO NOTHING).
-	if (slot == null) || (slot.hotbar_item == null):
-		return
-	# Decrement the amount by 1.
-	if slot.amount > 1:
-		slot.amount -= 1
-	else: # if slot item is 0, then update the slot properties to be a brand new, empty slot.
+	if slot.amount <= 0:
 		slot.hotbar_item = null
 		slot.amount = 0
-	
+
 	update.emit()
 
 
-func apply_freeze(scene_tree: SceneTree) -> void:
-	var targets = scene_tree.get_nodes_in_group("freezable")
-	for target in targets:
-		if target.is_in_group("player"):
-			continue
-		if target.has_method("apply_freeze"):
-			target.apply_freeze(5.0)
+func _apply_use_request_locally(request: Dictionary, scene_tree: SceneTree, user: Node = null) -> void:
+	var method: StringName = request.get("effect_method", &"")
+	if method == &"":
+		return
 
-func apply_disorientation(scene_tree: SceneTree) -> void:
-	var targets = scene_tree.get_nodes_in_group("disorientable")
+	var targets := _get_local_targets(request, scene_tree, user)
 	for target in targets:
-		if target.is_in_group("player"):
-			continue
-		if target.has_method("apply_disorientation"):
-			target.apply_disorientation(5.0)
+		_apply_effect_to_target(target, request)
 
-func apply_slow(scene_tree: SceneTree) -> void:
-	var targets = scene_tree.get_nodes_in_group("slowable")
-	for target in targets:
-		if target.is_in_group("player"):
-			continue
-		if target.has_method("apply_slow"):
-			target.apply_slow(3.0, 0.4)
+
+func _get_local_targets(request: Dictionary, scene_tree: SceneTree, user: Node = null) -> Array[Node]:
+	var mode: int = request.get("target_mode", HotbarItem.TargetMode.NONE)
+	var group_name: StringName = request.get("target_group", &"")
+
+	match mode:
+		HotbarItem.TargetMode.USER_ONLY:
+			return [user] if user != null else []
+		HotbarItem.TargetMode.GROUP_EXCLUDING_USER, HotbarItem.TargetMode.GROUP_INCLUDING_USER:
+			if group_name == &"":
+				return []
+			var targets: Array[Node] = []
+			for target in scene_tree.get_nodes_in_group(String(group_name)):
+				if mode == HotbarItem.TargetMode.GROUP_EXCLUDING_USER and target == user:
+					continue
+				targets.append(target)
+			return targets
+		_:
+			return []
+
+
+func _apply_effect_to_target(target: Node, request: Dictionary) -> void:
+	if target == null:
+		return
+
+	var method: StringName = request.get("effect_method", &"")
+	if not target.has_method(method):
+		return
+
+	var duration: float = request.get("duration", 0.0)
+	var multiplier: float = request.get("multiplier", 1.0)
+
+	if method == &"apply_slow":
+		target.call(method, duration, multiplier)
+	else:
+		target.call(method, duration)

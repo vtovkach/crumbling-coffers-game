@@ -13,19 +13,27 @@ enum PickupKind {
 func _ready() -> void:
 	super()
 
-func apply_to_player(player: Player) -> bool:
+func apply_to_player(player: Node) -> bool:
 	if points != 0 and player.has_method("add_score"):
 		player.add_score(points)
 
 	match pickup_kind:
 		PickupKind.COLLECTIBLE:
+			if inventory_item != null and player.has_method("receive_inventory_item"):
+				return player.receive_inventory_item(inventory_item)
+			# Backwards-compatible fallback for older player scripts.
 			if inventory_item != null and player.has_method("collect"):
 				player.collect(inventory_item)
 				return true
+
 		PickupKind.HOTBAR:
+			if hotbar_item != null and player.has_method("receive_hotbar_item"):
+				return player.receive_hotbar_item(hotbar_item)
+			# Backwards-compatible fallback for older player scripts.
 			if hotbar_item != null and player.has_method("consumable_collect"):
 				player.consumable_collect(hotbar_item)
 				return true
+
 	return false
 
 func on_collected(body: Node) -> bool:

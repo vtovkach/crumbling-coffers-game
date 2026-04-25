@@ -69,4 +69,5 @@ func _input(event):
 		use_active_item()
 
 func use_active_item():
-	hotbar.use_item(active_item_slot, get_tree())
+	var user := get_tree().get_first_node_in_group("player")
+	hotbar.use_item(active_item_slot, get_tree(), user)

@@ -7,4 +7,9 @@
 script = ExtResource("1_lswsw")
 name = "Freezing Staff"
 texture = ExtResource("2_lswsw")
+item_id = "freeze_staff"
+effect_method = &"apply_freeze"
+target_group = &"freezable"
+target_mode = 1
+duration = 5.0
 metadata/_custom_type_script = "uid://dfwywy614rur6"

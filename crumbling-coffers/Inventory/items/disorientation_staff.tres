@@ -5,6 +5,11 @@
 
 [resource]
 script = ExtResource("1_81m0l")
-name = "Disorientatino Staff"
+name = "Disorientation Staff"
 texture = ExtResource("2_81m0l")
+item_id = "disorientation_staff"
+effect_method = &"apply_disorientation"
+target_group = &"disorientable"
+target_mode = 1
+duration = 5.0
 metadata/_custom_type_script = "uid://dfwywy614rur6"
