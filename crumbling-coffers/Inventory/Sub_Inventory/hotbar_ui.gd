@@ -2,6 +2,9 @@ extends Control
 
 @onready var hotbar: Hotbar = preload("res://Inventory/Sub_Inventory/playerHotbar.tres")
 @onready var slots: Array = $HBoxContainer.get_children()
+
+@onready var info_panel: Panel = $InfoHint
+@onready var hint_label: Label = $InfoHint/Hint
 # Signal to send out that the active item is highlighting a new item.
 signal active_item_updated
 # variable that will keep track of what index the selection is on.
@@ -13,6 +16,10 @@ func _ready():
 	hotbar.update.connect(self.update_hotbar_slots)
 	# connect the active_item_updated signal 
 	active_item_updated.connect(self.update_active_item_visual)
+	
+	# Hide the infoHint at the start.
+	info_panel.visible = false
+
 	# call the updates to have scene be up to date when first ran.
 	update_hotbar_slots()
 	update_active_item_visual()
@@ -29,6 +36,15 @@ func update_active_item_visual():
 		slots[i].set_active_slot(i == active_item_slot)
 		# function "set_active()" will update the visuals. 
 		# Set function in hotbar_slot_ui.gd script.
+	
+	var slot = hotbar.hotbar_slots[active_item_slot]
+	
+	if slot == null or slot.hotbar_item == null:
+		info_panel.visible = false
+		return
+	
+	hint_label.text = slot.hotbar_item.name
+	info_panel.visible = true
 
 
 func active_item_scroll_up():
@@ -53,13 +69,6 @@ func set_active_slot(index: int):
 	active_item_slot = index
 	active_item_updated.emit()
 
-
-# ADDING MOUSE HOVERING DETECTION.
-func hovering_started(slots) -> void:
-	pass
-
-func hovering_ended() -> void:
-	pass
 
 # Will check if the button (right mouse click) is pressed to use the highlighted item.
 # Will only remove the selected item from the array for now.

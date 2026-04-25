@@ -41,3 +41,20 @@ layout_mode = 2
 
 [node name="hotbar_ui_slot8" parent="HBoxContainer" unique_id=1184632068 instance=ExtResource("1_74b81")]
 layout_mode = 2
+
+[node name="InfoHint" type="Panel" parent="." unique_id=448423806]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 1451.0
+offset_top = -182.0
+offset_right = 2986.0
+offset_bottom = -36.0
+
+[node name="Hint" type="Label" parent="InfoHint" unique_id=1789521120]
+layout_mode = 0
+offset_left = 5.0
+offset_right = 1530.0
+offset_bottom = 141.0
+theme_override_font_sizes/font_size = 100
+text = "label is here"
+horizontal_alignment = 1
