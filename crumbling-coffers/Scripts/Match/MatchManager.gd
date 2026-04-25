@@ -9,11 +9,16 @@ enum MatchMode {SINGLEPLAYER, MULTIPLAYER}
 var current_state: MatchState = MatchState.WAITING
 # Set the mode to singleplayer by default.
 var mode: MatchMode = MatchMode.SINGLEPLAYER
-
 # Variables for score page to hold results of last match
 var final_score: int = 0
-
 var time_left: int = 60
+
+# Network identity data from server
+var game_id: String = ""
+var player_id: String = ""
+var udp_port: int = 0
+# Removed const map path; game.tscn contains map as child node
+
 @onready var timer: Timer
 
 # Signals that will be called out whenever emitted to notify other functions.
@@ -55,7 +60,38 @@ func _ready() -> void:
 	timer.timeout.connect(_on_game_timer_timeout)
 	#print(current_state) # To check if current_state = 0 (which is WAITING)
 
+# =============== Multiplayer Transition =============== #
+# Called by Lobby to begin network search
+# Lobby is responsible for scene transition
+func load_multiplayer_level() -> void:
+	# Set mode so scripts know to use server-synced logic
+	mode = MatchMode.MULTIPLAYER
+	# Form 200 byte 'Search Game' packet
+	var search_packet = PacketizationManager.form_tcp_packet(PacketizationManager.TYPE_SEARCH_GAME, 0)
+	# Send via TCP queue
+	NetworkManager.send_tcp(search_packet)
+	
+# Looks for 'Game Found' from NetworkManager
+func _process(delta: float) -> void:
+	if mode == MatchMode.MULTIPLAYER:
+		_check_for_game_start()
 
+func _check_for_game_start() -> void:
+	# Receive 200 byte packet
+	var raw_packet := NetworkManager.receive_tcp()
+	if raw_packet.is_empty():
+		return
+	# Parsing
+	var response := PacketizationManager.interpret_tcp_packet(raw_packet)
+	# If find match, move to dungeon
+	if response.response_type == PacketizationManager.TYPE_GAME_FOUND:
+		# Store session data for UDP
+		game_id = response.game_id
+		player_id = response.player_id
+		udp_port = response.port
+		# Removed forced scene tree change; Lobby controls this
+
+# =============== State & Time =============== #
 # set_state: Will assign/set the current state that is passed to the function and emit corresponding signal.
 func set_state(new_state: MatchState) -> void:
 	current_state = new_state
@@ -66,15 +102,19 @@ func set_state(new_state: MatchState) -> void:
 
 # set_time: When called, will assign the new time and emit signal to have HUD update UI.
 func set_time(new_time: int) -> void:
-	time_left = new_time
+	time_left = max(0, new_time) #Clamp to not show below 0 on HUD
 	time_updated.emit(time_left)
 	
 	# Check if the time_left is 0, then switch match state to ENDED by calling end_match.
 	if time_left <= 0 and current_state != MatchState.ENDED:
+		# Stop timer variable node reference
+		if timer:
+			timer.stop()
+		# In multiplayer must wait for server to send 'Match Over' packet
 		if multiplayer.is_server():
-			end_match_rpc.rpc() # Server tells everyone to end
-		else:
-			end_match() # For singleplayer
+			end_match_rpc.rpc()
+		elif mode == MatchMode.SINGLEPLAYER:
+			end_match()
 
 func start_countdown() -> void:
 	set_state(MatchState.COUNTDOWN)
@@ -92,10 +132,9 @@ func start_match(match_duration: int) -> void:
 	set_state(MatchState.RUNNING)
 	
 	# check mode to see if need to start timer or not when countdown ends.
+	# Only server or single player should run timer logic
 	if mode == MatchMode.SINGLEPLAYER or multiplayer.is_server():
 		timer.start()
-
-# Note: Multiplayer mode distinction will be defined in a later task. For right now, only handling Singleplayer. 
 
 # New end_match function that will change the match state to ENDED wehen the timer runs out.
 func end_match() -> void:
@@ -112,6 +151,7 @@ func _on_game_timer_timeout() -> void:
 	
 	# In multiplayer make only the server calculate time to prevent drift
 	# Make clients ignore local clocks
+	# game.gd will call set_time() directly using server data
 	if mode == MatchMode.MULTIPLAYER and not multiplayer.is_server():
 		return
 		
@@ -123,7 +163,6 @@ func go_to_score_page() -> void:
 	# Ensure game isn't stuck in paused state
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://Scenes/Menu/score_page.tscn")
-	print("Redirecting to Score Page...")
 	
 # Quit logic
 func quit_to_main_menu() -> void:
