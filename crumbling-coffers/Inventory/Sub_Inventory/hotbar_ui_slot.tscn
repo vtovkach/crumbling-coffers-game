@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://br57nkietfbmg"]
 
-[ext_resource type="Texture2D" uid="uid://bbvxpootwjp8y" path="res://Assets/Items/PNG/inventoryPNG/inventory-slot.png" id="1_6o6lk"]
 [ext_resource type="Script" uid="uid://hlklgadcap2i" path="res://Inventory/Sub_Inventory/hotbar_ui_slot.gd" id="1_b4rwl"]
+[ext_resource type="Texture2D" uid="uid://cr6diny4tm8n5" path="res://Assets/Inventory/slots-image.png" id="2_b4rwl"]
 
 [node name="hotbar_ui_slot" type="Panel" unique_id=367499635]
 self_modulate = Color(1, 1, 1, 0)
-custom_minimum_size = Vector2(540, 525)
+custom_minimum_size = Vector2(520, 525)
 anchors_preset = -1
 anchor_left = 0.66400003
 anchor_top = 0.595
@@ -13,15 +13,15 @@ anchor_right = 0.66400003
 anchor_bottom = 0.595
 offset_left = -269.92804
 offset_top = -262.56003
-offset_right = 270.07196
+offset_right = 250.07196
 offset_bottom = 262.43997
 script = ExtResource("1_b4rwl")
 
 [node name="bg" type="Sprite2D" parent="." unique_id=1822380301]
 texture_filter = 1
 position = Vector2(270, 260)
-scale = Vector2(30, 30.062)
-texture = ExtResource("1_6o6lk")
+scale = Vector2(1.25, 1.253)
+texture = ExtResource("2_b4rwl")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=432120598]
 layout_mode = 1
@@ -45,9 +45,10 @@ layout_mode = 2
 [node name="amount" type="Label" parent="CenterContainer/Panel" unique_id=1192837822]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 0
-offset_left = -27.0
-offset_right = 206.0
-offset_bottom = 467.0
+offset_left = -48.0
+offset_top = 1.0
+offset_right = 185.0
+offset_bottom = 468.0
 theme_override_font_sizes/font_size = 160
 text = "99
 "

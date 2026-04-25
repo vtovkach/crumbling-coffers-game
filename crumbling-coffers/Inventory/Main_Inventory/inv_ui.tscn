@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://d1nf7qbl005j0"]
 
 [ext_resource type="Script" uid="uid://86yyc76nu6u" path="res://Inventory/Main_Inventory/inv_ui.gd" id="1_605em"]
-[ext_resource type="Texture2D" uid="uid://djlwj1qh76ay8" path="res://Assets/Items/PNG/inventoryPNG/inventory-background.png" id="2_actet"]
+[ext_resource type="Texture2D" uid="uid://b50cnxd11lvva" path="res://Assets/Inventory/backpack-inventory-image.png" id="2_e0t4p"]
 [ext_resource type="PackedScene" uid="uid://bpp28wunxcrj3" path="res://Inventory/Main_Inventory/inv_ui_slot.tscn" id="3_ltxgc"]
 
 [node name="Inv_UI" type="Control" unique_id=664736319]
@@ -21,29 +21,21 @@ grow_vertical = 2
 script = ExtResource("1_605em")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=368926509]
-self_modulate = Color(1, 1, 1, 0.7058824)
+self_modulate = Color(1, 1, 1, 0.9019608)
 texture_filter = 1
 custom_minimum_size = Vector2(2750, 1800)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 4
 anchor_top = 0.5
-anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -1375.0
-offset_top = -900.0
-offset_right = 1375.0
-offset_bottom = 900.0
-grow_horizontal = 2
+offset_top = -1669.5
+offset_right = 4966.0
+offset_bottom = 1669.5
 grow_vertical = 2
-texture = ExtResource("2_actet")
-patch_margin_left = 1
-patch_margin_top = 1
-patch_margin_right = 1
-patch_margin_bottom = 1
+texture = ExtResource("2_e0t4p")
 
 [node name="GridContainer" type="GridContainer" parent="NinePatchRect" unique_id=1748499754]
-self_modulate = Color(1, 1, 1, 0.5882353)
+self_modulate = Color(1, 1, 1, 0.3764706)
 custom_minimum_size = Vector2(2516, 1508)
 layout_mode = 1
 anchors_preset = 8

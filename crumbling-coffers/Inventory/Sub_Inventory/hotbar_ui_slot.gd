@@ -34,9 +34,9 @@ func update(hotbar_slot: HotbarSlot):
 # Update function that will change the visual from a normal slot png to the highlighted slot png..
 func update_active_slot_visual():
 	if slot_active: # if true
-		slot_visual.texture = preload("res://Assets/Items/PNG/inventoryPNG/inventory-slot-highlighted.png")
+		slot_visual.texture = preload("res://Assets/Inventory/slot-hightlighted-image.png")
 	else: # if not true, then not active, so switch texture to non-highlighted.
-		slot_visual.texture = preload("res://Assets/Items/PNG/inventoryPNG/inventory-slot.png")
+		slot_visual.texture = preload("res://Assets/Inventory/slots-image.png")
 
 # Set function to update the highlighted slot visuals.
 func set_active_slot(value: bool):
