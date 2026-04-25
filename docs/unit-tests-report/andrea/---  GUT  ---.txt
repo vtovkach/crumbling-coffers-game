@@ -1,0 +1,6 @@
+---  GUT  ---
+[INFO]:  using [C:/Users/garzo/AppData/Roaming/Godot/app_userdata/Crumbling-Coffers] for temporary output.
+Godot version:  4.6.0
+GUT version:  9.6.0
+[ERROR]:  Could not find script matching 'test_player_stops_at_wall.gd'.
+Check your directory settings and Script Prefix/Suffix settings.
