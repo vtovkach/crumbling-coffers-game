@@ -303,10 +303,14 @@ position = Vector2(900, -127)
 [node name="QuitConfirmation" type="ConfirmationDialog" parent="." unique_id=228908350]
 process_mode = 3
 oversampling_override = 1.0
-title = "Quit training?"
+title = "QUIT TRAINING?"
 position = Vector2i(0, 36)
-size = Vector2i(397, 100)
-dialog_text = "You'll be returned to the Main Menu"
+size = Vector2i(435, 108)
+ok_button_text = "YES"
+dialog_text = "YOU'LL RETURN TO THE MAIN MENU PAGE"
+dialog_hide_on_ok = false
+dialog_autowrap = true
+cancel_button_text = "NO"
 
 [node name="ItemSpawnManager" parent="." unique_id=899288004 instance=ExtResource("8_ntwnh")]
 common_items = Array[PackedScene]([ExtResource("4_ycfoj")])
@@ -314,6 +318,13 @@ rare_items = Array[PackedScene]([ExtResource("9_dvfde")])
 legendary_items = Array[PackedScene]([ExtResource("10_dvfde")])
 
 [node name="Items" type="Node2D" parent="." unique_id=233828747]
+
+[node name="ColorRect" type="ColorRect" parent="Items" unique_id=336368552]
+offset_left = -17012.0
+offset_top = -7923.0
+offset_right = 15413.0
+offset_bottom = 9891.0
+color = Color(0.2627356, 0.17973876, 0.121933244, 1)
 
 [node name="AreaToSpawn" parent="." unique_id=1591107580 instance=ExtResource("9_isx1w")]
 position = Vector2(881, 1056)
