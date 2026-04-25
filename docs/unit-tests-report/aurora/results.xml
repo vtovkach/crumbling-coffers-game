@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="GutTests" failures="0" tests="7" >
+  <testsuite name="Tests/test_boundaries.gd" tests="3" failures="0" skipped="0" time="0.000785" >
+      <testcase name="test_player_has_collision" assertions="2" status="pass" classname="Tests/test_boundaries.gd" time="0.000359" >
+      </testcase>
+      <testcase name="test_boundary_stops_player" assertions="2" status="pass" classname="Tests/test_boundaries.gd" time="0.000252" >
+      </testcase>
+      <testcase name="test_high_speed_boundary_glitch" assertions="2" status="pass" classname="Tests/test_boundaries.gd" time="0.000174" >
+      </testcase>
+  </testsuite>
+  <testsuite name="Tests/test_game_flow.gd" tests="4" failures="0" skipped="0" time="4.110383" >
+      <testcase name="test_timer_accuracy_start" assertions="2" status="pass" classname="Tests/test_game_flow.gd" time="0.000204" >
+      </testcase>
+      <testcase name="test_timer_decrement" assertions="1" status="pass" classname="Tests/test_game_flow.gd" time="0.000303" >
+      </testcase>
+      <testcase name="test_timer_boundary" assertions="2" status="pass" classname="Tests/test_game_flow.gd" time="0.000363" >
+      </testcase>
+      <testcase name="test_unpause_after_transition" assertions="3" status="pass" classname="Tests/test_game_flow.gd" time="4.109513" >
+      </testcase>
+  </testsuite>
+</testsuites>
