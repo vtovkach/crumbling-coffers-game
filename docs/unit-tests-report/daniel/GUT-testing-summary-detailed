@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="GutTests" failures="0" tests="7" >
+  <testsuite name="Tests/Unit/test_hotbar_item_system.gd" tests="3" failures="0" skipped="0" time="0.000888" >
+      <testcase name="test_hotbar_insert_adds_item_successfully" assertions="3" status="pass" classname="Tests/Unit/test_hotbar_item_system.gd" time="0.000336" >
+      </testcase>
+      <testcase name="test_hotbar_item_builds_use_request" assertions="8" status="pass" classname="Tests/Unit/test_hotbar_item_system.gd" time="0.000368" >
+      </testcase>
+      <testcase name="test_hotbar_use_consumes_item" assertions="3" status="pass" classname="Tests/Unit/test_hotbar_item_system.gd" time="0.000184" >
+      </testcase>
+  </testsuite>
+  <testsuite name="Tests/Unit/test_player_push.gd" tests="4" failures="0" skipped="0" time="0.024406" >
+      <testcase name="test_push_angle" assertions="2" status="pass" classname="Tests/Unit/test_player_push.gd" time="0.00672" >
+      </testcase>
+      <testcase name="test_push_adds_velocity" assertions="1" status="pass" classname="Tests/Unit/test_player_push.gd" time="0.010107" >
+      </testcase>
+      <testcase name="test_push_directionless" assertions="1" status="pass" classname="Tests/Unit/test_player_push.gd" time="0.004268" >
+      </testcase>
+      <testcase name="test_push_respects_max_speed" assertions="2" status="pass" classname="Tests/Unit/test_player_push.gd" time="0.003311" >
+      </testcase>
+  </testsuite>
+</testsuites>
