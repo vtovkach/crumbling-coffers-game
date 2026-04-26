@@ -40,11 +40,19 @@ var local_player:   UserPlayer
 var remote_players: Dictionary = {}  # player_id (String) -> RemotePlayer
 
 # ============================================================
+# ITEMS
+# ============================================================
+
+var item_manager: MultiplayerItemManager
+
+# ============================================================
 # LIFECYCLE
 # ============================================================
 
 func _ready() -> void:
-	game_status = GameStatus.NOT_READY
+	game_status  = GameStatus.NOT_READY
+	item_manager = MultiplayerItemManager.new()
+	add_child(item_manager)
 
 func _process(delta: float) -> void:
 	if game_status == GameStatus.NOT_READY:
@@ -90,8 +98,10 @@ func _sync_match_time() -> void:
 # ============================================================
 
 func init(local_player_id: String, p_game_id: String, port: int, udp_response: PacketizationManager.UDP_Response) -> void:
-	game_id     = p_game_id
-	game_port   = port
+	game_id              = p_game_id
+	game_port            = port
+	item_manager.game_id   = game_id
+	item_manager.game_port = game_port
 	game_status = GameStatus.PREMATCH
 	start_tick  = udp_response.start_tick
 	stop_tick   = udp_response.stop_tick
@@ -109,12 +119,18 @@ func init(local_player_id: String, p_game_id: String, port: int, udp_response: P
 			hud.bind_to_player(local_player)
 			hud.set_player_to_indicators(local_player)
 			local_player.set_physics_process(false)
+			local_player.item_picked_up.connect(func(id): item_manager.handle_player_pickup(local_player, id))
 		else:
 			print("game: REMOTE player_id=%s x=%.2f y=%.2f vx=0.00 vy=0.00" % [player_id, pos.x, pos.y])
 			var remote: RemotePlayer = RemotePlayerScene.instantiate()
 			remote.init(player_id, pos.x, pos.y)
 			add_child(remote)
 			remote_players[player_id] = remote
+
+	for instance_id in udp_response.items_init_positions:
+		var item: PacketizationManager.ItemInfo = udp_response.items_init_positions[instance_id]
+		print("game: ITEM   instance_id=%d type=%d x=%.2f y=%.2f" % [item.instance_id, item.item_type, item.pos_x, item.pos_y])
+		item_manager.spawn_item(item.pos_x, item.pos_y, item.item_type, item.instance_id)
 
 # ============================================================
 # NETWORK
@@ -123,15 +139,20 @@ func init(local_player_id: String, p_game_id: String, port: int, udp_response: P
 func _process_network(_delta: float) -> void:
 	var raw := NetworkManager.receive_udp()
 	while raw.size() > 0:
-		var response: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+		var response: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, game_id)
 
-		if response.status == PacketizationManager.UDPStatus.ERROR:
+		if response == null or response.status == PacketizationManager.UDPStatus.ERROR:
 			raw = NetworkManager.receive_udp()
 			continue
 
 		server_tick = response.server_cur_tick
 
 		if response.packet_type == PacketizationManager.UDPPacketType.SERVER_INIT:
+			raw = NetworkManager.receive_udp()
+			continue
+
+		if response.packet_type == PacketizationManager.UDPPacketType.SERVER_AUTH_ITEMS:
+			item_manager.update_active_items(response.items_auth)
 			raw = NetworkManager.receive_udp()
 			continue
 

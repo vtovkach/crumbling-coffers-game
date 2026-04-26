@@ -13,6 +13,13 @@ struct Player *create_player(uint8_t *player_id, uint8_t player_idx, FILE *log_f
     memcpy(player->player_id, player_id, PLAYER_ID_SIZE);
     player->player_idx = player_idx;
 
+    player->items = vec_create(ITEMS_PER_GAME_MAX, sizeof(struct Item));
+    if(!player->items)
+    {
+        free(player);
+        return NULL; 
+    }
+
     return player;
 }
 
@@ -25,12 +32,18 @@ void update_player(struct Player *player, const struct ClientRegularPacket *pkt)
     player->score = pkt->score;
 }
 
+int player_add_item(struct Player *player, struct Item *item)
+{
+    if(!player || !item) return -1;
+    return v_push_back(player->items, item);
+}
+
 void destroy_player(struct Player *player, FILE *log_file)
 {
     (void)log_file;
 
     if (!player) return;
 
-    free(player->items);
+    vec_destroy(player->items);
     free(player);
 }

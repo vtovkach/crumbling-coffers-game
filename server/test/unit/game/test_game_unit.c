@@ -177,13 +177,16 @@ int main(void)
         p1->pos_x = 2.0f; p1->vel_x = 0.6f; p1->score = 20;
         update_game_tick(g, 7);
 
-        uint8_t buf[UDP_DATAGRAM_SIZE];
+        uint8_t buf[UDP_DATAGRAM_MAX_SIZE];
         struct AuthPacket *ap = (struct AuthPacket *)buf;
-        form_auth_packet(g, 100, 200, ap);
+        size_t auth_size = form_auth_packet(g, 100, 200, ap);
 
+        uint16_t expected_auth_payload = sizeof(uint32_t) * 2 + sizeof(uint8_t)
+                                         + 2 * sizeof(struct AuthPlayerRecord);
         CHECK(memcmp(ap->header.game_id, gid, GAME_ID_SIZE) == 0,           "form_auth_packet sets game_id");
         CHECK(ap->header.control == CTRL_FLAG_AUTH,                          "form_auth_packet sets control flag");
-        CHECK(ap->header.payload_size == UDP_DATAGRAM_PAYLOAD_SIZE,          "form_auth_packet sets payload_size");
+        CHECK(ap->header.payload_size == expected_auth_payload,              "form_auth_packet sets payload_size");
+        CHECK(auth_size == UDP_DATAGRAM_HEADER_SIZE + expected_auth_payload, "form_auth_packet returns correct total size");
         CHECK(ap->header.seq_num == 7,                                       "form_auth_packet sets seq_num from game_tick");
         CHECK(ap->start_tick == 100,                                         "form_auth_packet sets start_tick");
         CHECK(ap->stop_tick  == 200,                                         "form_auth_packet sets stop_tick");
@@ -221,23 +224,29 @@ int main(void)
         p1->pos_x = 5.0f; p1->pos_y = 6.0f;
         update_game_tick(g, 3);
 
-        uint8_t buf[UDP_DATAGRAM_SIZE];
+        uint8_t buf[UDP_DATAGRAM_MAX_SIZE];
         struct InitPacket *ip = (struct InitPacket *)buf;
-        form_init_packet(g, 50, 150, ip);
+        size_t init_size = form_init_packet(g, 50, 150, ip);
 
+        uint16_t expected_init_payload = sizeof(uint32_t) * 2 + sizeof(uint8_t)
+                                         + sizeof(uint16_t)
+                                         + 2 * sizeof(struct InitPlayerRecord);
         CHECK(memcmp(ip->header.game_id, gid, GAME_ID_SIZE) == 0,         "form_init_packet sets game_id");
         CHECK(ip->header.control == CTRL_FLAG_INIT,                        "form_init_packet sets control flag");
-        CHECK(ip->header.payload_size == UDP_DATAGRAM_PAYLOAD_SIZE,        "form_init_packet sets payload_size");
+        CHECK(ip->header.payload_size == expected_init_payload,            "form_init_packet sets payload_size");
+        CHECK(init_size == UDP_DATAGRAM_HEADER_SIZE + expected_init_payload, "form_init_packet returns correct total size");
         CHECK(ip->header.seq_num == 3,                                     "form_init_packet sets seq_num from game_tick");
         CHECK(ip->start_tick == 50,                                        "form_init_packet sets start_tick");
         CHECK(ip->stop_tick  == 150,                                       "form_init_packet sets stop_tick");
         CHECK(ip->n == 2,                                                  "form_init_packet sets player count");
-        CHECK(memcmp(ip->players[0].player_id, id0, PLAYER_ID_SIZE) == 0, "form_init_packet sets player[0] id");
-        CHECK(ip->players[0].x == 3.0f,                                    "form_init_packet sets player[0] x");
-        CHECK(ip->players[0].y == 4.0f,                                    "form_init_packet sets player[0] y");
-        CHECK(memcmp(ip->players[1].player_id, id1, PLAYER_ID_SIZE) == 0, "form_init_packet sets player[1] id");
-        CHECK(ip->players[1].x == 5.0f,                                    "form_init_packet sets player[1] x");
-        CHECK(ip->players[1].y == 6.0f,                                    "form_init_packet sets player[1] y");
+        CHECK(ip->n_items == 0,                                            "form_init_packet sets n_items");
+        struct InitPlayerRecord *players = (struct InitPlayerRecord *)ip->body;
+        CHECK(memcmp(players[0].player_id, id0, PLAYER_ID_SIZE) == 0,     "form_init_packet sets player[0] id");
+        CHECK(players[0].x == 3.0f,                                        "form_init_packet sets player[0] x");
+        CHECK(players[0].y == 4.0f,                                        "form_init_packet sets player[0] y");
+        CHECK(memcmp(players[1].player_id, id1, PLAYER_ID_SIZE) == 0,     "form_init_packet sets player[1] id");
+        CHECK(players[1].x == 5.0f,                                        "form_init_packet sets player[1] x");
+        CHECK(players[1].y == 6.0f,                                        "form_init_packet sets player[1] y");
 
         destroy_player(p0, NULL);
         destroy_player(p1, NULL);

@@ -155,9 +155,10 @@ void *run_net_t(void *t_args)
 
     FILE *log_file = ((struct NetArgs *) t_args)->log_file;
 
-    // Shared stuctures 
-    struct PostOffice *post_office = ((struct NetArgs *) t_args)->post_office;
-    struct Herald *herald = ((struct NetArgs *) t_args)->herald;
+    // Shared stuctures
+    struct PostOffice *post_office  = ((struct NetArgs *) t_args)->post_office;
+    struct Herald     *herald       = ((struct NetArgs *) t_args)->herald;
+    struct Herald     *items_herald = ((struct NetArgs *) t_args)->items_herald;
 
     atomic_bool *game_stop = ((struct NetArgs *) t_args)->game_stop_flag;
     atomic_bool *net_stop = ((struct NetArgs *) t_args)->net_stop_flag;
@@ -201,21 +202,15 @@ void *run_net_t(void *t_args)
 
     while(!atomic_load(game_stop) && !atomic_load(net_stop))
     {   
-        // Check Herald 
-        uint8_t server_packet[UDP_DATAGRAM_SIZE];
-        if(herald_read(herald, server_packet, UDP_DATAGRAM_SIZE) == 0)
-        {
-            // Broadcast packet to all clients
-            net_broadcast_state(
-                log_file, 
-                udp_fd, 
-                players_reg, 
-                players_num, 
-                players_ids, 
-                server_packet, 
-                UDP_DATAGRAM_SIZE
-            );
-        }
+        uint8_t server_packet[UDP_DATAGRAM_MAX_SIZE];
+
+        int bytes = herald_read(herald, server_packet, UDP_DATAGRAM_MAX_SIZE);
+        if(bytes > 0)
+            net_broadcast_state(log_file, udp_fd, players_reg, players_num, players_ids, server_packet, bytes);
+
+        int items_bytes = herald_read(items_herald, server_packet, UDP_DATAGRAM_MAX_SIZE);
+        if(items_bytes > 0)
+            net_broadcast_state(log_file, udp_fd, players_reg, players_num, players_ids, server_packet, items_bytes);
 
         int e_ret = epoll_wait(
             efd, 

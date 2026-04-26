@@ -39,6 +39,8 @@ func _make_server_init_raw(start_tick: int, stop_tick: int,
 	var raw := PackedByteArray()
 	raw.resize(PacketizationManager.PACKET_SIZE)
 	raw.fill(0)
+	for i in range(16):
+		raw[PacketizationManager.UDP_HDR_GAME_ID_OFFSET + i] = GAME_ID.substr(i * 2, 2).hex_to_int()
 	raw[PacketizationManager.UDP_HDR_CTRL_OFFSET    ] = PacketizationManager.UDP_CTRL_SERVER_INIT & 0xFF
 	raw[PacketizationManager.UDP_HDR_CTRL_OFFSET + 1] = (PacketizationManager.UDP_CTRL_SERVER_INIT >> 8) & 0xFF
 	raw[PacketizationManager.UDP_HDR_SEQ_NUM_OFFSET] = 42
@@ -67,6 +69,8 @@ func _make_server_auth_raw(seq_num: int, players: Array, start_tick: int = 0, st
 	var raw := PackedByteArray()
 	raw.resize(PacketizationManager.PACKET_SIZE)
 	raw.fill(0)
+	for i in range(16):
+		raw[PacketizationManager.UDP_HDR_GAME_ID_OFFSET + i] = GAME_ID.substr(i * 2, 2).hex_to_int()
 	raw[PacketizationManager.UDP_HDR_CTRL_OFFSET    ] = PacketizationManager.UDP_CTRL_SERVER_AUTH & 0xFF
 	raw[PacketizationManager.UDP_HDR_CTRL_OFFSET + 1] = (PacketizationManager.UDP_CTRL_SERVER_AUTH >> 8) & 0xFF
 	raw[PacketizationManager.UDP_HDR_SEQ_NUM_OFFSET    ] =  seq_num        & 0xFF
@@ -211,7 +215,7 @@ func test_wrong_size_returns_error_status() -> void:
 	var raw := PackedByteArray()
 	raw.resize(PacketizationManager.PACKET_SIZE - 1)
 	raw.fill(0)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.status, PacketizationManager.UDPStatus.ERROR,
 		"A packet of wrong size must yield ERROR status")
 
@@ -222,8 +226,10 @@ func test_unknown_ctrl_returns_error_status() -> void:
 	var raw := PackedByteArray()
 	raw.resize(PacketizationManager.PACKET_SIZE)
 	raw.fill(0)
+	for i in range(16):
+		raw[PacketizationManager.UDP_HDR_GAME_ID_OFFSET + i] = GAME_ID.substr(i * 2, 2).hex_to_int()
 	raw[PacketizationManager.UDP_HDR_CTRL_OFFSET] = 0x01
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.status, PacketizationManager.UDPStatus.ERROR,
 		"An unrecognised ctrl field must yield ERROR status")
 
@@ -232,29 +238,29 @@ func test_unknown_ctrl_returns_error_status() -> void:
 
 func test_server_init_packet_type() -> void:
 	var raw := _make_server_init_raw(100, 200, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.packet_type, PacketizationManager.UDPPacketType.SERVER_INIT,
 		"packet_type must be SERVER_INIT")
 
 func test_server_init_status_is_normal() -> void:
 	var raw := _make_server_init_raw(100, 200, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.status, PacketizationManager.UDPStatus.NORMAL,
 		"Valid SERVER_INIT must have NORMAL status")
 
 func test_server_init_server_cur_tick() -> void:
 	var raw := _make_server_init_raw(100, 200, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.server_cur_tick, 42, "server_cur_tick must equal seq_num from header")
 
 func test_server_init_start_tick() -> void:
 	var raw := _make_server_init_raw(100, 200, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.start_tick, 100, "start_tick must be decoded correctly")
 
 func test_server_init_stop_tick() -> void:
 	var raw := _make_server_init_raw(100, 200, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.stop_tick, 200, "stop_tick must be decoded correctly")
 
 func test_server_init_num_players() -> void:
@@ -263,20 +269,20 @@ func test_server_init_num_players() -> void:
 		{id = PLAYER_ID, x = -5, y = 30},
 	]
 	var raw := _make_server_init_raw(1, 2, players)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.num_players, 2, "num_players must match encoded count")
 
 func test_server_init_player_positions_populated() -> void:
 	var players := [{id = GAME_ID, x = 77, y = -33}]
 	var raw := _make_server_init_raw(1, 2, players)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_true(resp.player_init_positions.has(GAME_ID),
 		"player_init_positions must contain entry for the encoded player id")
 
 func test_server_init_player_position_values() -> void:
 	var players := [{id = GAME_ID, x = 77, y = -33}]
 	var raw := _make_server_init_raw(1, 2, players)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	var pos: PacketizationManager.PlayerInitPos = resp.player_init_positions[GAME_ID]
 	assert_eq(pos.x, 77.0,  "PlayerInitPos.x must decode correctly")
 	assert_eq(pos.y, -33.0, "PlayerInitPos.y must decode correctly (negative)")
@@ -286,19 +292,19 @@ func test_server_init_player_position_values() -> void:
 
 func test_server_auth_packet_type() -> void:
 	var raw := _make_server_auth_raw(500, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.packet_type, PacketizationManager.UDPPacketType.SERVER_AUTH,
 		"packet_type must be SERVER_AUTH")
 
 func test_server_auth_status_is_normal() -> void:
 	var raw := _make_server_auth_raw(500, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.status, PacketizationManager.UDPStatus.NORMAL,
 		"Valid SERVER_AUTH must have NORMAL status")
 
 func test_server_auth_server_cur_tick() -> void:
 	var raw := _make_server_auth_raw(500, [])
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.server_cur_tick, 500, "server_cur_tick must equal seq_num from header")
 
 func test_server_auth_num_players() -> void:
@@ -307,14 +313,14 @@ func test_server_auth_num_players() -> void:
 		{id = PLAYER_ID, pos_x = 6, pos_y = 7, vel_x = 8, vel_y = 9, score = 10},
 	]
 	var raw := _make_server_auth_raw(1, players)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.num_players, 2, "num_players must match encoded count")
 
 func test_server_auth_players_populated() -> void:
 	var players := [{id = GAME_ID, pos_x = 10, pos_y = 20,
 					 vel_x = -1, vel_y = -2, score = 99}]
 	var raw := _make_server_auth_raw(1, players)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_true(resp.players.has(GAME_ID),
 		"players dict must contain entry for the encoded player id")
 
@@ -322,7 +328,7 @@ func test_server_auth_player_info_values() -> void:
 	var players := [{id = GAME_ID, pos_x = 10, pos_y = 20,
 					 vel_x = -1, vel_y = -2, score = 99}]
 	var raw := _make_server_auth_raw(1, players)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	var info: PacketizationManager.PlayerInfo = resp.players[GAME_ID]
 	assert_eq(info.pos_x,  10.0, "PlayerInfo.pos_x must decode correctly")
 	assert_eq(info.pos_y,  20.0, "PlayerInfo.pos_y must decode correctly")
@@ -332,10 +338,10 @@ func test_server_auth_player_info_values() -> void:
 
 func test_server_auth_start_tick() -> void:
 	var raw := _make_server_auth_raw(1, [], 100, 200)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.start_tick, 100, "start_tick must decode correctly from SERVER_AUTH")
 
 func test_server_auth_stop_tick() -> void:
 	var raw := _make_server_auth_raw(1, [], 100, 200)
-	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
+	var resp: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, GAME_ID)
 	assert_eq(resp.stop_tick, 200, "stop_tick must decode correctly from SERVER_AUTH")

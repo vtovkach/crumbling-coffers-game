@@ -11,6 +11,8 @@
 #define CTRL_FLAG_ACK           (1 << 2)  
 #define CTRL_FLAG_AUTH          (1 << 3)
 
+#define CTRL_FLAG_ITEMS_AUTH    (1 << 4)
+
 #define CTRL_FLAG_HIT_EVENT     (1 << 10)
 #define CTRL_FLAG_PICK_EVENT    (1 << 11)
 
@@ -68,6 +70,13 @@ struct __attribute__((packed)) ClientRegularPacket
     uint32_t      score;
 };
 
+struct __attribute__((packed)) ClientPickUpPacket
+{
+    struct Header header;
+    uint16_t item_id;
+    uint8_t item_type;
+};
+
 /* ── Server → Client ──────────────────────────────────────────────────────── */
 
 struct __attribute__((packed)) AuthPlayerRecord
@@ -87,6 +96,14 @@ struct __attribute__((packed)) InitPlayerRecord
     float   y;
 };
 
+struct __attribute__((packed)) ItemEntry
+{
+    uint16_t item_id;
+    float    pos_x;
+    float    pos_y;
+    uint8_t  item_type;
+};
+
 struct __attribute__((packed)) AuthPacket
 {
     struct Header           header;
@@ -96,13 +113,22 @@ struct __attribute__((packed)) AuthPacket
     struct AuthPlayerRecord players[];
 };
 
+struct __attribute__((packed)) ItemsAuthPacket
+{
+    struct Header    header;
+    uint16_t         n_items;
+    struct ItemEntry items[];
+};
+
 struct __attribute__((packed)) InitPacket
 {
-    struct Header           header;
-    uint32_t                start_tick;
-    uint32_t                stop_tick;
-    uint8_t                 n;
-    struct InitPlayerRecord players[];
+    struct Header header;
+    uint32_t      start_tick;
+    uint32_t      stop_tick;
+    uint8_t       n;
+    uint16_t      n_items;
+    // body holds n InitPlayerRecord entries followed by n_items ItemEntry entries
+    uint8_t       body[];
 };
 
 #endif

@@ -14,6 +14,7 @@ class_name UserPlayer
 #Daniel - adding a score to the character for when they pick up the items.
 
 signal score_changed(new_score: int)
+signal item_picked_up(item_instance_id: int)
 
 var score: int = 0
 
@@ -96,6 +97,9 @@ func use_hotbar_item(index: int) -> bool:
 	return hotbar.use_item(index, get_tree(), self)
 	
 func receive_pickup(pickup: ItemPickup) -> bool:
+	if pickup.has_meta("item_instance_id"):
+		emit_signal("item_picked_up", pickup.get_meta("item_instance_id"))
+		return true
 	return pickup.apply_to_player(self)
 # Implementing call reset functions for inventory and hotbar when a match ends.
 func reset_inv_hotbar():

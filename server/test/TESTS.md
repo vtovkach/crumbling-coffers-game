@@ -71,3 +71,19 @@ Tests `game.c` and `player.c` without a running server or map file. Constructs `
 | Command | Description |
 |---|---|
 | `make test-game-unit` | Builds and runs the game unit test |
+
+### Game Create
+
+Tests `create_game` end-to-end with the real map file. Must be run from `server/` so the map file path resolves correctly. Verifies:
+
+- `create_game` returns non-NULL
+- Items hashtable is initialized
+- At least one item is generated
+- Item count does not exceed `MAX_ITEMS`
+- Every item has a valid type (common, rare, or legendary)
+
+Also prints a formatted table of every generated item (ID, type, X, Y) for visual inspection.
+
+| Command | Description |
+|---|---|
+| `make test-game-create` | Builds and runs the game create unit test |

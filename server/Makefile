@@ -38,8 +38,17 @@ TEST_GAME_UNIT_BIN  := bin/test_game_unit
 TEST_GAME_UNIT_OBJS := test/unit/game/obj/test_game_unit.o \
                        game/obj/game.o \
                        game/obj/player.o \
+                       common/obj/hashmap.o \
                        common/obj/log_system.o \
                        common/obj/util.o
+
+TEST_GAME_CREATE_BIN  := bin/test_game_create
+TEST_GAME_CREATE_OBJS := test/unit/game_create/obj/test_game_create.o \
+                         game/obj/game.o \
+                         game/obj/player.o \
+                         common/obj/hashmap.o \
+                         common/obj/log_system.o \
+                         common/obj/util.o
 
 all: common supervisor game link link-game
 
@@ -82,6 +91,9 @@ test-build-game:
 test-build-game-unit:
 	$(MAKE) -C test/unit/game
 
+test-build-game-create:
+	$(MAKE) -C test/unit/game_create
+
 link-test: link-test-orchestrator link-test-matchmaker link-test-port-reaper link-test-game
 
 link-test-orchestrator: test-build-orchestrator
@@ -108,6 +120,10 @@ link-test-game: test-build-game
 link-test-game-unit: test-build-game-unit
 	mkdir -p bin
 	$(CC) $(CFLAGS) $(TEST_GAME_UNIT_OBJS) -o $(TEST_GAME_UNIT_BIN)
+
+link-test-game-create: test-build-game-create
+	mkdir -p bin
+	$(CC) $(CFLAGS) $(TEST_GAME_CREATE_OBJS) -o $(TEST_GAME_CREATE_BIN)
 
 test-orchestrator: test
 	@FIFO=$$(mktemp -u /tmp/sv_stdin_XXXXXX); \
@@ -145,15 +161,19 @@ test-matchmaker-remote: link-test-matchmaker
 test-matchmaking-queue-remote: link-test-matchmaking-queue
 	@./$(TEST_MATCHMAKING_QUEUE_BIN)
 
-test-unit: all test-build-port-reaper link-test-port-reaper test-build-game-unit link-test-game-unit
+test-unit: all test-build-port-reaper link-test-port-reaper test-build-game-unit link-test-game-unit test-build-game-create link-test-game-create
 	@./$(TEST_PORT_REAPER_BIN)
 	@./$(TEST_GAME_UNIT_BIN)
+	@./$(TEST_GAME_CREATE_BIN)
 
 test-port-reaper: all test-build-port-reaper link-test-port-reaper
 	@./$(TEST_PORT_REAPER_BIN)
 
 test-game-unit: all test-build-game-unit link-test-game-unit
 	@./$(TEST_GAME_UNIT_BIN)
+
+test-game-create: all test-build-game-create link-test-game-create
+	@./$(TEST_GAME_CREATE_BIN)
 
 test-game: all test-build-game link-test-game
 	@./$(TEST_GAME_BIN)
@@ -167,8 +187,10 @@ clean:
 	$(MAKE) -C test/integration/game clean
 	$(MAKE) -C test/unit/port_reaper clean
 	$(MAKE) -C test/unit/game clean
+	$(MAKE) -C test/unit/game_create clean
 	rm -f $(TEST_PORT_REAPER_BIN)
 	rm -f $(TEST_GAME_UNIT_BIN)
+	rm -f $(TEST_GAME_CREATE_BIN)
 	rm -rf bin
 
 .PHONY: all common supervisor game link link-game run test \
@@ -180,4 +202,5 @@ clean:
         test-unit test-port-reaper test-game-unit \
         test-game test-build-game link-test-game \
         test-build-game-unit link-test-game-unit \
+        test-game-create test-build-game-create link-test-game-create \
         clean

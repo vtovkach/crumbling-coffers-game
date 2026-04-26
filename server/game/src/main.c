@@ -93,6 +93,7 @@ int main(int argc, char *argv[])
     uint8_t *player_ids = NULL;
     struct PostOffice *po = NULL;
     struct Herald *herald = NULL;
+    struct Herald *items_herald = NULL;
 
     struct GameArgs *game_t_args = NULL;
     struct NetArgs *net_t_args = NULL;
@@ -136,7 +137,11 @@ int main(int argc, char *argv[])
 
     herald = herald_init();
     if(!herald)
-        goto failure; 
+        goto failure;
+
+    items_herald = herald_init();
+    if(!items_herald)
+        goto failure;
 
     game_t_args = malloc(sizeof(*game_t_args));
     net_t_args = malloc(sizeof(*net_t_args));
@@ -148,6 +153,7 @@ int main(int argc, char *argv[])
     game_t_args->players_ids = player_ids;
     game_t_args->post_office = po;
     game_t_args->herald = herald;
+    game_t_args->items_herald = items_herald;
     game_t_args->players_num = players_num;
     game_t_args->game_stop_flag = &game_stop;
     game_t_args->net_stop_flag = &net_stop;
@@ -159,6 +165,7 @@ int main(int argc, char *argv[])
     net_t_args->port = port;
     net_t_args->post_office = po;
     net_t_args->herald = herald;
+    net_t_args->items_herald = items_herald;
     net_t_args->players_num = players_num;
     net_t_args->game_stop_flag = &game_stop;
     net_t_args->net_stop_flag = &net_stop;
@@ -183,6 +190,7 @@ int main(int argc, char *argv[])
 failure:
     post_office_destroy(po);
     herald_destroy(herald);
+    herald_destroy(items_herald);
     free(player_ids);
     free(game_t_args);
     free(net_t_args);

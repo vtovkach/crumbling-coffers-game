@@ -11,8 +11,9 @@ struct GameArgs
     uint8_t *game_id;
     uint8_t *players_ids; 
 
-    struct PostOffice *post_office; 
+    struct PostOffice *post_office;
     struct Herald *herald;
+    struct Herald *items_herald;
 
     size_t players_num;
 

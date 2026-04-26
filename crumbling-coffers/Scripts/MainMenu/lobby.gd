@@ -3,6 +3,7 @@ extends Control
 var elapsed_time: int = 0
 var searching: bool = false
 var _loading_game: bool = false
+var _pending_main_menu: bool = false
 var _pending_tcp_response: PacketizationManager.TCP_Response
 
 @onready var hover_search_style = preload("res://Styles/lobby_menu/hover_search_style.tres")
@@ -12,6 +13,7 @@ var _pending_tcp_response: PacketizationManager.TCP_Response
 @onready var pressed_cancel_style = preload("res://Styles/lobby_menu/pressed_cancel_style.tres")
 
 @onready var search_cancel_button = $CenterContainer/MarginContainer2/VBoxContainer/find_match_button
+@onready var main_menu_button = $CenterContainer/MarginContainer2/VBoxContainer/main_menu_button
 @onready var search_panel = $MarginContainer1/SearchPanelContainer
 @onready var timer_label = $MarginContainer1/SearchPanelContainer/SearchTimerLabel
 @onready var search_timer = $SearchTimer
@@ -49,8 +51,9 @@ func _handle_tcp_response(raw: PackedByteArray) -> void:
 		_on_game_found(response)
 
 func _handle_udp_loading(raw: PackedByteArray) -> void:
-	var response: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw)
-	if response.status == PacketizationManager.UDPStatus.ERROR:
+	var response: PacketizationManager.UDP_Response = PacketizationManager.interpret_udp_packet(raw, _pending_tcp_response.game_id)
+	if response == null or response.status == PacketizationManager.UDPStatus.ERROR:
+		print("interpret_udp_packet failed")
 		return
 	if response.packet_type == PacketizationManager.UDPPacketType.SERVER_INIT:
 		print("lobby: SERVER_INIT received, launching game")
@@ -59,9 +62,12 @@ func _handle_udp_loading(raw: PackedByteArray) -> void:
 func _on_game_not_found() -> void:
 	print("lobby: game not found, stopping search")
 	_reset_search_ui()
+	if _pending_main_menu:
+		get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
 
 func _on_game_found(response: PacketizationManager.TCP_Response) -> void:
 	print("lobby: game found!")
+	_pending_main_menu = false
 	searching = false
 	search_timer.stop()
 	elapsed_time = 0
@@ -102,11 +108,17 @@ func _on_find_match_button_pressed() -> void:
 	else:
 		start_search()
 
-func _on_cancel_button_pressed() -> void:
-	stop_search()
-
 func _on_back_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
+	if not searching:
+		get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
+		return
+	stop_search()
+	if not searching:
+		# stop_search failed and already reset UI, navigate immediately
+		get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
+		return
+	_pending_main_menu = true
+	main_menu_button.disabled = true
 
 # ========== SEARCH CONTROL ===========
 func start_search() -> void:
@@ -123,8 +135,10 @@ func stop_search() -> void:
 	var stop_packet: PackedByteArray = PacketizationManager.form_tcp_packet(PacketizationManager.TYPE_STOP_SEARCH, 0)
 	if NetworkManager.send_tcp(stop_packet) != 0:
 		push_error("lobby: failed to send STOP_SEARCH request")
+		_reset_search_ui()
 		return
 	print("lobby: STOP_SEARCH request sent")
+	search_cancel_button.disabled = true
 
 func _start_search_ui() -> void:
 	searching = true
@@ -141,6 +155,8 @@ func _start_loading_ui() -> void:
 	search_panel.visible = true
 	timer_label.visible = true
 	timer_label.text = "Game is loading..."
+	search_cancel_button.disabled = true
+	main_menu_button.disabled = true
 
 func _reset_search_ui() -> void:
 	searching = false
@@ -149,6 +165,7 @@ func _reset_search_ui() -> void:
 	search_panel.visible = false
 	timer_label.visible = false
 	timer_label.text = "00:00"
+	search_cancel_button.disabled = false
 	search_cancel_button.text = "Find Match"
 	search_cancel_button.add_theme_stylebox_override("hover", hover_search_style)
 	search_cancel_button.add_theme_stylebox_override("pressed", pressed_search_style)

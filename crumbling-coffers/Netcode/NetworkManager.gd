@@ -11,6 +11,7 @@ class UDPPacket:
 const FramerTCP = preload("res://Netcode/tcp_framer.gd")
 
 const PACKET_SIZE: int = 200
+const UDP_MAX_PACKET_SIZE: int = 3500
 const TCP_CONNECT_TIMEOUT_MS: int = 5000
 const THREAD_TICK_MS: int = 1
 const RECONNECT_INTERVAL_MS: int = 400
@@ -120,12 +121,14 @@ func _thread_main() -> void:
 			var packet := _udp.get_packet()
 			if _udp.get_packet_error() != OK:
 				continue
-			if packet.size() != PACKET_SIZE:
-				push_error("NetworkManager: Dropping UDP packet with wrong size: %d" % packet.size())
+			if packet.size() > UDP_MAX_PACKET_SIZE:
+				push_error("NetworkManager: Dropping oversized UDP packet: %d bytes" % packet.size())
 				continue
 			var ctrl := _decode_u16_le(packet, UDP_HDR_CTRL_OFFSET)
 			if ctrl & UDP_CTRL_ACK:
 				var seq := _decode_u32_le(packet, UDP_HDR_SEQ_NUM_OFFSET)
+				print("ack seq num received: ")
+				print(seq)
 				_sent_reliable_packets.erase(seq)
 				continue
 			_mutex_in_udp.lock()

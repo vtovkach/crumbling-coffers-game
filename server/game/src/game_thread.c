@@ -18,10 +18,11 @@
 #include "herald.h"
 #include "packet.h"
 
-#define TICK_RATE_MS              16
-#define CONNECTION_DEADLINE_TICKS 1875   /* 30 s  — max wait for all players to connect */
-#define GAME_INIT_TICKS           312    /* 5 s   — lobby/countdown before game starts  */
-#define GAME_DURATION_TICKS       2500   /* 2 min — total game duration (7200ticks)     */
+#define TICK_RATE_MS                16
+#define CONNECTION_DEADLINE_TICKS   1875 /* 30 s  — max wait for all players to connect */
+#define GAME_INIT_TICKS             312  /* 5 s   — lobby/countdown before game starts  */
+#define GAME_DURATION               GAME_DURATION_TICKS /* 2 min — total game duration (7200ticks)     */
+#define ITEMS_AUTH_RATE             2    /* ITEMS_AUTH_PACKET is sent every 20 server ticks */
 
 static void sleep_ms(long ms)
 {
@@ -135,6 +136,7 @@ static void run_game_loop(FILE *log_file,
                           struct Game *game,
                           struct PostOffice *post_office,
                           struct Herald *herald,
+                          struct Herald *items_herald,
                           atomic_bool *game_stop,
                           atomic_bool *net_stop,
                           size_t players_num,
@@ -157,6 +159,32 @@ static void run_game_loop(FILE *log_file,
 
         if(game->status == STARTED)
         {
+            // Process Reliable Packets 
+            uint8_t raw[UDP_DATAGRAM_SIZE];
+            for(;;)
+            {
+                int rc = post_office_mail_drop_pop(post_office, raw, UDP_DATAGRAM_SIZE);
+                if(rc == -1) // No more packets 
+                    break; 
+
+                struct Packet *pck = (struct Packet *)raw;
+
+                if(pck->header.control & CTRL_FLAG_PICK_EVENT)
+                {
+                    player_item_pickup(game, pck);
+
+                    // Will be removed later it is just for testing purposes here 
+                    printf("Processed Item Pickup by player: ");
+                    for(size_t i = 0; i < PLAYER_ID_SIZE; i++)
+                    {
+                        printf("%02X", pck->header.player_id[i]);
+                    }
+                    printf("\n");
+                }
+                else
+                    printf("\nDrop Reliable Packet\n");
+            }
+
             for(size_t i = 0; i < players_num; i++)
             {
                 uint8_t udp_packet[UDP_DATAGRAM_SIZE];
@@ -166,14 +194,24 @@ static void run_game_loop(FILE *log_file,
             }
         }
 
-        struct Packet pkt = {0};
+        uint8_t pkt[UDP_DATAGRAM_MAX_SIZE] = {0};
+        size_t pkt_size = 0;
 
         if(game->status == INIT)
-            form_init_packet(game, start_tick, stop_tick, (struct InitPacket *)&pkt);
+            pkt_size = form_init_packet(game, start_tick, stop_tick, (struct InitPacket *)pkt);
         else if(game->status == STARTED)
-            form_auth_packet(game, start_tick, stop_tick, (struct AuthPacket *)&pkt);
+            pkt_size = form_auth_packet(game, start_tick, stop_tick, (struct AuthPacket *)pkt);
 
-        herald_write(herald, &pkt, UDP_DATAGRAM_SIZE);
+        if(pkt_size > 0)
+            herald_write(herald, pkt, pkt_size);
+
+        if(game->status == STARTED && *server_tick % ITEMS_AUTH_RATE == 0)
+        {
+            uint8_t items_pkt[UDP_DATAGRAM_MAX_SIZE] = {0};
+            size_t items_pkt_size = form_item_auth_packet(game, (struct ItemsAuthPacket *)items_pkt);
+            if(items_pkt_size > 0)
+                herald_write(items_herald, items_pkt, items_pkt_size);
+        }
 
         (*server_tick)++;
         sleep_ms(TICK_RATE_MS);
@@ -188,8 +226,9 @@ void *run_game_t(void *t_args)
     uint8_t *players_ids  = ((struct GameArgs *)t_args)->players_ids;
     size_t   players_num  = ((struct GameArgs *)t_args)->players_num;
 
-    struct PostOffice *post_office = ((struct GameArgs *)t_args)->post_office;
-    struct Herald     *herald      = ((struct GameArgs *)t_args)->herald;
+    struct PostOffice *post_office  = ((struct GameArgs *)t_args)->post_office;
+    struct Herald     *herald       = ((struct GameArgs *)t_args)->herald;
+    struct Herald     *items_herald = ((struct GameArgs *)t_args)->items_herald;
 
     atomic_bool *game_stop = ((struct GameArgs *)t_args)->game_stop_flag;
     atomic_bool *net_stop  = ((struct GameArgs *)t_args)->net_stop_flag;
@@ -210,7 +249,7 @@ void *run_game_t(void *t_args)
 
     if(!rs) goto cleanup;
     
-    run_game_loop(log_file, game, post_office, herald, game_stop, net_stop,
+    run_game_loop(log_file, game, post_office, herald, items_herald, game_stop, net_stop,
                   players_num, &server_tick, start_tick, stop_tick);
 
 cleanup:

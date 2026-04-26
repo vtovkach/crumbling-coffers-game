@@ -1,6 +1,7 @@
 extends Node
 
 const PACKET_SIZE: int = 200
+const PACKET_MAX_SIZE: int = 3500
 
 # Outbound request type identifiers (bytes [0:3] of client→server TCP packets)
 const TYPE_SEARCH_GAME: int = 0
@@ -14,8 +15,10 @@ const TYPE_GAME_NOT_FOUND: int = 3
 const UDP_CTRL_REGULAR:     int = 0x0000  # client regular packet  — all bits clear
 const UDP_CTRL_INIT:        int = 0x0003  # client INIT packet     — bits 0 and 1 set
 const UDP_CTRL_SERVER_INIT: int = 0x0002  # server SERVER_INIT     — bit 1 only
+const UDP_CTRL_ITEMS_SERVER_AUTH: int = 0x0010 # server ITEM_AUTH  — bit 4 only
 const UDP_CTRL_SERVER_AUTH: int = 0x0008  # server SERVER_AUTH     — bit 3 only
 const UDP_CTRL_ACK:         int = 0x0004  # ACK packet             — bit 2 only
+const UDP_CTRL_PICKUP:      int = 0x0801  # pickup — RELIABLE (bit 0) + PICK_EVENT (bit 11)
 
 # UDP header layout (offsets in bytes)
 const UDP_HDR_GAME_ID_OFFSET:      int = 0   # 16 bytes
@@ -26,13 +29,14 @@ const UDP_HDR_SEQ_NUM_OFFSET:      int = 36  # 4 bytes (uint32)
 const UDP_HDR_SIZE:                int = 40
 
 # UDP payload sizes
-const UDP_INIT_PAYLOAD_SIZE: int = 0
-const UDP_REG_PAYLOAD_SIZE:  int = 20
+const UDP_INIT_PAYLOAD_SIZE:   int = 0
+const UDP_REG_PAYLOAD_SIZE:    int = 20
+const UDP_PICKUP_PAYLOAD_SIZE: int = 3   # item_id (uint16) + item_type (uint8)
 
 # UDP response enums — top-level so clients can reference them directly via
 # PacketizationManager.UDPStatus.NORMAL / PacketizationManager.UDPPacketType.SERVER_INIT
 enum UDPStatus     { NORMAL = 0, ERROR  = 1 }
-enum UDPPacketType { SERVER_INIT = 0, SERVER_AUTH = 1 }
+enum UDPPacketType { SERVER_INIT = 0, SERVER_AUTH = 1, SERVER_AUTH_ITEMS = 2 }
 
 var seq_num: int = 0
 
@@ -67,6 +71,18 @@ class PlayerInfo:
 		vel_y = vy
 		score = sc
 
+class ItemInfo:
+	var instance_id: int
+	var pos_x: float
+	var pos_y: float
+	var item_type: int
+
+	func _init(iid: int, ix: float, iy: float, it: int) -> void:
+		instance_id = iid
+		pos_x       = ix
+		pos_y       = iy
+		item_type   = it
+
 class UDP_Response:
 	var status:      int  # PacketizationManager.UDPStatus value
 	var packet_type: int  # PacketizationManager.UDPPacketType value
@@ -80,9 +96,13 @@ class UDP_Response:
 
 	# Populated for SERVER_INIT only
 	var player_init_positions: Dictionary  # hex String → PacketizationManager.PlayerInitPos
+	var items_init_positions: Dictionary # hex int -> PacketizationManager.ItemInfo
 
 	# Populated for SERVER_AUTH only
 	var players: Dictionary  # hex String → PacketizationManager.PlayerInfo
+
+	# Populated for SERVER_AUTH_ITEMS only
+	var items_auth: Dictionary  # instance_id (int) → PacketizationManager.ItemInfo
 
 	func _init() -> void:
 		status      = 0  # UDPStatus.NORMAL
@@ -92,7 +112,9 @@ class UDP_Response:
 		start_tick = 0
 		stop_tick  = 0
 		player_init_positions = {}
+		items_init_positions  = {}
 		players               = {}
+		items_auth            = {}
 
 # ========================= Public API =========================
 
@@ -169,16 +191,46 @@ func form_udp_reg_packet(
 	_encode_u32_le(score,           packet, UDP_HDR_SIZE + 16)
 	return NetworkManager.UDPPacket.new(packet, port)
 
+## Builds a PACKET_SIZE-byte UDP pickup packet and returns a UDPPacket ready for
+## NetworkManager.send_udp_reliable(). Sent when the local player picks up an item.
+##   game_id   – 32-char uppercase hex string representing a 16-byte game identifier
+##   player_id – 32-char uppercase hex string representing a 16-byte player identifier
+##   port      – destination UDP port
+##   item_id   – server-assigned instance id of the picked-up item (uint16)
+##   item_type – item rarity type: 1 = common, 2 = rare, 3 = legendary (uint8)
+func form_udp_pickup_packet(
+	game_id:   String,
+	player_id: String,
+	port:      int,
+	item_id:   int,
+	item_type: int
+) -> Object:
+	var packet := PackedByteArray()
+	packet.resize(PACKET_SIZE)
+	packet.fill(0)
+	_hex_to_bytes(game_id,   packet, UDP_HDR_GAME_ID_OFFSET)
+	_hex_to_bytes(player_id, packet, UDP_HDR_PLAYER_ID_OFFSET)
+	_encode_u16_le(UDP_CTRL_PICKUP,        packet, UDP_HDR_CTRL_OFFSET)
+	_encode_u16_le(UDP_PICKUP_PAYLOAD_SIZE, packet, UDP_HDR_PAYLOAD_SIZE_OFFSET)
+	_encode_u32_le(0,                      packet, UDP_HDR_SEQ_NUM_OFFSET)
+	_encode_u16_le(item_id,   packet, UDP_HDR_SIZE)
+	packet[UDP_HDR_SIZE + 2] = item_type & 0xFF
+	return NetworkManager.UDPPacket.new(packet, port)
+
 ## Parses a raw PACKET_SIZE-byte UDP server packet into a UDP_Response.
+## Returns null if the packet's game_id header does not match the supplied game_id.
 ## Check response.status first — if ERROR the remaining fields are undefined.
 ## Then check response.packet_type to know which fields are populated.
-func interpret_udp_packet(raw: PackedByteArray) -> UDP_Response:
+func interpret_udp_packet(raw: PackedByteArray, game_id: String) -> UDP_Response:
 	var response := UDP_Response.new()
 
-	if raw.size() != PACKET_SIZE:
+	if raw.size() > PACKET_MAX_SIZE:
 		response.status = UDPStatus.ERROR
 		return response
 
+	if _bytes_to_hex(raw, UDP_HDR_GAME_ID_OFFSET, 16) != game_id:
+		return null
+	
 	var ctrl    := _decode_u16_le(raw, UDP_HDR_CTRL_OFFSET)
 	var seq_num := _decode_u32_le(raw, UDP_HDR_SEQ_NUM_OFFSET)
 	response.server_cur_tick = seq_num
@@ -206,15 +258,40 @@ func interpret_udp_packet(raw: PackedByteArray) -> UDP_Response:
 		response.start_tick   = _decode_u32_le(raw, UDP_HDR_SIZE)
 		response.stop_tick    = _decode_u32_le(raw, UDP_HDR_SIZE + 4)
 		var num               := raw[UDP_HDR_SIZE + 8]
+		var n_items           := _decode_u16_le(raw, UDP_HDR_SIZE + 9)
 		response.num_players  = num
+		var body_base         := UDP_HDR_SIZE + 11
 		for i in range(num):
-			var base    := UDP_HDR_SIZE + 9 + i * 24
+			var base    := body_base + i * 24
 			var pid_hex := _bytes_to_hex(raw, base, 16)
 			var pos     := PlayerInitPos.new(
 				_decode_f32_le(raw, base + 16),
 				_decode_f32_le(raw, base + 20)
 			)
 			response.player_init_positions[pid_hex] = pos
+		var items_base := body_base + num * 24
+		for j in range(n_items):
+			var base := items_base + j * 11
+			var item := ItemInfo.new(
+				_decode_u16_le(raw, base),
+				_decode_f32_le(raw, base + 2),
+				_decode_f32_le(raw, base + 6),
+				raw[base + 10]
+			)
+			response.items_init_positions[item.instance_id] = item
+
+	elif ctrl & UDP_CTRL_ITEMS_SERVER_AUTH:
+		response.packet_type = UDPPacketType.SERVER_AUTH_ITEMS
+		var n_items := _decode_u16_le(raw, UDP_HDR_SIZE)
+		for j in range(n_items):
+			var base := UDP_HDR_SIZE + 2 + j * 11
+			var item := ItemInfo.new(
+				_decode_u16_le(raw, base),
+				_decode_f32_le(raw, base + 2),
+				_decode_f32_le(raw, base + 6),
+				raw[base + 10]
+			)
+			response.items_auth[item.instance_id] = item
 
 	else:
 		response.status = UDPStatus.ERROR
