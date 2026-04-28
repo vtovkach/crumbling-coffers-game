@@ -13,7 +13,7 @@
 #include <stdbool.h>
 
 #define INIT_POSITIONS_COUNT 7
-#define ITEM_RANGES_COUNT 16
+#define ITEM_RANGES_COUNT 19
 #define MAX_ITEMS 1000
 
 enum GameStatus
