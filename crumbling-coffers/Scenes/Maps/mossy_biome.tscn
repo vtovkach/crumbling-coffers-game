@@ -303,7 +303,7 @@ position = Vector2(900, -127)
 [node name="QuitConfirmation" type="ConfirmationDialog" parent="." unique_id=228908350]
 process_mode = 3
 oversampling_override = 1.0
-title = "QUIT TRAINING?"
+title = "QUIT SINGLEPLAYER?"
 position = Vector2i(0, 36)
 size = Vector2i(435, 108)
 ok_button_text = "YES"

@@ -2,47 +2,66 @@
 
 [ext_resource type="Script" uid="uid://ns47c71u7dcr" path="res://Scripts/MainMenu/char_selection.gd" id="1_3567h"]
 [ext_resource type="Texture2D" uid="uid://b662g1htkpbv6" path="res://Assets/Players/BlueWizard/2BlueWizardIdle/Chara - BlueIdle00000.png" id="1_emndy"]
+[ext_resource type="Texture2D" uid="uid://cvvqaq86rtnf5" path="res://Assets/MAIN-MENU-ELEMENTS/crumbling-coffers-character-info-bg.png" id="3_gurvi"]
 
 [node name="CharSelection" type="Node2D" unique_id=517563277]
 script = ExtResource("1_3567h")
 
+[node name="TextureRect" type="TextureRect" parent="." unique_id=2005028309]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 40.0
+offset_right = 1320.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("3_gurvi")
+stretch_mode = 3
+
 [node name="Label" type="Label" parent="." unique_id=1310236115]
-offset_left = 128.0
-offset_top = 64.0
-offset_right = 447.0
-offset_bottom = 206.0
-text = "Character Info:"
+offset_left = 418.0
+offset_top = 47.0
+offset_right = 775.0
+offset_bottom = 189.0
+theme_override_font_sizes/font_size = 32
+text = "CHARACTER INFO:"
 
 [node name="Info" type="Label" parent="." unique_id=316924252]
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 128.0
-offset_top = 128.0
-offset_right = 512.0
-offset_bottom = 256.0
+offset_left = 134.0
+offset_top = 513.0
+offset_right = 972.0
+offset_bottom = 641.0
 grow_vertical = 2
+theme_override_font_sizes/font_size = 20
 text = "Blue Wizard:
 
 Previously the castle mage
 now left to wander the ruins"
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=901467443]
-offset_left = 32.0
-offset_top = 152.0
-offset_right = 389.0
-offset_bottom = 564.0
-
-[node name="TextureRect" type="TextureRect" parent="CenterContainer" unique_id=1394959048]
-layout_mode = 2
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=1394959048]
+self_modulate = Color(1.0487798, 1.2484335, 1.4369954, 1)
+offset_left = 329.0
+offset_top = 177.0
+offset_right = 841.0
+offset_bottom = 689.0
 texture = ExtResource("1_emndy")
 
 [node name="back button" type="Button" parent="." unique_id=1561491954]
-offset_left = 13.0
-offset_top = 11.0
-offset_right = 129.0
-offset_bottom = 42.0
+offset_left = 62.0
+offset_top = 41.0
+offset_right = 177.0
+offset_bottom = 72.0
 size_flags_horizontal = 0
-text = "< Back Button"
+theme_override_colors/font_hover_color = Color(0.8, 0.81960785, 0.9529412, 1)
+text = "MAIN MENU
+"
+flat = true
 
 [connection signal="pressed" from="back button" to="." method="_on_back_button_pressed"]
