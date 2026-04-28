@@ -1,0 +1,140 @@
+[gd_scene format=3 uid="uid://chnt4h57jfd6d"]
+
+[ext_resource type="Script" uid="uid://6qxbwa04a4wb" path="res://Scripts/MainMenu/score_block.gd" id="1_j7crd"]
+[ext_resource type="Texture2D" uid="uid://6ccjmqms0s3p" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00000.png" id="2_c1nj7"]
+[ext_resource type="Texture2D" uid="uid://d17b8qn72advs" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00001.png" id="3_tkwxa"]
+[ext_resource type="Texture2D" uid="uid://pj71avt1a024" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00002.png" id="4_5e8av"]
+[ext_resource type="Texture2D" uid="uid://batbdvmonnjk" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00003.png" id="5_d8hmr"]
+[ext_resource type="Texture2D" uid="uid://baambe01680ec" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00004.png" id="6_kvr1s"]
+[ext_resource type="Texture2D" uid="uid://b3xei37cq5bus" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00005.png" id="7_i84fc"]
+[ext_resource type="Texture2D" uid="uid://cunw25orh46ks" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00006.png" id="8_pvfmd"]
+[ext_resource type="Texture2D" uid="uid://bvesfpkr7anpx" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00007.png" id="9_v371y"]
+[ext_resource type="Texture2D" uid="uid://dxgxfdxu5rff6" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00008.png" id="10_tdnh7"]
+[ext_resource type="Texture2D" uid="uid://bta2573ljorjx" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00009.png" id="11_cojcx"]
+[ext_resource type="Texture2D" uid="uid://dtanyedg65a0b" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00010.png" id="12_6obqw"]
+[ext_resource type="Texture2D" uid="uid://d35gl0p2xw187" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00011.png" id="13_f3e7t"]
+[ext_resource type="Texture2D" uid="uid://cjvk4eg5t83yb" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00012.png" id="14_3avbu"]
+[ext_resource type="Texture2D" uid="uid://c71ttagcvcl8k" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00013.png" id="15_jxag3"]
+[ext_resource type="Texture2D" uid="uid://bv6nswh1vvdgi" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00014.png" id="16_n8bw8"]
+[ext_resource type="Texture2D" uid="uid://d040ids0jgr3i" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00015.png" id="17_0dx1v"]
+[ext_resource type="Texture2D" uid="uid://mjsy7v6qf3ps" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00016.png" id="18_rgk3l"]
+[ext_resource type="Texture2D" uid="uid://bk2k1xuwg4r8g" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00017.png" id="19_qy8mn"]
+[ext_resource type="Texture2D" uid="uid://d33xgy24hmg15" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00018.png" id="20_qlaqt"]
+[ext_resource type="Texture2D" uid="uid://ktmxprhdeo64" path="res://Assets/Players/BlueWizard/2BlueWizardWalk/Chara_BlueWalk00019.png" id="21_pg44i"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rwflh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_c1nj7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tkwxa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_5e8av")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_d8hmr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_kvr1s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_i84fc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_pvfmd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_v371y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_tdnh7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_cojcx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_6obqw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_f3e7t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_3avbu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_jxag3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_n8bw8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_0dx1v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_rgk3l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_qy8mn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_qlaqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_pg44i")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[sub_resource type="LabelSettings" id="LabelSettings_c1nj7"]
+shadow_size = 10
+shadow_color = Color(0, 0, 0, 0.8039216)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tkwxa"]
+shadow_size = 10
+shadow_color = Color(0, 0, 0, 0.8039216)
+
+[node name="ScoreBlock" type="MarginContainer" unique_id=26766527]
+custom_minimum_size = Vector2(256, 200)
+offset_left = -128.0
+offset_top = -180.0
+offset_right = 128.0
+offset_bottom = 80.0
+script = ExtResource("1_j7crd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1025147830]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+alignment = 1
+
+[node name="Sprite" type="Control" parent="VBoxContainer" unique_id=674498332]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VBoxContainer/Sprite" unique_id=1252180313]
+position = Vector2(128, 100)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_rwflh")
+animation = &"idle"
+
+[node name="TextContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=543597289]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+size_flags_vertical = 4
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="VBoxContainer/TextContainer" unique_id=2068584569]
+layout_mode = 2
+text = "Blue Wizard"
+label_settings = SubResource("LabelSettings_c1nj7")
+horizontal_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="VBoxContainer/TextContainer" unique_id=610346589]
+layout_mode = 2
+text = "Score:"
+label_settings = SubResource("LabelSettings_tkwxa")
+horizontal_alignment = 1

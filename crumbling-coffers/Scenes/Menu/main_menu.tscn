@@ -62,7 +62,7 @@ size_flags_vertical = 6
 theme_override_colors/font_hover_color = Color(0.8, 0.81960785, 0.9529412, 1)
 theme_override_constants/line_spacing = 18
 theme_override_font_sizes/font_size = 48
-text = "TRAINING GROUNDS"
+text = "SINGLE PLAYER"
 flat = true
 
 [node name="character select" type="Button" parent="VBoxContainer" unique_id=1725372750]
@@ -73,7 +73,7 @@ size_flags_vertical = 6
 theme_override_colors/font_hover_color = Color(0.8, 0.81960785, 0.9529412, 1)
 theme_override_constants/line_spacing = 18
 theme_override_font_sizes/font_size = 48
-text = "SELECT CHARACTER"
+text = "CHARACTER INFO"
 flat = true
 
 [node name="quit" type="Button" parent="VBoxContainer" unique_id=1672525556]
