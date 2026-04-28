@@ -4,6 +4,7 @@ var elapsed_time: int = 0
 var searching: bool = false
 var _loading_game: bool = false
 var _pending_main_menu: bool = false
+var _pending_quit: bool = false
 var _pending_tcp_response: PacketizationManager.TCP_Response
 
 @onready var hover_search_style = preload("res://Styles/lobby_menu/hover_search_style.tres")
@@ -20,6 +21,7 @@ var _pending_tcp_response: PacketizationManager.TCP_Response
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_tree().set_auto_accept_quit(false)
 	# Playe music
 	MusicManager.play_music("res://Assets/Music/little-bird.mp3")
 
@@ -31,6 +33,25 @@ func _ready() -> void:
 	search_cancel_button.add_theme_stylebox_override("pressed", pressed_search_style)
 
 	search_timer.timeout.connect(_on_search_timer_timeout)
+
+func _exit_tree() -> void:
+	get_tree().set_auto_accept_quit(true)
+
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_WM_CLOSE_REQUEST:
+		return
+	if not searching:
+		get_tree().quit()
+		return
+	stop_search()
+	if not searching:
+		# stop_search failed to send — quit immediately
+		get_tree().quit()
+		return
+	_pending_quit = true
+	main_menu_button.disabled = true
+	# Fallback: quit after 3 seconds if server never responds
+	get_tree().create_timer(3.0).timeout.connect(func(): get_tree().quit())
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -62,6 +83,9 @@ func _handle_udp_loading(raw: PackedByteArray) -> void:
 func _on_game_not_found() -> void:
 	print("lobby: game not found, stopping search")
 	_reset_search_ui()
+	if _pending_quit:
+		get_tree().quit()
+		return
 	if _pending_main_menu:
 		get_tree().change_scene_to_file("res://Scenes/Menu/main_menu.tscn")
 
