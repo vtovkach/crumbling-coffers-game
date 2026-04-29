@@ -7,11 +7,11 @@ The server architecture consists of two main entities:
 
 ## High-Level Architecture Diagram 
 
-<img src="diagrams/gen-serv-arch.png" width="1100" height="650">
+<img src="demo-diagrams/server-cloud-diagram.svg" width="1000" height="550">
 
 --- 
 
-# [Session Orchestrator Process](ORCHESTRATOR.md)
+# [Session Orchestrator](ORCHESTRATOR.md)
 
 The Session Orchestrator is a single parent process responsible for coordinating game sessions.
 
@@ -33,7 +33,7 @@ Once a game is created:
 
 ---
 
-# [Game Server Process](GAME_PROCESS.md)
+# [Game Server](GAME_PROCESS.md)
 
 The Game Server Process contains 2 concurrent threads.
 
