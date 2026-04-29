@@ -6,13 +6,16 @@
 * [Description](#description)
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
-* [Features](#features)
 * [Sprint 1](#sprint-1)
 * [Sprint 2](#sprint-2)
-* [Upcoming](#upcoming)
+* [Sprint 3](#sprint-3)
 * [Screenshots](#screenshots)
 
 ---
+
+![Crumbling Coffers Title Page](docs/screenshots/crumbling-coffers-title-page.png)
+
+<div id="description"></div>
 
 ## Description
 
@@ -25,6 +28,8 @@
 **Purpose:** To create a competitive and visually engaging game for friends  
 
 ---
+
+<div id="general-information"></div>
 
 ## General Information
 
@@ -42,7 +47,18 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 --- 
 
-## Features
+<div id="technologies-used"></div>
+
+## Technologies Used
+
+- **Godot Engine** – Rendering, physics, scene management, and cross-platform support.
+- **GDScript (Client)** – Gameplay logic, input handling, UI, client-side prediction and interpolation.
+- **C (Dedicated Server)** – Authoritative server handling networking, simulation ticks, session management, and state synchronization.
+- **SQLite** – Embedded database for storing player accounts, statistics, progression, and leaderboard data.
+ 
+---
+
+<div id="sprint-1"></div>
 
 ### Sprint 1
 
@@ -169,6 +185,8 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 - Item system with rarity tiers and score values  
 
 ---
+
+<div id="sprint-2"></div>
 
 ### Sprint 2
 
@@ -318,9 +336,118 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 - Implement the game process.
 - Integrate multiplayer into the game.
 
-### Upcoming
-- Multiplayer support (planned: 4 players per match)
-- Player animation changes
+---
+
+<div id="sprint-3"></div>
+
+### Sprint 3
+
+### Contributions
+
+**Aurora**: "I designed and polished a new custom map, CastleDungeon, focusing on enhanced verticality, room for multiple player spawn locations, and platforming compatibility to ensure a high-quality gameplay experience. To streamline this, I established a BaseLevel inheritance structure that centralized universal map functions, allowing for a more modular and efficient level-design workflow."  
+
+- `Jira Task: Time-Sync & Transition Unit Testing`  
+    - [PROJ-46](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-46), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-46-time-sync-unit-testing)  
+- `Jira Task: 1st Map Ready For Multiplayer`  
+    - [PROJ-99](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-99). [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-99-1st-map-multiplayer-ready)  
+- `Jira Task: Polish 1st Custom Map Design & Playability`  
+    - [PROJ-137](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-137), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-137-polish-1st-map)  
+- `Jira Task: Testing Plan Task (Aurora)`  
+    - [PROJ-170](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-170), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-170-testing-plan-task-aurora)  
+- `Jira Task: Testing Results Task (Aurora)`  
+    - [PROJ-171](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-171), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-171-testing-results-task-aurora)  
+
+&nbsp;&nbsp;*BONUS* (post-sprint/pre-demo):
+
+- `Jira Task: Refurbish UI/UX`  
+    - [PROJ-178](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-178), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-178-refurbish-ui-ux)  
+
+**Andrea**: "Refurbished Main Menu page to fit aesthetic of our game as well as worked on small QOL (quality of life) changes with UI elements." 
+
+- `Jira Task: Item Information Hint for Hotbar` 
+    - PROJ-134, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-134-item-info-hint-for-hotbar)  
+- `Jira Task: Create Main Menu Title design assets`
+    - PROJ-102, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-102-main-menu-title-assets-creation)
+- `Jira Task: Implement polished Main Menu UI`
+    - PROJ-98, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-98-implement-polished-main-menu-ui)
+- `Jira Task: Create custom assets for hotbar and inventory and edit UI`
+    - PROJ-158, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-158-create-custom-assets-for-hotbar)
+- `Jira Task: Testing Plan Task (Andrea)`
+    - PROJ-174, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-174-testing-plan-task-andrea)
+- `Jira Task: Testing Reults Task (Andrea)`
+    - PROJ-175, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-175-testing-results-task-andrea)
+- `Additional Jira Task (post-sprint/pre-demo): Character Page Implementation`
+    - PROJ-179, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-179-character-page-implementation)
+
+**Daniel Pelley**: "Refactor major systems to follow a more SOLID approach along with making items multiplayer ready(to be integrated)."
+
+- `Jira Task: Refactor Status Effects (Freeze, Slow, Disorientation) into Unified System`
+    - [PROJ-139](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-139), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-139-refactor-status-effects-freeze-)
+- `Jira Task: Refactor Item Pickup Flow for Maintainability and Multiplayer`
+    - [PROJ-143](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-143), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-143-refactor-item-pickup-flow-for-m)
+- `Jira Task: Refactor Staff and Item Scripts to Reduce Duplication`
+    - [PROJ-144](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-144), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-144-refactor-staff-and-item-scripts)
+ - `Jira Task: Refactor Inventory and Hotbar Systems for Cleaner Separation of Concerns`
+    - [PROJ-145](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-145), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-145-refactor-inventory-and-hotbar-s)
+ - `Jira Task: Refactor Item Systems for Multiplayer Compatibility`
+    - [PROJ-146](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-146), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-146-refactor-item-systems-for-multi)
+ 
+
+**Nicholas**: "Add animations, more (inheriting) types of players, and tweaks to indicators and movement"
+
+- `Jira Task: second iteration movement tuning`
+    - [PROJ-88](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-88), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-88-second-iteration-movement-tuning)
+- `Jira Task: Distinguish Player baseclass and controllable UserPlayer`
+    - [PROJ-140](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-140), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-140-distinguish-player-baseclass-an)
+- `Jira Task: Add RemotePlayer server-given player`
+    - [PROJ-141](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-141), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-141-add-remoteplayer-server-given-p)
+- `Jira Task: Off-screen indicators extra features`
+    - [PROJ-131](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-131), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/feature/PROJ-131-off-screen-indicators-extra-fea)
+- `Jira Task: animate player by state`
+    - [PROJ-138](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-138), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/feature/PROJ-138-animate-player-by-state)
+- `Jira Task: Testing Plan Task`
+    - [PROJ-168](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-168), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-168-testing-plan-task)
+- `Jira Task: Testing Results Task`
+    - [PROJ-169](https://cs3398-callisto-s26.atlassian.net/browse/PROJ-169), [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-169-testing-results-task)
+
+
+**Vadym**: "Refactored the orchestrator and implemented the server's internal game structure with a clean interface. Built packetization utilities on both the server and client sides, added a lightweight reliability layer, and moved the client networking module onto its own thread. Integrated everything through a Game class, added a multiplayer transition scene, implemented client-side interpolation, wrote and executed test plans for all three tests, and fixed window-closing and item-spawn bugs."
+
+- `Jira Task: PROJ-167 Test Execution and Results Task (for all 3 tests)` 
+    - PROJ-167, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-167-test-execution-and-results-task)
+- ``Jira Task: PROJ-166-testing-plan-task-for-all-3-tests`
+    - PROJ-166, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/branch/PROJ-166-testing-plan-task-for-all-3-tests)
+- `Jira Task: PROJ-164 Implement interpolation on client side.`
+    - PROJ-164, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-164-implement-interpolation-on-client-side)
+- `Jira Task: PROJ-163 Create Multiplayer Transition Scene`
+    - PROJ-163, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-163-create-multiplayer-transition-scene)
+- `Jira Task: PROJ-160 Add the Game class to tie together netcode and client code`
+    - PROJ-160, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-160-add-the-game-class-to-client)
+- `Jira Task: PROJ-156 Implement Packetization Utility Class with Header and Payload Formation`
+    - PROJ-156, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-156-implement-packetization-utility)
+- `Jira Task: PROJ-154 Refactor Client Networking Module to Run on a Separate Thread`
+    - PROJ-154, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-154-refactor-client-networking-module)
+- `Jira Task: PROJ-153 Implement Lightweight Reliability Layer in Client Networking Module`
+    - PROJ-153, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-156-implement-packetization-utility)
+- `Jira Task: PROJ-151 Create Packetization Utility for Forming Authoritative Game-State Packets`
+    - PROJ-151, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-151-create-packetization-utility-for-game-server) 
+- `Jira Task: PROJ-150  Implement Server Internal Game Structure with Clear Interface`
+    - PROJ-150, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-150-implement-server-internal-game-structure)
+- `Jira Task: PROJ-135 Refactor Orchestrator`
+    - PROJ-135, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/PROJ-135-refactor-orchestrator)
+- `Jira Task: PROJ-9991 Fix window bug`
+    - PROJ-9991, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/bugfix%2FPROJ-9991-fix-win-closing-bug)
+- `Jira Task: PROJ-9992 Fix item spawn bug`
+    - PROJ-9992, [Bitbucket](https://bitbucket.org/cs3398-callisto-s26/crumbling-coffers-main/commits/branch/bugfix%2Ffix-item-spawn-locations)
+
+- `Next Steps`
+    - Implement user accounts with persistent data (player stats, progression, leaderboard entries) backed by SQLite.
+    - Move the server infrastructure to cloud hosting to support real remote play.
+    - Integrate encryption (TLS/DTLS) into client-server communication to secure data in transit.
+    
+### Reports
+
+![Sprint 3 Burnup Chart](docs/screenshots/Sprint3-burnup-chart.png)
 
 &nbsp;
 ---
@@ -347,14 +474,6 @@ The game also includes temporary **boost items (spells)** that enhance abilities
 
 ---
 
-## Technologies Used
-
-- **Godot Engine** – Rendering, physics, scene management, and cross-platform support.
-- **GDScript (Client)** – Gameplay logic, input handling, UI, client-side prediction and interpolation.
-- **C (Dedicated Server)** – Authoritative server handling networking, simulation ticks, session management, and state synchronization.
-- **SQLite** – Embedded database for storing player accounts, statistics, progression, and leaderboard data.
- 
----
 
 ## Screenshots (Initial Vision)
 
